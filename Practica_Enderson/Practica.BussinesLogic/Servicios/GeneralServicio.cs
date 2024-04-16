@@ -15,10 +15,10 @@ namespace Practica.BussinesLogic.Servicios
         private readonly EstadoCivilRepositorio _estadoCivilRepositorio;
         private readonly CiudadRepositorio _municipioRepositorio;
        
-        private readonly ClienteRepositorio _clienteRepositorio;
+        private readonly PersonaRepositorio _clienteRepositorio;
 
         public GeneralServicio(EstadoRepositorio departamentoRepositorio, EstadoCivilRepositorio estadoCivilRepositorio, CiudadRepositorio municipioRepositorio
-              ,ClienteRepositorio clienteRepositorio)
+              ,PersonaRepositorio clienteRepositorio)
         {
             _departamentoRepositorio = departamentoRepositorio;
             _estadoCivilRepositorio = estadoCivilRepositorio;
@@ -233,7 +233,7 @@ namespace Practica.BussinesLogic.Servicios
             }
         }
 
-        public ServiceResult InsertarClie(tbClientes item)
+        public ServiceResult InsertarClie(tbPersonas item)
         {
             var result = new ServiceResult();
             try
@@ -256,7 +256,7 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult ActualizarClie(tbClientes item)
+        public ServiceResult ActualizarClie(tbPersonas item)
         {
             var result = new ServiceResult();
             try
@@ -304,10 +304,10 @@ namespace Practica.BussinesLogic.Servicios
         }
        
        
-        public IEnumerable<tbClientes> DetallesClien(int id)
-        {
-            return _clienteRepositorio.Detalle(id);
-        }
+        //public IEnumerable<tbPersonas> DetallesClien(int id)
+        //{
+        //    return _clienteRepositorio.Detalle(id);
+        //}
         #endregion
 
        

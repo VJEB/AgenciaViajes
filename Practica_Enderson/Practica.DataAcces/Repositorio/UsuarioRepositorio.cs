@@ -20,7 +20,7 @@ namespace Practica.DataAcces.Repositorio
                 parametro.Add("Usua_Id", item.Usua_Id);
                 parametro.Add("Usua_Usuario", item.Usua_Usuario);
                 parametro.Add("Usua_Admin", item.Usua_Admin);
-              
+                parametro.Add("Pers_Id", item.Pers_Id);
                 parametro.Add("Rol_Id", item.Rol_Id);
                 parametro.Add("Usua_Usua_Modifica", item.Usua_Usua_Modifica);
                 parametro.Add("Usua_Fecha_Modifica", DateTime.Now);
@@ -34,7 +34,18 @@ namespace Practica.DataAcces.Repositorio
                 return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
             }
         }
+        public IEnumerable<tbUsuarios> ObtenerUsuaID(int Usua_Id)
+        {
 
+
+            List<tbUsuarios> result = new List<tbUsuarios>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Usua_Id = Usua_Id };
+                result = db.Query<tbUsuarios>(ScriptBaseDatos.Usua_Detalles, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
         public RequestStatus Eliminar(int? id)
         {
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
@@ -65,11 +76,11 @@ namespace Practica.DataAcces.Repositorio
                 parametro.Add("Usua_Usuario", item.Usua_Usuario);
                 parametro.Add("Usua_Contra", item.Usua_Contra);
                 parametro.Add("Usua_Admin", item.Usua_Admin);
-             
+                parametro.Add("Pers_Id", item.Pers_Id);
                 parametro.Add("Rol_Id", item.Rol_Id);
-                parametro.Add("Usua_Estado", item.Usua_Estado);
+            
 
-                parametro.Add("Usua_Usua_Creacion", item.Usua_Usua_Modifica);
+                parametro.Add("Usua_Usua_Creacion", 1);
                 parametro.Add("Usua_Fecha_Creacion", DateTime.Now);
 
                 var result = db.Execute(ScriptBaseDatos.Usua_Insertar,
@@ -95,7 +106,6 @@ namespace Practica.DataAcces.Repositorio
 
         public IEnumerable<tbUsuarios> Detalle(int Usua_Id)
         {
-
 
             List<tbUsuarios> result = new List<tbUsuarios>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))

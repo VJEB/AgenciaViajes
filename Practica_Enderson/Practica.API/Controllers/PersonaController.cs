@@ -10,13 +10,13 @@ namespace Practica.API.Controllers
 {
     [ApiController]
     [Route("API/[Controller]")]
-    public class ClienteController : Controller
+    public class PersonaController : Controller
     {
         private readonly GeneralServicio _generalServicio;
         private readonly IMapper _mapper;
 
 
-        public ClienteController(GeneralServicio generalServicio, IMapper mapper)
+        public PersonaController(GeneralServicio generalServicio, IMapper mapper)
         {
 
             _mapper = mapper;

@@ -26,7 +26,7 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<HotelRepositorio>();
             service.AddScoped<PaqueteRepositorio>();
             service.AddScoped<TransporteRepositorio>();
-            service.AddScoped<ClienteRepositorio>();
+            service.AddScoped<PersonaRepositorio>();
             
             AgenciaContext.BuildConnectionString(conn);
         }

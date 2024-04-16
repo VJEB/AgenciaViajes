@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Practica.Common.Models
 {
-    public class ClienteViewModel
+    public class PersonaViewModel
     {
     }
 }

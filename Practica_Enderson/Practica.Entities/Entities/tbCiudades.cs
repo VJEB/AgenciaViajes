@@ -10,8 +10,8 @@ namespace Agencia.Entities.Entities
     {
         public tbCiudades()
         {
-            tbClientes = new HashSet<tbClientes>();
             tbHoteles = new HashSet<tbHoteles>();
+            tbPersonas = new HashSet<tbPersonas>();
             tbTransportesTran_PuntoFinalNavigation = new HashSet<tbTransportes>();
             tbTransportesTran_PuntoInicioNavigation = new HashSet<tbTransportes>();
         }
@@ -25,8 +25,8 @@ namespace Agencia.Entities.Entities
         public DateTime? Ciud_Fecha_Modifica { get; set; }
 
         public virtual tbEstados Esta { get; set; }
-        public virtual ICollection<tbClientes> tbClientes { get; set; }
         public virtual ICollection<tbHoteles> tbHoteles { get; set; }
+        public virtual ICollection<tbPersonas> tbPersonas { get; set; }
         public virtual ICollection<tbTransportes> tbTransportesTran_PuntoFinalNavigation { get; set; }
         public virtual ICollection<tbTransportes> tbTransportesTran_PuntoInicioNavigation { get; set; }
     }

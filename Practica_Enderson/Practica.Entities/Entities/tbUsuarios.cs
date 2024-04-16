@@ -12,8 +12,6 @@ namespace Agencia.Entities.Entities
         {
             InverseUsua_Usua_CreacionNavigation = new HashSet<tbUsuarios>();
             InverseUsua_Usua_ModificaNavigation = new HashSet<tbUsuarios>();
-            tbClientesClie_Usua_CreacionNavigation = new HashSet<tbClientes>();
-            tbClientesClie_Usua_ModificaNavigation = new HashSet<tbClientes>();
             tbDetallePorPaqueteDePa_Usua_CreacionNavigation = new HashSet<tbDetallePorPaquete>();
             tbDetallePorPaqueteDePa_Usua_ModificaNavigation = new HashSet<tbDetallePorPaquete>();
             tbEstadosCivilesEsCi_Usua_CreacionNavigation = new HashSet<tbEstadosCiviles>();
@@ -32,6 +30,8 @@ namespace Agencia.Entities.Entities
             tbPantallasPorRolesParo_Usua_ModificaNavigation = new HashSet<tbPantallasPorRoles>();
             tbPaquetesPaqu_Usua_CreacionNavigation = new HashSet<tbPaquetes>();
             tbPaquetesPaqu_Usua_ModificaNavigation = new HashSet<tbPaquetes>();
+            tbPersonasPers_Usua_CreacionNavigation = new HashSet<tbPersonas>();
+            tbPersonasPers_Usua_ModificaNavigation = new HashSet<tbPersonas>();
             tbRolesRol_Usua_CreacionNavigation = new HashSet<tbRoles>();
             tbRolesRol_Usua_ModificaNavigation = new HashSet<tbRoles>();
             tbTiposDeCamasTiCa_Usua_CreacionNavigation = new HashSet<tbTiposDeCamas>();
@@ -52,16 +52,14 @@ namespace Agencia.Entities.Entities
         public int? Usua_Usua_Modifica { get; set; }
         public DateTime? Usua_Fecha_Modifica { get; set; }
         public bool? Usua_Estado { get; set; }
-        public int? Clie_Id { get; set; }
+        public int? Pers_Id { get; set; }
 
-        public virtual tbClientes Clie { get; set; }
+        public virtual tbPersonas Pers { get; set; }
         public virtual tbRoles Rol { get; set; }
         public virtual tbUsuarios Usua_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Usua_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbUsuarios> InverseUsua_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbUsuarios> InverseUsua_Usua_ModificaNavigation { get; set; }
-        public virtual ICollection<tbClientes> tbClientesClie_Usua_CreacionNavigation { get; set; }
-        public virtual ICollection<tbClientes> tbClientesClie_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaqueteDePa_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaqueteDePa_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbEstadosCiviles> tbEstadosCivilesEsCi_Usua_CreacionNavigation { get; set; }
@@ -80,6 +78,8 @@ namespace Agencia.Entities.Entities
         public virtual ICollection<tbPantallasPorRoles> tbPantallasPorRolesParo_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbPaquetes> tbPaquetesPaqu_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbPaquetes> tbPaquetesPaqu_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbPersonas> tbPersonasPers_Usua_CreacionNavigation { get; set; }
+        public virtual ICollection<tbPersonas> tbPersonasPers_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbRoles> tbRolesRol_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbRoles> tbRolesRol_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbTiposDeCamas> tbTiposDeCamasTiCa_Usua_CreacionNavigation { get; set; }

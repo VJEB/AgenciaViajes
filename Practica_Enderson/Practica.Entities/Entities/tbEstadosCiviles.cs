@@ -10,7 +10,7 @@ namespace Agencia.Entities.Entities
     {
         public tbEstadosCiviles()
         {
-            tbClientes = new HashSet<tbClientes>();
+            tbPersonas = new HashSet<tbPersonas>();
         }
 
         public int EsCi_Id { get; set; }
@@ -23,6 +23,6 @@ namespace Agencia.Entities.Entities
 
         public virtual tbUsuarios EsCi_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios EsCi_Usua_ModificaNavigation { get; set; }
-        public virtual ICollection<tbClientes> tbClientes { get; set; }
+        public virtual ICollection<tbPersonas> tbPersonas { get; set; }
     }
 }

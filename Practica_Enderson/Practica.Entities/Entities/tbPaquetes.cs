@@ -22,7 +22,7 @@ namespace Agencia.Entities.Entities
         public DateTime Paqu_Fecha_Modifica { get; set; }
         public int Paqu_Estado { get; set; }
 
-        public virtual tbClientes Clie { get; set; }
+        public virtual tbPersonas Clie { get; set; }
         public virtual tbUsuarios Paqu_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Paqu_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaquete { get; set; }

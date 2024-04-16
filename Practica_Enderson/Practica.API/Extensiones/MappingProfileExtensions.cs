@@ -15,7 +15,7 @@ namespace Practica.API.Extensiones
         {
             CreateMap<EstadoViewModel, tbEstados>().ReverseMap();
          
-            CreateMap<ClienteViewModel, tbClientes>().ReverseMap();
+            CreateMap<PersonaViewModel, tbPersonas>().ReverseMap();
             CreateMap<HabitacionViewModel, tbHabitaciones>().ReverseMap();
             CreateMap<HabitacionPorHotelViewModel, tbHabitacionesPorHotel>().ReverseMap();
             CreateMap<FotografiaPorHabitacionViewModel, tbFotografiasPorHabitacion>().ReverseMap();

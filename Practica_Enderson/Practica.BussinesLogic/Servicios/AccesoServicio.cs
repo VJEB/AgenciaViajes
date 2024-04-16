@@ -39,7 +39,20 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult ObtenerUsuaID(int Usua_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _usuarioRepositorio.ObtenerUsuaID(Usua_Id);
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
 
+        }
         public ServiceResult Insertarusua(tbUsuarios item)
         {
             var result = new ServiceResult();

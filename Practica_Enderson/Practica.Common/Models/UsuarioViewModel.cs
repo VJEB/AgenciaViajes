@@ -19,6 +19,6 @@ namespace Practica.Common.Models
         public int? Usua_Usua_Modifica { get; set; }
         public DateTime? Usua_Fecha_Modifica { get; set; }
         public bool? Usua_Estado { get; set; }
-        public int? Clie_Id { get; set; }
+        public int? Pers_Id { get; set; }
     }
 }

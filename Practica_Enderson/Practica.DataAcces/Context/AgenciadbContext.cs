@@ -21,7 +21,6 @@ namespace Agencia.DataAcces.Context
         }
 
         public virtual DbSet<tbCiudades> tbCiudades { get; set; }
-        public virtual DbSet<tbClientes> tbClientes { get; set; }
         public virtual DbSet<tbDetallePorPaquete> tbDetallePorPaquete { get; set; }
         public virtual DbSet<tbEstados> tbEstados { get; set; }
         public virtual DbSet<tbEstadosCiviles> tbEstadosCiviles { get; set; }
@@ -33,6 +32,7 @@ namespace Agencia.DataAcces.Context
         public virtual DbSet<tbPantallas> tbPantallas { get; set; }
         public virtual DbSet<tbPantallasPorRoles> tbPantallasPorRoles { get; set; }
         public virtual DbSet<tbPaquetes> tbPaquetes { get; set; }
+        public virtual DbSet<tbPersonas> tbPersonas { get; set; }
         public virtual DbSet<tbRoles> tbRoles { get; set; }
         public virtual DbSet<tbTiposDeCamas> tbTiposDeCamas { get; set; }
         public virtual DbSet<tbTiposTransportes> tbTiposTransportes { get; set; }
@@ -69,51 +69,6 @@ namespace Agencia.DataAcces.Context
                 entity.HasOne(d => d.Esta)
                     .WithMany(p => p.tbCiudades)
                     .HasForeignKey(d => d.Esta_Id);
-            });
-
-            modelBuilder.Entity<tbClientes>(entity =>
-            {
-                entity.HasKey(e => e.Clie_Id)
-                    .HasName("PK__tbClient__5BB95503F4A2DA75");
-
-                entity.ToTable("tbClientes", "Gral");
-
-                entity.Property(e => e.Ciud_Id)
-                    .HasMaxLength(4)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Clie_Apellido)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Clie_Fecha_Creacion).HasColumnType("datetime");
-
-                entity.Property(e => e.Clie_Fecha_Modifica).HasColumnType("datetime");
-
-                entity.Property(e => e.Clie_Nombre)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Clie_Sexo)
-                    .HasMaxLength(1)
-                    .IsUnicode(false)
-                    .IsFixedLength(true);
-
-                entity.HasOne(d => d.Ciud)
-                    .WithMany(p => p.tbClientes)
-                    .HasForeignKey(d => d.Ciud_Id);
-
-                entity.HasOne(d => d.Clie_Usua_CreacionNavigation)
-                    .WithMany(p => p.tbClientesClie_Usua_CreacionNavigation)
-                    .HasForeignKey(d => d.Clie_Usua_Creacion);
-
-                entity.HasOne(d => d.Clie_Usua_ModificaNavigation)
-                    .WithMany(p => p.tbClientesClie_Usua_ModificaNavigation)
-                    .HasForeignKey(d => d.Clie_Usua_Modifica);
-
-                entity.HasOne(d => d.EsCi)
-                    .WithMany(p => p.tbClientes)
-                    .HasForeignKey(d => d.EsCi_Id);
             });
 
             modelBuilder.Entity<tbDetallePorPaquete>(entity =>
@@ -422,7 +377,8 @@ namespace Agencia.DataAcces.Context
                 entity.HasOne(d => d.Clie)
                     .WithMany(p => p.tbPaquetes)
                     .HasForeignKey(d => d.Clie_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbPaquetes_tbClientes_Clie_Id");
 
                 entity.HasOne(d => d.Paqu_Usua_CreacionNavigation)
                     .WithMany(p => p.tbPaquetesPaqu_Usua_CreacionNavigation)
@@ -433,6 +389,67 @@ namespace Agencia.DataAcces.Context
                     .WithMany(p => p.tbPaquetesPaqu_Usua_ModificaNavigation)
                     .HasForeignKey(d => d.Paqu_Usua_Modifica)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<tbPersonas>(entity =>
+            {
+                entity.HasKey(e => e.Pers_Id)
+                    .HasName("PK__tbClient__5BB95503F4A2DA75");
+
+                entity.ToTable("tbPersonas", "Gral");
+
+                entity.Property(e => e.Ciud_Id)
+                    .HasMaxLength(4)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pers_Apellido)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pers_DNI)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pers_Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pers_Fecha_Creacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Pers_Fecha_Modifica).HasColumnType("datetime");
+
+                entity.Property(e => e.Pers_Nombre)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pers_Pasaporte)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pers_Sexo)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.Ciud)
+                    .WithMany(p => p.tbPersonas)
+                    .HasForeignKey(d => d.Ciud_Id)
+                    .HasConstraintName("FK_tbClientes_tbCiudades_Ciud_Id");
+
+                entity.HasOne(d => d.EsCi)
+                    .WithMany(p => p.tbPersonas)
+                    .HasForeignKey(d => d.EsCi_Id)
+                    .HasConstraintName("FK_tbClientes_tbEstadosCiviles_EsCi_Id");
+
+                entity.HasOne(d => d.Pers_Usua_CreacionNavigation)
+                    .WithMany(p => p.tbPersonasPers_Usua_CreacionNavigation)
+                    .HasForeignKey(d => d.Pers_Usua_Creacion)
+                    .HasConstraintName("FK_tbClientes_tbUsuarios_Clie_Usua_Creacion");
+
+                entity.HasOne(d => d.Pers_Usua_ModificaNavigation)
+                    .WithMany(p => p.tbPersonasPers_Usua_ModificaNavigation)
+                    .HasForeignKey(d => d.Pers_Usua_Modifica)
+                    .HasConstraintName("FK_tbClientes_tbUsuarios_Clie_Usua_Modifica");
             });
 
             modelBuilder.Entity<tbRoles>(entity =>
@@ -576,9 +593,9 @@ namespace Agencia.DataAcces.Context
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Clie)
+                entity.HasOne(d => d.Pers)
                     .WithMany(p => p.tbUsuarios)
-                    .HasForeignKey(d => d.Clie_Id);
+                    .HasForeignKey(d => d.Pers_Id);
 
                 entity.HasOne(d => d.Rol)
                     .WithMany(p => p.tbUsuarios)
