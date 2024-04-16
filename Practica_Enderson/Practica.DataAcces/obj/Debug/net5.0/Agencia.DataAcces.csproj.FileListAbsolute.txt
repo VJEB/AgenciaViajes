@@ -1,0 +1,15 @@
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\bin\Debug\net5.0\Agencia.DataAcces.deps.json
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\bin\Debug\net5.0\Agencia.DataAcces.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\bin\Debug\net5.0\ref\Agencia.DataAcces.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\bin\Debug\net5.0\Agencia.DataAcces.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\bin\Debug\net5.0\Agencia.Entities.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\bin\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.csproj.CopyComplete
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\ref\Agencia.DataAcces.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.DataAcces\obj\Debug\net5.0\Agencia.DataAcces.pdb

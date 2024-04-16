@@ -1,0 +1,105 @@
+﻿{
+   "CodeGenerationMode": 0,
+   "ContextClassName": "AgenciaContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": "Entities",
+   "OutputContextPath": null,
+   "OutputPath": "Entities",
+   "ProjectRootNamespace": "Agencia.Entities",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 2,
+   "Tables": [
+      {
+         "Name": "[Acce].[tbPantallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbPantallasPorRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbUsuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbDetallePorPaquete]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbFotografiasPorHabitacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbHabitaciones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbHabitacionesPorHotel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbHoteles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbPaquetes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbTransportes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbCiudades]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbClientes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbEstados]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbEstadosCiviles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbPaises]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbTiposDeCamas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbTiposTransportes]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "vj7500.BD_AgenciaViajes",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false
+}

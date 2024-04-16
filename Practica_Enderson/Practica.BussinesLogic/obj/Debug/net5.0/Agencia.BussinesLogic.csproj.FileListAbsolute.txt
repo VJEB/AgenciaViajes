@@ -1,0 +1,17 @@
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.BussinesLogic.deps.json
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.BussinesLogic.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\ref\Agencia.BussinesLogic.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.BussinesLogic.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.DataAcces.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.Entities.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.DataAcces.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\bin\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.csproj.CopyComplete
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\ref\Agencia.BussinesLogic.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.BussinesLogic\obj\Debug\net5.0\Agencia.BussinesLogic.pdb

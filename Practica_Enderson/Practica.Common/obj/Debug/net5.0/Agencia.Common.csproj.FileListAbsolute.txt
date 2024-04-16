@@ -1,0 +1,12 @@
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\bin\Debug\net5.0\Agencia.Common.deps.json
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\bin\Debug\net5.0\Agencia.Common.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\bin\Debug\net5.0\ref\Agencia.Common.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\bin\Debug\net5.0\Agencia.Common.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\ref\Agencia.Common.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.pdb

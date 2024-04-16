@@ -1,0 +1,12 @@
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.deps.json
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\ref\Agencia.Entities.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\ref\Agencia.Entities.dll
+C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.pdb
