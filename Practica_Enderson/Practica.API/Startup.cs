@@ -1,3 +1,4 @@
+using Agencia.API.Configuration;
 using Agencia.BussinesLogic.Servicios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,16 @@ namespace Practica.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SistemaAsilos.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "SistemaAsilos.API", 
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Example Contact",
+                        Email = "example@example.com",
+                        Url = new Uri("https://example.com/contact"),
+                    },
+                });
             });
             services.DataAcces(Configuration.GetConnectionString("AgenciaConn"));
             services.BussinesLogic();
@@ -45,7 +55,7 @@ namespace Practica.API
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
@@ -56,6 +66,7 @@ namespace Practica.API
                                .AllowAnyMethod();
                     });
             });
+            //services.AddTransient<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
