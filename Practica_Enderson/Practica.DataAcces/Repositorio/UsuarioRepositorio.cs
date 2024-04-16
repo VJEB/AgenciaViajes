@@ -34,6 +34,21 @@ namespace Practica.DataAcces.Repositorio
                 return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
             }
         }
+        public RequestStatus ActualizarCodigoVerificacion(string Usua_Id, string CodigoVerificacion)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+                parametro.Add("Usua_Id", Usua_Id);
+                parametro.Add("Usua_CodigoVerificacion", CodigoVerificacion);
+
+                var result = db.QueryFirst(ScriptBaseDatos.Usua_ActualizarCodigoVerificacion,
+                    parametro,
+                     commandType: CommandType.StoredProcedure
+                    );
+                return new RequestStatus { CodeStatus = result.Resultado};
+            }
+        }
         public IEnumerable<tbUsuarios> ObtenerUsuaID(int Usua_Id)
         {
 

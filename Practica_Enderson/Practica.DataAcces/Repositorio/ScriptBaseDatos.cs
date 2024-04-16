@@ -12,6 +12,7 @@ namespace Practica.DataAcces.Repositorio
         public static string Usua_Mostrar = "Acce.SP_Usuarios_Mostrar";
         public static string Usua_Insertar = "Acce.SP_Usuarios_Insertar";
         public static string Usua_Actualizar = "Acce.SP_Usuarios_Actualizar";
+        public static string Usua_ActualizarCodigoVerificacion = "[Acce].[SP_Usuarios_ActualizarCodigoVerificacion]";
         public static string Usua_Eliminar = "Acce.SP_Usuarios_Eliminar";
         public static string Usua_Detalles = "Acce.SP_Usuarios_Llenar";
         public static string Usua_Reestablecer = "[Acce].[SP_Usuarios_Reestablecer]";

@@ -9,15 +9,20 @@ using Agencia.API.Configuration;
 using MimeKit;
 using MailKit.Net.Smtp;
 using SistemaAsilos.BussinesLogic;
+using Practica.DataAcces.Repositorio;
 
 namespace Agencia.BussinesLogic.Servicios
 {
     public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
-        public MailService(IOptions<MailSettings> mailSettingsOptions)
+        private readonly UsuarioRepositorio _usuarioRepositorio;
+
+        public MailService(IOptions<MailSettings> mailSettingsOptions, UsuarioRepositorio usuarioRepositorio)
         {
             _mailSettings = mailSettingsOptions.Value;
+            _usuarioRepositorio = usuarioRepositorio;
+
         }
 
         public ServiceResult SendMail(MailData mailData)
@@ -32,13 +37,14 @@ namespace Agencia.BussinesLogic.Servicios
                     MailboxAddress emailTo = new MailboxAddress(mailData.EmailToName, mailData.EmailToId);
                     emailMessage.To.Add(emailTo);
 
-                    //emailMessage.Cc.Add(new MailboxAddress("Cc Receiver", "cc@example.com"));
-                    //emailMessage.Bcc.Add(new MailboxAddress("Bcc Receiver", "bcc@example.com"));
-
-                    emailMessage.Subject = mailData.EmailSubject;
+                    emailMessage.Subject = "Codigo de registro";
 
                     BodyBuilder emailBodyBuilder = new BodyBuilder();
-                    emailBodyBuilder.TextBody = mailData.EmailBody;
+                    
+                    Random generator = new Random();
+                    var codigo = generator.Next(0, 1000000).ToString("D6");
+                    _usuarioRepositorio.ActualizarCodigoVerificacion(mailData.EmailSubject, codigo);
+                    emailBodyBuilder.TextBody = codigo;
 
                     emailMessage.Body = emailBodyBuilder.ToMessageBody();
                     using (SmtpClient mailClient = new SmtpClient())
