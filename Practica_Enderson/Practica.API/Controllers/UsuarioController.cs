@@ -1,4 +1,6 @@
-﻿using Agencia.Entities.Entities;
+﻿using Agencia.BussinesLogic.Servicios;
+using Agencia.Common.Models;
+using Agencia.Entities.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Practica.BussinesLogic.Servicios;
@@ -16,15 +18,14 @@ namespace Practica.API.Controllers
     {
         private readonly AccesoServicio _accesoServicio;
         private readonly IMapper _mapper;
+        private readonly IMailService _mailService;
 
-
-        public UsuarioController(AccesoServicio accesoServicio, IMapper mapper)
+        public UsuarioController(AccesoServicio accesoServicio, IMapper mapper, IMailService mailService)
         {
 
+            _mailService = mailService;
             _mapper = mapper;
             _accesoServicio = accesoServicio;
-
-
         }
 
         [HttpGet("List")]
@@ -50,8 +51,8 @@ namespace Practica.API.Controllers
             return Json(modelo.Data);
         }
      
-        [HttpGet("Login/{usuario},{contraseña}")]
-        public IActionResult loginUsuario(string usuario, string contraseña)
+        [HttpGet("Login/{usuario}/{contraseña}")]
+        public IActionResult Login(string usuario, string contraseña)
         {
             var estado = _accesoServicio.Login(usuario, contraseña);
             return Ok(estado);
@@ -104,6 +105,12 @@ namespace Practica.API.Controllers
                 return View("Error");
             }
         }
+        [HttpPost("EnviarCodigo")]
+        public IActionResult EnviarCodigo(MailData mailData)
+        {
+            var enviarCorreo = _mailService.SendMail(mailData);
+            return Ok(enviarCorreo);
+        }
         [HttpPut("restablecer/{id}")]
         public IActionResult restablecer(int id, UsuarioViewModel item)
         {
@@ -114,8 +121,6 @@ namespace Practica.API.Controllers
                 {
                     Usua_Id = id,
                     Usua_Contra = item.Usua_Contra,
-
-
                 };
                 var listado = _accesoServicio.ListUsua();
 
@@ -127,6 +132,7 @@ namespace Practica.API.Controllers
                 return View("Error");
             }
         }
+
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {

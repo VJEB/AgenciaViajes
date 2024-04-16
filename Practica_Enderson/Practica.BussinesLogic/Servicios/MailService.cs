@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using 
+using Agencia.API.Configuration;
+using MimeKit;
+using MailKit.Net.Smtp;
+using SistemaAsilos.BussinesLogic;
 
 namespace Agencia.BussinesLogic.Servicios
 {
@@ -17,8 +20,9 @@ namespace Agencia.BussinesLogic.Servicios
             _mailSettings = mailSettingsOptions.Value;
         }
 
-        public bool SendMail(MailData mailData)
+        public ServiceResult SendMail(MailData mailData)
         {
+            var result = new ServiceResult();
             try
             {
                 using (MimeMessage emailMessage = new MimeMessage())
@@ -28,8 +32,8 @@ namespace Agencia.BussinesLogic.Servicios
                     MailboxAddress emailTo = new MailboxAddress(mailData.EmailToName, mailData.EmailToId);
                     emailMessage.To.Add(emailTo);
 
-                    emailMessage.Cc.Add(new MailboxAddress("Cc Receiver", "cc@example.com"));
-                    emailMessage.Bcc.Add(new MailboxAddress("Bcc Receiver", "bcc@example.com"));
+                    //emailMessage.Cc.Add(new MailboxAddress("Cc Receiver", "cc@example.com"));
+                    //emailMessage.Bcc.Add(new MailboxAddress("Bcc Receiver", "bcc@example.com"));
 
                     emailMessage.Subject = mailData.EmailSubject;
 
@@ -37,7 +41,6 @@ namespace Agencia.BussinesLogic.Servicios
                     emailBodyBuilder.TextBody = mailData.EmailBody;
 
                     emailMessage.Body = emailBodyBuilder.ToMessageBody();
-                    //this is the SmtpClient from the Mailkit.Net.Smtp namespace, not the System.Net.Mail one
                     using (SmtpClient mailClient = new SmtpClient())
                     {
                         mailClient.Connect(_mailSettings.Server, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
@@ -46,13 +49,11 @@ namespace Agencia.BussinesLogic.Servicios
                         mailClient.Disconnect(true);
                     }
                 }
-
-                return true;
+                return result.Ok("Correo enviado");
             }
             catch (Exception ex)
             {
-                // Exception Details
-                return false;
+                return result.Error("Error al enviar el correo");
             }
         }
     }
