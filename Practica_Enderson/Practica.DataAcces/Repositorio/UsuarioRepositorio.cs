@@ -22,7 +22,7 @@ namespace Practica.DataAcces.Repositorio
                 parametro.Add("Usua_Admin", item.Usua_Admin);
                 parametro.Add("Pers_Id", item.Pers_Id);
                 parametro.Add("Rol_Id", item.Rol_Id);
-                parametro.Add("Usua_Usua_Modifica", item.Usua_Usua_Modifica);
+                parametro.Add("Usua_Usua_Modifica", 1);
                 parametro.Add("Usua_Fecha_Modifica", DateTime.Now);
 
                 var result = db.Execute(ScriptBaseDatos.Usua_Actualizar,
@@ -124,7 +124,7 @@ namespace Practica.DataAcces.Repositorio
                 var parametro = new DynamicParameters();
                 parametro.Add("Usua_Id", item.Usua_Id);
                 parametro.Add("Usua_Contra", item.Usua_Contra);
-                parametro.Add("Usua_Usua_Modifica", item.Usua_Fecha_Modifica);
+                parametro.Add("Usua_Usua_Modifica", 1);
                 parametro.Add("Usua_Fecha_Modifica", DateTime.Now);
 
                 var result = db.Execute(ScriptBaseDatos.Usua_Reestablecer,

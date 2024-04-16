@@ -91,7 +91,7 @@ namespace Practica.API.Controllers
                     Usua_Admin = item.Usua_Admin,
                     Pers_Id = item.Pers_Id,
                     Rol_Id = item.Rol_Id,
-                    Usua_Usua_Modifica = item.Usua_Usua_Modifica
+                 
 
                 };
                 var listado = _accesoServicio.ListUsua();
