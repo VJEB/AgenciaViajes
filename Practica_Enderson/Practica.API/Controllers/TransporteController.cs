@@ -25,10 +25,10 @@ namespace Agencia.API.Controllers
 
         }
 
-        [HttpGet("TransporteList")]
-        public IActionResult TransporteList()
+        [HttpGet("TransporteList/{Ciud_Id}")]
+        public IActionResult TransporteList(string Ciud_Id)
         {
-            var list = _agenciaServicio.ListTransporte();
+            var list = _agenciaServicio.ListTransporte(Ciud_Id);
             return Ok(list);
         }
 
