@@ -22,6 +22,7 @@ namespace Agencia.Entities.Entities
         public DateTime? Fact_Fecha_Creacion { get; set; }
         public int? Fact_Usua_Modifica { get; set; }
         public DateTime? Fact_Fecha_Modifica { get; set; }
+        public bool Fact_Emitida { get; set; }
 
         public virtual tbUsuarios Fact_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Fact_Usua_ModificaNavigation { get; set; }

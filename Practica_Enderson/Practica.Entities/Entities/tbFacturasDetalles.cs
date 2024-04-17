@@ -11,6 +11,7 @@ namespace Agencia.Entities.Entities
         public int Fdet_Id { get; set; }
         public int? Fact_Id { get; set; }
         public int? Paqu_Id { get; set; }
+        public int Fact_CantidadPaqu { get; set; }
 
         public virtual tbFacturas Fact { get; set; }
         public virtual tbPaquetes Paqu { get; set; }

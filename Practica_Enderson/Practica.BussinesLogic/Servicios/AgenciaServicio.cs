@@ -1,4 +1,5 @@
 ﻿using Agencia.DataAcces.Repositorio;
+using Agencia.Entities.Entities;
 using Practica.DataAcces.Repositorio;
 using SistemaAsilos.BussinesLogic;
 using System;
@@ -31,12 +32,12 @@ namespace Agencia.BussinesLogic.Servicios
         }
 
         #region Paquetes
-        public ServiceResult ListPaquetes()
+        public ServiceResult ListPaquetes(int Pers_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _paqueteRepositorio.List();
+                var lost = _paqueteRepositorio.MostrarPaquetes(Pers_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)
@@ -45,15 +46,172 @@ namespace Agencia.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult InsertarPaquete(tbPaquetes item, out int paqueteId)
+        {
+            var result = new ServiceResult();
+            paqueteId = 0;
+            try
+            {
+                var (lost, idGenerado) = _paqueteRepositorio.Insertar(item);
+                if (lost.CodeStatus > 0)
+                {
+                    paqueteId = idGenerado;
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult ActualizarPaquete(int id,tbPaquetes item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _paqueteRepositorio.Actualizar(id,item);
+                if (lost.CodeStatus > 0)
+                {
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult EliminarPaquete(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _paqueteRepositorio.Eliminar(id);
+                if (lost.CodeStatus > 0)
+                {
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+
+        public IEnumerable<tbPaquetes> DetallesPaquete(int id)
+        {
+            return _paqueteRepositorio.Detalle(id);
+        }
+
+        #endregion
+
+        #region Detalle Paquetes
+        public ServiceResult InsertarDetallePaquete(tbDetallePorPaquete item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _detallexpaqueteRepositorio.Insertar(item);
+                if (lost.CodeStatus > 0)
+                {
+                    
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult ActualizarDetallePaquete(int id, tbDetallePorPaquete item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _detallexpaqueteRepositorio.Actualizar(id, item);
+                if (lost.CodeStatus > 0)
+                {
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult EliminarDetallePaquete(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _detallexpaqueteRepositorio.Eliminar(id);
+                if (lost.CodeStatus > 0)
+                {
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+
+        public IEnumerable<tbDetallePorPaquete> DetallesDetallePaquete(int id)
+        {
+            return _detallexpaqueteRepositorio.Detalle(id);
+        }
+
         #endregion
 
         #region Habitaciones
-        public ServiceResult ListFotografias()
+        public ServiceResult FotosPorHabitacion(int HaHo_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _habitacionRepositorio.FotosPorHabitacionList();
+                var lost = _habitacionRepositorio.FotosPorHabitacion(HaHo_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)
@@ -63,12 +221,28 @@ namespace Agencia.BussinesLogic.Servicios
             }
         }
 
-        public ServiceResult ListHabitacionesXHotel()
+        public ServiceResult FotosPorHotel(int Hote_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _habitacionRepositorio.HabitacionesPorHotelList();
+                var lost = _habitacionRepositorio.FotosPorHotel(Hote_Id);
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+
+
+        public ServiceResult ListHabitacionesXHotel(int Hote_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _habitacionRepositorio.HabitacionPorHotel(Hote_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)
@@ -112,12 +286,12 @@ namespace Agencia.BussinesLogic.Servicios
         #endregion
 
         #region Transportes
-        public ServiceResult ListTransporte()
+        public ServiceResult ListTransporte(string Ciud_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _transporteRepositorio.List();
+                var lost = _transporteRepositorio.MostrarTransporte(Ciud_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)

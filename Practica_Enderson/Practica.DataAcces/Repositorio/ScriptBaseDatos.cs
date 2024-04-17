@@ -47,11 +47,10 @@ namespace Practica.DataAcces.Repositorio
         #endregion
 
         #region Clientes
-        public static string Clie_Mostrar = "Gral.SP_Clientes_Mostrar";
-        public static string Clie_Insertar = "Gral.SP_Clientes_Insertar";
-        public static string Clie_Actualizar = "Gral.SP_Clientes_Actualizar";
-        public static string Clie_Eliminar = "Gral.SP_Clientes_Eliminar";
-        public static string Clie_Detalles = "Gral.SP_Clientes_Llenar";
+       
+        public static string Pers_Insertar = "Gral.SP_Personas_Insertar";
+        public static string Pers_Detalles = "Gral.SP_Personas_Llenar";
+        public static string Pers_Tarjetas = "[Vent].[SP_PersonasPorTarjetas_Mostrar]";
         #endregion
 
         #region Paquetes
@@ -68,6 +67,7 @@ namespace Practica.DataAcces.Repositorio
         public static string DePa_Eliminar = "[Agen].[SP_DetallePorPaquete_Eliminar]";
         public static string DePa_Llenar = "[Agen].[SP_DetallePorPaquete_Llenar]";
         #endregion
+
         #region Habitaciones
         public static string Habi_Mostrar = "";
         public static string FoHa_Mostrar = "[Agen].[SP_FotografiasPorHabitacion_Mostrar]";
@@ -78,6 +78,7 @@ namespace Practica.DataAcces.Repositorio
 
         #region Hoteles
         public static string Hote_Mostrar = "[Agen].[SP_Hoteles_Mostrar]";
+        public static string Hote_Fotografias = "[Agen].[SP_FotografiasPorHotel_Mostrar]";
         #endregion
 
         #region Transportes

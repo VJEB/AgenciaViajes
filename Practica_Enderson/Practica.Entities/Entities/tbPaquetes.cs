@@ -22,6 +22,7 @@ namespace Agencia.Entities.Entities
         public int Paqu_Usua_Modifica { get; set; }
         public DateTime Paqu_Fecha_Modifica { get; set; }
         public int Paqu_Estado { get; set; }
+        public decimal Paqu_Precio { get; set; }
 
         public virtual tbUsuarios Paqu_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Paqu_Usua_ModificaNavigation { get; set; }

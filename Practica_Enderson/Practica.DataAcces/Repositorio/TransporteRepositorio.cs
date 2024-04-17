@@ -34,6 +34,16 @@ namespace Agencia.DataAcces.Repositorio
             throw new NotImplementedException();
         }
 
+        public IEnumerable<tbTransportes> MostrarTransporte(string Ciud_Id)
+        {
+            List<tbTransportes> result = new List<tbTransportes>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Ciud_Id = Ciud_Id };
+                result = db.Query<tbTransportes>(ScriptBaseDatos.Tran_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
         public IEnumerable<tbTransportes> List()
         {
             List<tbTransportes> result = new List<tbTransportes>();

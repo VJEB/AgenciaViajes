@@ -67,57 +67,86 @@ namespace Practica.DataAcces.Repositorio
             throw new NotImplementedException();
         }
 
-        public RequestStatus Insertar(tbPersonas item)
+
+        public (RequestStatus,int) Insertar(tbPersonas item)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+
+                parametro.Add("Pers_DNI", item.Pers_DNI);
+                parametro.Add("Pers_Pasaporte", item.Pers_Pasaporte);
+                parametro.Add("Pers_Email", item.Pers_Email);
+                parametro.Add("Pers_Nombre", item.Pers_Nombre);
+                parametro.Add("Pers_Apellido", item.Pers_Apellido);
+                parametro.Add("Pers_Sexo", item.Pers_Sexo);
+                parametro.Add("Pers_Telefono", item.Pers_Telefono);
+                parametro.Add("EsCi_Id", item.EsCi_Id);
+                parametro.Add("Carg_Id", item.Carg_Id);
+                parametro.Add("Ciud_Id", item.Ciud_Id);
+                parametro.Add("Pers_Usua_Creacion", 1);
+                parametro.Add("Pers_Fecha_Creacion", DateTime.Now);
+                parametro.Add("Pers_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                 var result = db.Execute(ScriptBaseDatos.Pers_Insertar,
+                    parametro,
+                    commandType: CommandType.StoredProcedure
+                    );
+
+
+                int perso = 0;
+                if (result > 0)
+                {
+                    perso = parametro.Get<int>("Pers_Id");
+                }
+
+                string mensaje = (result == 1) ? "Exito" : "Error";
+                return (new RequestStatus { CodeStatus = result, MessageStatus = mensaje }, perso);
+            }
+        }
+
+        //public IEnumerable<tbPersonas> List()
+        //{
+        //    List<tbPersonas> result = new List<tbPersonas>();
+        //    using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+        //    {
+        //        result = db.Query<tbPersonas>(ScriptBaseDatos.Clie_Mostrar, commandType: CommandType.StoredProcedure).ToList();
+        //        return result;
+        //    }
+        //}
+
+        public IEnumerable<tbPersonas> CargarTarjetas(int Pers_Id)
+        {
+
+
+            List<tbPersonas> result = new List<tbPersonas>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Pers_Id = Pers_Id };
+                result = db.Query<tbPersonas>(ScriptBaseDatos.Pers_Tarjetas, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
+        public IEnumerable<tbPersonas> Detalle(int Pers_Id)
+        {
+
+            List<tbPersonas> result = new List<tbPersonas>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Pers_Id = Pers_Id };
+                result = db.Query<tbPersonas>(ScriptBaseDatos.Pers_Detalles, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
+
+        public IEnumerable<tbPersonas> List()
         {
             throw new NotImplementedException();
         }
 
-        //public RequestStatus Insertar(tbPersonas item)
-        //{
-        //    //using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-        //    //{
-        //    //    var parametro = new DynamicParameters();
-
-        //    //    parametro.Add("Clie_DNI", item.Clie_DNI);
-        //    //    parametro.Add("Clie_Nombre", item.Clie_Nombre);
-        //    //    parametro.Add("Clie_Apellido", item.Clie_Apellido);
-        //    //    parametro.Add("Clie_Sexo", item.Clie_Sexo);
-        //    //    parametro.Add("Clie_Telefono", item.Clie_Telefono);
-        //    //    parametro.Add("EsCi_Id", item.EsCi_Id);
-        //    //    parametro.Add("Ciud_Id", item.Ciud_Id);
-
-        //    //    parametro.Add("Clie_Usua_Creacion", item.Clie_Usua_Creacion);
-        //    //    parametro.Add("Clie_Fecha_Creacion", DateTime.Now);
-
-
-        //    //    var result = db.QueryFirst(ScriptBaseDatos.Clie_Insertar,
-        //    //        parametro,
-        //    //         commandType: CommandType.StoredProcedure
-        //    //        );
-
-        //    //    return result;
-        //    //}
-        //}
-
-        public IEnumerable<tbPersonas> List()
+        RequestStatus IRepository<tbPersonas>.Insertar(tbPersonas item)
         {
-            List<tbPersonas> result = new List<tbPersonas>();
-            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-            {
-                result = db.Query<tbPersonas>(ScriptBaseDatos.Clie_Mostrar, commandType: CommandType.StoredProcedure).ToList();
-                return result;
-            }
+            throw new NotImplementedException();
         }
-        //public IEnumerable<tbPersonas> Detalle(int Clie_Id)
-        //{
-
-        //    List<tbPersonas> result = new List<tbPersonas>();
-        //    using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-        //    {
-        //        var parameters = new { Clie_Id = Clie_Id };
-        //        result = db.Query<tbPersonas>(ScriptBaseDatos.Clie_Detalles, parameters, commandType: CommandType.StoredProcedure).ToList();
-        //        return result;
-        //    }
-        //}
     }
 }

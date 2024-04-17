@@ -25,17 +25,24 @@ namespace Agencia.API.Controllers
 
         }
 
-        [HttpGet("FotoXHabitacionList")]
-        public IActionResult FotoXHabitacion()
+        [HttpGet("FotoPorHabitacionList/{HaHo_Id}")]
+        public IActionResult FotoPorHabitacion(int HaHo_Id)
         {
-            var list = _agenciaServicio.ListFotografias();
+            var list = _agenciaServicio.FotosPorHabitacion(HaHo_Id);
             return Ok(list);
         }
 
-        [HttpGet("HabitacionXHotelList/{Hote_Id}")]
-        public IActionResult HabitacionXHotel()
+        [HttpGet("FotoPorHotelList/{Hote_Id}")]
+        public IActionResult FotoPorHoteles(int Hote_Id)
         {
-            var list = _agenciaServicio.ListHabitacionesXHotel();
+            var list = _agenciaServicio.FotosPorHotel(Hote_Id);
+            return Ok(list);
+        }
+
+        [HttpGet("HabitacionPorHotelList/{Hote_Id}")]
+        public IActionResult HabitacionPorHotel(int Hote_Id)
+        {
+            var list = _agenciaServicio.ListHabitacionesXHotel(Hote_Id);
             return Ok(list);
         }
 

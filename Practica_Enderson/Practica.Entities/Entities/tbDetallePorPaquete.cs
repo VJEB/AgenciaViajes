@@ -18,6 +18,7 @@ namespace Agencia.Entities.Entities
         public DateTime DePa_Fecha_Modifica { get; set; }
         public int? DePa_Cantidad { get; set; }
         public int? DePa_NumNoches { get; set; }
+        public decimal DePa_PrecioTodoIncluido { get; set; }
 
         public virtual tbUsuarios DePa_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios DePa_Usua_ModificaNavigation { get; set; }

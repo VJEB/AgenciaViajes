@@ -15,7 +15,7 @@ namespace Practica.BussinesLogic.Servicios
         private readonly EstadoCivilRepositorio _estadoCivilRepositorio;
         private readonly CiudadRepositorio _municipioRepositorio;
        
-        private readonly PersonaRepositorio _clienteRepositorio;
+        private readonly PersonaRepositorio _personaRepositorio;
 
         public GeneralServicio(EstadoRepositorio departamentoRepositorio, EstadoCivilRepositorio estadoCivilRepositorio, CiudadRepositorio municipioRepositorio
               ,PersonaRepositorio clienteRepositorio)
@@ -23,8 +23,8 @@ namespace Practica.BussinesLogic.Servicios
             _departamentoRepositorio = departamentoRepositorio;
             _estadoCivilRepositorio = estadoCivilRepositorio;
             _municipioRepositorio = municipioRepositorio;
-            
-            _clienteRepositorio = clienteRepositorio;
+
+            _personaRepositorio = clienteRepositorio;
             
 
         }
@@ -217,30 +217,31 @@ namespace Practica.BussinesLogic.Servicios
 
         #endregion
 
-        #region Clientes
-        public ServiceResult ListClie()
+        #region Personas
+        public ServiceResult CargarTarjetas(int Pers_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _clienteRepositorio.List();
+                var lost = _personaRepositorio.CargarTarjetas(Pers_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)
             {
-
                 return result.Error(ex.Message);
             }
         }
 
-        public ServiceResult InsertarClie(tbPersonas item)
+        public ServiceResult InsertarPerson(tbPersonas item,out int personId)
         {
             var result = new ServiceResult();
+            personId = 0;
             try
             {
-                var lost = _clienteRepositorio.Insertar(item);
+                var (lost, idGenerado) = _personaRepositorio.Insertar(item);
                 if (lost.CodeStatus > 0)
                 {
+                    personId = idGenerado;
                     return result.Ok(lost);
                 }
                 else
@@ -256,64 +257,17 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult ActualizarClie(tbPersonas item)
+
+        public IEnumerable<tbPersonas> DetallesPerson(int id)
         {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _clienteRepositorio.Actualizar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
+            return _personaRepositorio.Detalle(id);
         }
-        public ServiceResult EliminarClie(int id)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _clienteRepositorio.Eliminar(id);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-       
-       
-        //public IEnumerable<tbPersonas> DetallesClien(int id)
-        //{
-        //    return _clienteRepositorio.Detalle(id);
-        //}
         #endregion
 
-       
+
 
         #region Estados Civiles
-       
+
 
         public ServiceResult EstadoList()
         {
