@@ -46,6 +46,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Agen].[tbHorariosTransportes]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Agen].[tbHoteles]",
          "ObjectType": 0
       },
@@ -58,11 +62,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[Gral].[tbCiudades]",
+         "Name": "[Gral].[tbCargos]",
          "ObjectType": 0
       },
       {
-         "Name": "[Gral].[tbClientes]",
+         "Name": "[Gral].[tbCiudades]",
          "ObjectType": 0
       },
       {
@@ -74,7 +78,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Gral].[tbMetodosPagos]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Gral].[tbPaises]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbPersonas]",
          "ObjectType": 0
       },
       {
@@ -83,6 +95,22 @@
       },
       {
          "Name": "[Gral].[tbTiposTransportes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Vent].[tbFacturas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Vent].[tbFacturasDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Vent].[tbPagosTarjetas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Vent].[tbPersonasPorTarjetas]",
          "ObjectType": 0
       }
    ],

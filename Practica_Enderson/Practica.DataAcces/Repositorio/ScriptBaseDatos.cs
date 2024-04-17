@@ -94,7 +94,13 @@ namespace Practica.DataAcces.Repositorio
         public static string Esta_Detalles = "Gral.SP_EstadosCiviles_Llenar";
         #endregion
 
-     
+
+        #region Facturas
+        public static string Fact_Insertar = "Vent.SP_Facturas_Insertar";
+        public static string Fact_Mostrar = "Vent.SP_Facturas_Mostrar";
+        public static string Fact_Actualizar = "Vent.SP_Facturas_Actualizar";
+        #endregion
+        public static string Meto_Mostrar = "[Gral].[SP_MetodosPagos_Mostrar]";
     }
 
 }
