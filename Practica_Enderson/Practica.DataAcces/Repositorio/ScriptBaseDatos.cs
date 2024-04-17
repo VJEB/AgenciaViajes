@@ -12,7 +12,7 @@ namespace Practica.DataAcces.Repositorio
         public static string Usua_Mostrar = "Acce.SP_Usuarios_Mostrar";
         public static string Usua_Insertar = "Acce.SP_Usuarios_Insertar";
         public static string Usua_Actualizar = "Acce.SP_Usuarios_Actualizar";
-        public static string Usua_ActualizarCodigoVerificacion = "[Acce].[SP_Usuarios_ActualizarCodigoVerificacion]";
+        public static string Usua_Codigo = "[Acce].[SP_Usuarios_ActualizarCodigoVerificacion]";
         public static string Usua_Eliminar = "Acce.SP_Usuarios_Eliminar";
         public static string Usua_Detalles = "Acce.SP_Usuarios_Llenar";
         public static string Usua_Reestablecer = "[Acce].[SP_Usuarios_Reestablecer]";
@@ -56,15 +56,25 @@ namespace Practica.DataAcces.Repositorio
 
         #region Paquetes
         public static string Paque_Mostrar = "[Agen].[SP_Paquetes_Mostrar]";
-        public static string DePa_Mostrar = "Gral.SP_Municipios_Detalles";
+        public static string Paque_Insertar = "[Agen].[SP_Paquetes_Insertar]";
+        public static string Paque_Actualizar = "[Agen].[SP_Paquetes_Actualizar]";
+        public static string Paque_Eliminar = "[Agen].[SP_Paquetes_Eliminar]";
+        public static string Paque_Llenar = "[Agen].[SP_Paquetes_Llenar]";
         #endregion
 
+        #region Detalles Paquetes
+        public static string DePa_Insertar = "[Agen].[SP_DetallePorPaquete_Insertar]";
+        public static string DePa_Actualizar = "[Agen].[SP_DetallePorPaquete_Actualizar]";
+        public static string DePa_Eliminar = "[Agen].[SP_DetallePorPaquete_Eliminar]";
+        public static string DePa_Llenar = "[Agen].[SP_DetallePorPaquete_Llenar]";
+        #endregion
         #region Habitaciones
         public static string Habi_Mostrar = "";
         public static string FoHa_Mostrar = "[Agen].[SP_FotografiasPorHabitacion_Mostrar]";
         public static string HaHo_Mostrar = "[Agen].[SP_HabitacionesPorHotel_Mostrar]";
         public static string TiCa_Mostrar = "[Gral].[SP_TiposDeCamas_Mostrar]";
         #endregion
+
 
         #region Hoteles
         public static string Hote_Mostrar = "[Agen].[SP_Hoteles_Mostrar]";

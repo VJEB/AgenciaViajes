@@ -15,10 +15,10 @@ namespace Agencia.Entities.Entities
 
         public int Pais_Id { get; set; }
         public string Pais_Descripcion { get; set; }
-        public int Pais_Usua_Creacion { get; set; }
-        public DateTime Pais_Fecha_Creacion { get; set; }
-        public int Pais_Usua_Modifica { get; set; }
-        public DateTime Pais_Fecha_Modifica { get; set; }
+        public int? Pais_Usua_Creacion { get; set; }
+        public DateTime? Pais_Fecha_Creacion { get; set; }
+        public int? Pais_Usua_Modifica { get; set; }
+        public DateTime? Pais_Fecha_Modifica { get; set; }
 
         public virtual tbUsuarios Pais_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Pais_Usua_ModificaNavigation { get; set; }

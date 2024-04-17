@@ -99,26 +99,27 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult ActualizarCodigoVerificacionUsua(string Usua_Id, string CodigoVerificacion)
+        public ServiceResult ActualizarCodigo(string Usua_Id, string codigo)
         {
             var result = new ServiceResult();
             try
             {
-                var response = _usuarioRepositorio.ActualizarCodigoVerificacion(Usua_Id, CodigoVerificacion);
+                var response = _usuarioRepositorio.ActualizarCodigoVerificacion(Usua_Id,codigo);
                 if (response.CodeStatus == 1)
                 {
-                    return result.Ok("Codigo de verificacion actualizado!");
+                    return result.Ok("Codigo actualizado exitosamente");
                 }
                 else
                 {
-                    return result.Error("Error al actualizar el codigo de verficacion.");
+                   
+                    return result.Error("Error al acutalizar el codigo de verificacion");
                 }
 
             }
             catch (Exception ex)
             {
 
-                return result.Error(ex.Message);
+                return result.Error("Error al acutalizar el codigo de verificacion");
             }
         }
         public ServiceResult restablecer(tbUsuarios item)

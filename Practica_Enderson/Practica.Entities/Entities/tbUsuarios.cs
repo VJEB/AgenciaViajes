@@ -12,16 +12,24 @@ namespace Agencia.Entities.Entities
         {
             InverseUsua_Usua_CreacionNavigation = new HashSet<tbUsuarios>();
             InverseUsua_Usua_ModificaNavigation = new HashSet<tbUsuarios>();
+            tbCargosCarg_Usua_CreacionNavigation = new HashSet<tbCargos>();
+            tbCargosCarg_Usua_ModificaNavigation = new HashSet<tbCargos>();
             tbDetallePorPaqueteDePa_Usua_CreacionNavigation = new HashSet<tbDetallePorPaquete>();
             tbDetallePorPaqueteDePa_Usua_ModificaNavigation = new HashSet<tbDetallePorPaquete>();
             tbEstadosCivilesEsCi_Usua_CreacionNavigation = new HashSet<tbEstadosCiviles>();
             tbEstadosCivilesEsCi_Usua_ModificaNavigation = new HashSet<tbEstadosCiviles>();
             tbEstadosEsta_Usua_CreacionNavigation = new HashSet<tbEstados>();
             tbEstadosEsta_Usua_ModificaNavigation = new HashSet<tbEstados>();
+            tbFacturasFact_Usua_CreacionNavigation = new HashSet<tbFacturas>();
+            tbFacturasFact_Usua_ModificaNavigation = new HashSet<tbFacturas>();
             tbHabitacionesHabi_Usua_CreacionNavigation = new HashSet<tbHabitaciones>();
             tbHabitacionesHabi_Usua_ModificaNavigation = new HashSet<tbHabitaciones>();
             tbHotelesHote_Usua_CreacionNavigation = new HashSet<tbHoteles>();
             tbHotelesHote_Usua_ModificaNavigation = new HashSet<tbHoteles>();
+            tbMetodosPagosMeto_Usua_CreacionNavigation = new HashSet<tbMetodosPagos>();
+            tbMetodosPagosMeto_Usua_ModificaNavigation = new HashSet<tbMetodosPagos>();
+            tbPagosTarjetasPaTa_Usua_CreacionNavigation = new HashSet<tbPagosTarjetas>();
+            tbPagosTarjetasPaTa_Usua_ModificaNavigation = new HashSet<tbPagosTarjetas>();
             tbPaisesPais_Usua_CreacionNavigation = new HashSet<tbPaises>();
             tbPaisesPais_Usua_ModificaNavigation = new HashSet<tbPaises>();
             tbPantallasPant_Usua_CreacionNavigation = new HashSet<tbPantallas>();
@@ -53,6 +61,8 @@ namespace Agencia.Entities.Entities
         public DateTime? Usua_Fecha_Modifica { get; set; }
         public bool? Usua_Estado { get; set; }
         public int? Pers_Id { get; set; }
+        public string Usua_UrlImagen { get; set; }
+        public string Usua_CodigoVerificacion { get; set; }
 
         public virtual tbPersonas Pers { get; set; }
         public virtual tbRoles Rol { get; set; }
@@ -60,16 +70,24 @@ namespace Agencia.Entities.Entities
         public virtual tbUsuarios Usua_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbUsuarios> InverseUsua_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbUsuarios> InverseUsua_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbCargos> tbCargosCarg_Usua_CreacionNavigation { get; set; }
+        public virtual ICollection<tbCargos> tbCargosCarg_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaqueteDePa_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaqueteDePa_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbEstadosCiviles> tbEstadosCivilesEsCi_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbEstadosCiviles> tbEstadosCivilesEsCi_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbEstados> tbEstadosEsta_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbEstados> tbEstadosEsta_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbFacturas> tbFacturasFact_Usua_CreacionNavigation { get; set; }
+        public virtual ICollection<tbFacturas> tbFacturasFact_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbHabitaciones> tbHabitacionesHabi_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbHabitaciones> tbHabitacionesHabi_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbHoteles> tbHotelesHote_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbHoteles> tbHotelesHote_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbMetodosPagos> tbMetodosPagosMeto_Usua_CreacionNavigation { get; set; }
+        public virtual ICollection<tbMetodosPagos> tbMetodosPagosMeto_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbPagosTarjetas> tbPagosTarjetasPaTa_Usua_CreacionNavigation { get; set; }
+        public virtual ICollection<tbPagosTarjetas> tbPagosTarjetasPaTa_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbPaises> tbPaisesPais_Usua_CreacionNavigation { get; set; }
         public virtual ICollection<tbPaises> tbPaisesPais_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbPantallas> tbPantallasPant_Usua_CreacionNavigation { get; set; }
