@@ -8,6 +8,11 @@ namespace Agencia.Entities.Entities
 {
     public partial class tbTransportes
     {
+        public tbTransportes()
+        {
+            tbHorariosTransportes = new HashSet<tbHorariosTransportes>();
+        }
+
         public int Tran_Id { get; set; }
         public decimal? Tran_Precio { get; set; }
         public int? TiTr_Id { get; set; }
@@ -24,5 +29,6 @@ namespace Agencia.Entities.Entities
         public virtual tbCiudades Tran_PuntoInicioNavigation { get; set; }
         public virtual tbUsuarios Tran_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Tran_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbHorariosTransportes> tbHorariosTransportes { get; set; }
     }
 }

@@ -11,20 +11,23 @@ namespace Agencia.Entities.Entities
         public tbPaquetes()
         {
             tbDetallePorPaquete = new HashSet<tbDetallePorPaquete>();
+            tbFacturasDetalles = new HashSet<tbFacturasDetalles>();
         }
 
         public int Paqu_Id { get; set; }
         public string Paqu_Nombre { get; set; }
-        public int Clie_Id { get; set; }
+        public int Pers_Id { get; set; }
         public int Paqu_Usua_Creacion { get; set; }
         public DateTime Paqu_Fecha_Creacion { get; set; }
         public int Paqu_Usua_Modifica { get; set; }
         public DateTime Paqu_Fecha_Modifica { get; set; }
         public int Paqu_Estado { get; set; }
+        public decimal Paqu_Precio { get; set; }
 
-        public virtual tbPersonas Clie { get; set; }
         public virtual tbUsuarios Paqu_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Paqu_Usua_ModificaNavigation { get; set; }
+        public virtual tbPersonas Pers { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaquete { get; set; }
+        public virtual ICollection<tbFacturasDetalles> tbFacturasDetalles { get; set; }
     }
 }

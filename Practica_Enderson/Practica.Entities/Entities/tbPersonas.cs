@@ -10,7 +10,9 @@ namespace Agencia.Entities.Entities
     {
         public tbPersonas()
         {
+            tbFacturas = new HashSet<tbFacturas>();
             tbPaquetes = new HashSet<tbPaquetes>();
+            tbPersonasPorTarjetas = new HashSet<tbPersonasPorTarjetas>();
             tbUsuarios = new HashSet<tbUsuarios>();
         }
 
@@ -31,11 +33,14 @@ namespace Agencia.Entities.Entities
         public string Pers_Email { get; set; }
         public int? Carg_Id { get; set; }
 
+        public virtual tbCargos Carg { get; set; }
         public virtual tbCiudades Ciud { get; set; }
         public virtual tbEstadosCiviles EsCi { get; set; }
         public virtual tbUsuarios Pers_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Pers_Usua_ModificaNavigation { get; set; }
+        public virtual ICollection<tbFacturas> tbFacturas { get; set; }
         public virtual ICollection<tbPaquetes> tbPaquetes { get; set; }
+        public virtual ICollection<tbPersonasPorTarjetas> tbPersonasPorTarjetas { get; set; }
         public virtual ICollection<tbUsuarios> tbUsuarios { get; set; }
     }
 }

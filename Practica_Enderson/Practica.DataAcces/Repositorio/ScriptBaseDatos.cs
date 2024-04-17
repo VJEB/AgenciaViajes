@@ -83,7 +83,10 @@ namespace Practica.DataAcces.Repositorio
         public static string Esta_Detalles = "Gral.SP_EstadosCiviles_Llenar";
         #endregion
 
-     
+
+        #region Facturas
+        public static string Fact_Insertar = "Vent.SP_Facturas_Insertar";
+        #endregion
     }
 
 }
