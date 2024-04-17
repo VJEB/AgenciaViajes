@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.API\\Agencia.API.csproj": {}
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.API\\Agencia.API.csproj": {
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
+        "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
         "projectName": "Agencia.API",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.API\\obj\\",
+        "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
+        "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,11 +28,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj"
+              "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj": {
+                "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj"
               },
-              "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj"
+              "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
+                "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj"
               }
             }
           }
@@ -100,17 +100,17 @@
         }
       }
     },
-    "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj": {
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj",
+        "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj",
         "projectName": "Agencia.BussinesLogic",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.BussinesLogic\\obj\\",
+        "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj",
+        "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -124,8 +124,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj"
+              "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
+                "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj"
+              },
+              "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj": {
+                "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj"
               }
             }
           }
@@ -139,6 +142,12 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[3.5.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -158,17 +167,17 @@
         }
       }
     },
-    "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
+        "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
         "projectName": "Agencia.Common",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Common\\obj\\",
+        "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
+        "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -212,17 +221,17 @@
         }
       }
     },
-    "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj": {
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
+        "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
         "projectName": "Agencia.DataAcces",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\obj\\",
+        "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
+        "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -236,8 +245,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj"
+              "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj": {
+                "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj"
               }
             }
           }
@@ -284,17 +293,17 @@
         }
       }
     },
-    "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj": {
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj",
+        "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj",
         "projectName": "Agencia.Entities",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\obj\\",
+        "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj",
+        "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

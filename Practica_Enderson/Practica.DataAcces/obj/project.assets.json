@@ -5746,19 +5746,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
+    "C:\\Users\\LAB1\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
+      "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
       "projectName": "Agencia.DataAcces",
-      "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
-      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.DataAcces\\obj\\",
+      "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\Agencia.DataAcces.csproj",
+      "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.DataAcces\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5772,8 +5772,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj": {
-              "projectPath": "C:\\Users\\Usuario\\source\\repos\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj"
+            "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj": {
+              "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Entities\\Agencia.Entities.csproj"
             }
           }
         }
