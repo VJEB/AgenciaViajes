@@ -21,33 +21,44 @@ namespace Practica.BussinesLogic.Servicios
 
         #region Usuario
 
-        public ServiceResult ListFact()
+        public ServiceResult ListFact(int Pers_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _facturaRepositorio.List();
-                return result.Ok(lost);
+                var list = _facturaRepositorio.List(Pers_Id);
+                return result.Ok(list);
             }
             catch (Exception ex)
             {
-
-                return result.Error(ex.Message);
+                return result.Error("Error al cargar las facturas");
             }
         }
-        public ServiceResult ObtenerUsuaID(int Usua_Id)
+        public ServiceResult FindFact(int Fact_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _facturaRepositorio.ObtenerUsuaID(Usua_Id);
-                return result.Ok(lost);
+                var list = _facturaRepositorio.Find(Fact_Id);
+                return result.Ok(list);
             }
             catch (Exception ex)
             {
-                return result.Error(ex.Message);
+                return result.Error("Error al cargar las facturas");
             }
-
+        }
+        public ServiceResult ListMetodosPagos()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturaRepositorio.ListMetodosPagos();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error("Error al cargar los metodos de pago");
+            }
         }
         public ServiceResult InsertarFact(tbFacturas item)
         {
@@ -67,57 +78,29 @@ namespace Practica.BussinesLogic.Servicios
             catch (Exception ex)
             {
 
-                return result.Error(ex.Message);
+                return result.Error("Error al crear la factura");
             }
         }
-        public ServiceResult ActualizarUsua(tbFacturas item)
+        public ServiceResult ActualizarFact(tbFacturas item)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _facturaRepositorio.Actualizar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult ActualizarCodigoVerificacionUsua(string Usua_Id, string CodigoVerificacion)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var response = _facturaRepositorio.ActualizarCodigoVerificacion(Usua_Id, CodigoVerificacion);
+                var response = _facturaRepositorio.Actualizar(item);
                 if (response.CodeStatus == 1)
                 {
-                    return result.Ok("Codigo de verificacion actualizado!");
+                    return result.Ok("Factura actualizada!");
                 }
                 else
                 {
-                    return result.Error("Error al actualizar el codigo de verficacion.");
+                    return result.Error("Error al actualizar la factura");
                 }
-
             }
             catch (Exception ex)
             {
 
-                return result.Error(ex.Message);
+                return result.Error("Error al actualizar la factura");
             }
-        }
-        public IEnumerable<tbFacturas> DetallesUsua(int id)
-        {
-            return _facturaRepositorio.Detalle(id);
         }
         #endregion
     }

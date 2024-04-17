@@ -25,33 +25,25 @@ namespace Agencia.API.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet("List")]
-        //public IActionResult List()
-        //{
-        //    var list = _ventaServicio.ListFact();
-        //    return Ok(list);
-        //}
-
-        [HttpGet("Details/{id}")]
-        public IActionResult Details(int id)
+        [HttpGet("List/{Pers_Id}")]
+        public IActionResult List(int Pers_Id)
         {
-            var modelo = _ventaServicio.DetallesFact(id);
-            var detail = modelo.First();
-            return Ok(detail);
+            var result = _ventaServicio.ListFact(Pers_Id);
+            return Ok(result);
         }
 
 
         [HttpGet("Edit/{id}")]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int Fact_Id)
         {
-            var modelo = _ventaServicio.ObtenerUsuaID(id);
-            return Json(modelo.Data);
+            var result = _ventaServicio.FindFact(Fact_Id);
+            return Ok(result);
         }
 
         [HttpPost("Create")]
         public IActionResult Create(FacturaViewModel item)
         {
-            var model = _mapper.Map<tbFacturas>(item);
+            //var model = _mapper.Map<tbFacturas>(item);
             var modelo = new tbFacturas()
             {
                 Fact_Fecha = item.Fact_Fecha,
@@ -61,35 +53,30 @@ namespace Agencia.API.Controllers
                 Fact_Usua_Creacion = item.Fact_Usua_Creacion,
                 Fact_Fecha_Creacion = item.Fact_Fecha_Creacion
             };
-            var listado = _ventaServicio.ListFact();
+            //var listado = _ventaServicio.ListFact();
 
-            _ventaServicio.InsertarFact(modelo);
-            return Ok(listado);
+            var result = _ventaServicio.InsertarFact(modelo);
+            return Ok(result);
         }
 
-        [HttpPut("Edit/{id}")]
-        public IActionResult Edit(int id, UsuarioViewModel item)
+        [HttpPut("Edit")]
+        public IActionResult Edit(FacturaViewModel item)
         {
-            if (id > 0)
+            //var model = _mapper.Map<tbFacturas>(item);
+            var modelo = new tbFacturas()
             {
-                var model = _mapper.Map<tbFacturas>(item);
-                var modelo = new tbFacturas()
-                {
-                    Usua_Id = id,
-                    Usua_Usuario = item.Usua_Usuario,
-                    Usua_Admin = item.Usua_Admin,
-                    Pers_Id = item.Pers_Id,
-                    Rol_Id = item.Rol_Id,
-                };
-                var listado = _ventaServicio.ListUsua();
+                Fact_Id = item.Fact_Id,
+                Fact_Fecha = item.Fact_Fecha,
+                Pers_Id = item.Pers_Id,
+                Meto_Id = item.Meto_Id,
+                Pago_Id = item.Pago_Id,
+                Fact_Usua_Creacion = item.Fact_Usua_Creacion,
+                Fact_Fecha_Creacion = item.Fact_Fecha_Creacion
+            };
+            //var listado = _ventaServicio.ListFact();
 
-                _ventaServicio.ActualizarUsua(modelo);
-                return Ok(listado);
-            }
-            else
-            {
-                return View("Error");
-            }
+            var result = _ventaServicio.ActualizarFact(modelo);
+            return Ok(result);
         }
     }
 }

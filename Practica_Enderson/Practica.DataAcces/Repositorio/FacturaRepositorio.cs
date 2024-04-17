@@ -26,7 +26,7 @@ namespace Practica.DataAcces.Repositorio
                 parametro.Add("Fact_Usua_Modifica", item.Fact_Usua_Modifica);
                 parametro.Add("Fact_Fecha_Modifica", item.Fact_Fecha_Modifica);
 
-                var result = db.QueryFirst(ScriptBaseDatos.Fact_Insertar, parametro, commandType: CommandType.StoredProcedure);
+                var result = db.QueryFirst(ScriptBaseDatos.Fact_Actualizar, parametro, commandType: CommandType.StoredProcedure);
 
                 return new RequestStatus { CodeStatus = result.Resultado};
             }
@@ -47,9 +47,15 @@ namespace Practica.DataAcces.Repositorio
         //    }
         //}
 
-        public tbFacturas Find(int? id)
+        public tbFacturas Find(int? Fact_Id)
         {
-            throw new NotImplementedException();
+            tbFacturas result = new tbFacturas();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Fact_Id };
+                result = db.QueryFirst<tbFacturas>(ScriptBaseDatos.Fact_Mostrar, parameters, commandType: CommandType.StoredProcedure);
+                return result;
+            }
         }
 
         public RequestStatus Insertar(tbFacturas item)
@@ -74,29 +80,35 @@ namespace Practica.DataAcces.Repositorio
                 return new RequestStatus { CodeStatus = result.Resultado, MessageStatus = factId.ToString() };
             }
         }
-
-
-        public IEnumerable<tbFacturas> List()
+        public IEnumerable<tbFacturas> List(int Pers_Id)
         {
-
             List<tbFacturas> result = new List<tbFacturas>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
-                result = db.Query<tbFacturas>(ScriptBaseDatos.Usua_Mostrar, commandType: CommandType.Text).ToList();
+                var parameters = new { Pers_Id };
+                result = db.Query<tbFacturas>(ScriptBaseDatos.Fact_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
                 return result;
             }
         }
 
-        public IEnumerable<tbFacturas> Detalle(int Usua_Id)
+        public IEnumerable<tbMetodosPagos> ListMetodosPagos()
         {
-
-            List<tbFacturas> result = new List<tbFacturas>();
+            List<tbMetodosPagos> result = new List<tbMetodosPagos>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
-                var parameters = new { Usua_Id = Usua_Id };
-                result = db.Query<tbFacturas>(ScriptBaseDatos.Usua_Detalles, parameters, commandType: CommandType.StoredProcedure).ToList();
+                result = db.Query<tbMetodosPagos>(ScriptBaseDatos.Meto_Mostrar, commandType: CommandType.Text).ToList();
                 return result;
             }
+        }
+
+        public RequestStatus Eliminar(int? id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<tbFacturas> List()
+        {
+            throw new NotImplementedException();
         }
     }
 }

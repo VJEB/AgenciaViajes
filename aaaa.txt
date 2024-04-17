@@ -1,0 +1,68 @@
+USE [BD_AgenciaViajes]
+GO
+/****** Object:  StoredProcedure [Vent].[SP_PersonasPorTarjetas_Mostrar]    Script Date: 17/4/2024 07:21:07 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+create or	ALTER PROCEDURE [Agen].[SP_CiudadesDestino_Dashboard]
+AS
+BEGIN
+	SELECT p.MaritalStatus, tr.DestinationCity, COUNT(*) AS NumeroPersonas
+	FROM tbRoutes tr
+	JOIN tbPackageDetail pd ON tr.ID = pd.tbRoutesID
+	JOIN tbPackage pkg ON pd.PackageID = pkg.ID
+	JOIN tbInvoiceDetail invd ON pkg.ID = invd.PackageID
+	JOIN tbInvoice inv ON invd.InvoiceID = inv.ID
+	JOIN tbPerson p ON inv.Pers_Id = p.PersonID
+	GROUP BY p.MaritalStatus, tr.DestinationCity
+	ORDER BY p.MaritalStatus, TotalPeople DESC
+	LIMIT 10;
+END
+
+create or	ALTER PROCEDURE [Agen].[SP_CiudadesHospedaje_Dashboard]
+AS
+BEGIN
+	SELECT TOP 10 ci.CityName,
+		COUNT(*) AS TotalVisitors,
+		p.MaritalStatusId
+	FROM tbInvoice i
+	INNER JOIN tbPersons p ON i.Pers_Id = p.Pers_Id
+	INNER JOIN tbPackage pck ON i.PackageID = pck.PackageID
+	INNER JOIN tbPackageDetail pd ON pck.PackageID = pd.PackageID
+	INNER JOIN tbRoomsByHotel rh ON pd.RoomID = rh.RoomID
+	INNER JOIN tbHotels h ON rh.HotelID = h.HotelID
+	INNER JOIN tbCities ci ON h.CityID = ci.CityID
+	GROUP BY ci.CityName, p.MaritalStatusId
+	ORDER BY TotalVisitors DESC, p.MaritalStatusId;
+END
+
+create or	ALTER PROCEDURE [Agen].[SP_TiposTransporte_Dashboard]
+AS
+BEGIN
+	SELECT ttt.TypeOfTransport, p.Sex, SUM(pd.Quantity) AS TotalQuantity
+	FROM tbTypeOfTransport ttt
+	JOIN tbRoutes tr ON ttt.ID = tr.tOfTransID
+	JOIN tbPackageDetail pd ON tr.ID = pd.tbRoutesID
+	JOIN tbPackage pkg ON pd.PackageID = pkg.ID
+	JOIN tbInvoiceDetail invd ON pkg.ID = invd.PackageID
+	JOIN tbInvoice inv ON invd.InvoiceID = inv.ID
+	JOIN tbPerson p ON inv.Pers_Id = p.PersonID
+	GROUP BY ttt.TypeOfTransport, p.Sex
+	ORDER BY p.Sex, TotalQuantity DESC;
+END
+
+create or	ALTER PROCEDURE [Agen].[SP_HotelesMasReservados_Dashboard]
+AS
+BEGIN
+	SELECT TOP 10 h.HotelName, COUNT(*) AS NumeroReservaciones
+	FROM tbHotels h
+	INNER JOIN tbRoomsByHotel rh ON h.HotelID = rh.HotelID
+	INNER JOIN tbPackageDetail pd ON rh.RoomID = pd.RoomID
+	INNER JOIN tbPackage p ON pd.PackageID = p.PackageID
+	INNER JOIN tbInvoiceDetail id ON p.PackageID = id.PackageID
+	INNER JOIN tbInvoice i ON id.InvoiceID = i.InvoiceID
+	GROUP BY h.HotelName
+	ORDER BY NumeroReservaciones DESC;
+END
