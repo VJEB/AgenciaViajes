@@ -5,17 +5,18 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:agencia_viajes/screen/home_screen.dart';
 
-class SimpleLoginScreen extends StatefulWidget {
+class InicioSesion extends StatefulWidget {
   /// Callback for when this form is submitted successfully. Parameters are (email, password)
   final Function(String? email, String? password)? onSubmitted;
 
-  const SimpleLoginScreen({this.onSubmitted, super.key});
+  const InicioSesion({this.onSubmitted, super.key});
   @override
-  State<SimpleLoginScreen> createState() => _SimpleLoginScreenState();
+  State<InicioSesion> createState() => _InicioSesionState();
 }
 
-class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
+class _InicioSesionState extends State<InicioSesion> {
   late String email, password;
   String? emailError, passwordError;
   Function(String? email, String? password)? get onSubmitted =>
@@ -63,6 +64,10 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
   }
 
   void submit() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const Home()),
+    );
     if (validate()) {
       if (onSubmitted != null) {
         onSubmitted!(email, password);
@@ -83,14 +88,15 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
             children: [
               Container(
                 alignment: Alignment.center,
+                constraints: const BoxConstraints(maxHeight: 300),
                 child: Image.asset(
                   'lib/assets/Logo-agencia-viajes.png', // Replace 'your_image.png' with your actual image asset path
                   height: screenHeight * 0.6, // Adjust the height as needed
                 ),
               ),
-              SizedBox(height: screenHeight * .12),
               const Text(
                 'Bienvenido,',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -100,12 +106,13 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
               SizedBox(height: screenHeight * .01),
               const Text(
                 'Inicia sesión para continuar!',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromARGB(198, 255, 189, 89),
                 ),
               ),
-              SizedBox(height: screenHeight * .12),
+              SizedBox(height: screenHeight * .05),
               TextFormField(
                 onChanged: (value) {
                   setState(() {
@@ -145,14 +152,15 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
                 ),
               ),
               SizedBox(
-                height: screenHeight * .075,
+                height: screenHeight * .03,
               ),
               FormButton(
                 text: 'Iniciar Sesión',
                 onPressed: submit,
+                iconData: Icons.login,
               ),
               SizedBox(
-                height: screenHeight * .15,
+                height: screenHeight * .075,
               ),
               TextButton(
                 onPressed: () => Navigator.push(
@@ -269,14 +277,15 @@ class _SimpleRegisterScreenState extends State<SimpleRegisterScreen> {
             children: [
               Container(
                 alignment: Alignment.center,
+                constraints: const BoxConstraints(maxHeight: 300),
                 child: Image.asset(
                   'lib/assets/Logo-agencia-viajes.png', // Replace 'your_image.png' with your actual image asset path
                   height: screenHeight * 0.6, // Adjust the height as needed
                 ),
               ),
-              SizedBox(height: screenHeight * .12),
               const Text(
                 'Crear una cuenta,',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -286,12 +295,13 @@ class _SimpleRegisterScreenState extends State<SimpleRegisterScreen> {
               SizedBox(height: screenHeight * .01),
               const Text(
                 'Registrate para empezar!',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromARGB(198, 255, 189, 89),
                 ),
               ),
-              SizedBox(height: screenHeight * .12),
+              SizedBox(height: screenHeight * .05),
               TextFormField(
                 onChanged: (value) {
                   setState(() {
@@ -330,14 +340,14 @@ class _SimpleRegisterScreenState extends State<SimpleRegisterScreen> {
                 textInputAction: TextInputAction.done,
               ),
               SizedBox(
-                height: screenHeight * .075,
+                height: screenHeight * .03,
               ),
               FormButton(
                 text: 'Registrarse',
                 onPressed: submit,
               ),
               SizedBox(
-                height: screenHeight * .125,
+                height: screenHeight * .075,
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -367,24 +377,36 @@ class _SimpleRegisterScreenState extends State<SimpleRegisterScreen> {
 
 class FormButton extends StatelessWidget {
   final String text;
+  final IconData? iconData; // Icon data for the button icon
   final Function? onPressed;
-  const FormButton({this.text = '', this.onPressed, super.key});
+  const FormButton({this.text = '', this.iconData, this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return ElevatedButton(
-      onPressed: onPressed as void Function()?,
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: screenHeight * .02),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+    return SizedBox(
+      width: 150, // Set the maximum width here
+      child: ElevatedButton(
+        onPressed: onPressed as void Function()?,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: screenHeight * .02),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (iconData != null) // Conditionally display the icon
+              Icon(iconData),
+            const SizedBox(width: 8), // Add some spacing between icon and text
+            Text(
+              text,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }

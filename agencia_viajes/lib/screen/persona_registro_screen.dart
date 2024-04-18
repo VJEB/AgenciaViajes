@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 
 class PersonaForm extends StatefulWidget {
@@ -9,12 +11,15 @@ class PersonaForm extends StatefulWidget {
 
 class _PersonaFormState extends State<PersonaForm> {
   final _formKey = GlobalKey<FormState>();
+  // ignore: duplicate_ignore
+  // ignore: unused_field
   String? _dni = '',
       _nombre = '',
       _apellido = '',
       _sexo = '',
       _telefono = '',
       _pasaporte = '',
+      // ignore: prefer_final_fields
       _esCiId = '',
       _ciudId = '',
       _estadoCivil = '';
