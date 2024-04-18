@@ -29,7 +29,7 @@ namespace Agencia.API.Controllers
         public IActionResult HotelesList(string Ciud_Id)
         {
             var list = _agenciaServicio.ListHoteles(Ciud_Id);
-            return Ok(list);
+            return Ok(list.Data);
         }
     }
 }

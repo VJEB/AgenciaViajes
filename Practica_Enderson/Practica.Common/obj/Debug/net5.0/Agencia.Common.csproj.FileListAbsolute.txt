@@ -10,3 +10,15 @@ C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0
 C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.dll
 C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\ref\Agencia.Common.dll
 C:\Users\Usuario\source\repos\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.pdb
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Debug\net5.0\Agencia.Common.deps.json
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Debug\net5.0\Agencia.Common.dll
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Debug\net5.0\ref\Agencia.Common.dll
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Debug\net5.0\Agencia.Common.pdb
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.csproj.AssemblyReference.cache
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.AssemblyInfoInputs.cache
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.AssemblyInfo.cs
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.csproj.CoreCompileInputs.cache
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.dll
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\ref\Agencia.Common.dll
+C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Debug\net5.0\Agencia.Common.pdb

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -92,10 +93,14 @@ class _HomeState extends State<Home> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Image.network(
-                        element["Hote_Imagen"],
-                        fit: BoxFit.cover,
-                      ),
+                      child: 
+                        CachedNetworkImage(
+                          imageUrl: element["hote_Imagen"],
+                          fit: BoxFit.cover,
+                          placeholder: (context, url)=> const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -111,14 +116,14 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'ID: ${element["Hote_Nombre"]}',
+                                  '${element["hote_Nombre"]}',
                                   style: const TextStyle(
                                     fontSize: 12,
-                                    color: Colors.white,
+                                    color: Color(0xFFFFBD59),
                                   ),
                                 ),
                                 Text(
-                                  'Desde: L.${element["HaHo_PrecioPorNoche"]}',
+                                  'Desde: L.${element["haHo_PrecioPorNoche"]}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     color: Color.fromARGB(255, 44, 214, 50),
@@ -134,7 +139,7 @@ class _HomeState extends State<Home> {
                             child: Row(
                               children: [
                                 Text(
-                                  '${element["Hote_Estrellas"]}',
+                                  '${element["hote_Estrellas"]}',
                                   style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.white,
@@ -158,7 +163,7 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  element["Hote_DireccionExacta"],
+                                  element["hote_DireccionExacta"],
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
@@ -170,7 +175,7 @@ class _HomeState extends State<Home> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      element["Ciud_Descripcion"],
+                                      element["ciud_Descripcion"],
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.white,
@@ -178,7 +183,7 @@ class _HomeState extends State<Home> {
                                       ),
                                     ),
                                     Text(
-                                      element["Pais_Descripcion"],
+                                      element["pais_Descripcion"],
                                       style: const TextStyle(
                                         fontSize: 11,
                                         color: Colors.white,
