@@ -32,7 +32,7 @@ namespace Practica.API.Controllers
         public IActionResult List()
         {
             var list = _accesoServicio.ListUsua();
-            return Ok(list);
+            return Ok(list.Data);
         }
 
         [HttpGet("Details/{id}")]
