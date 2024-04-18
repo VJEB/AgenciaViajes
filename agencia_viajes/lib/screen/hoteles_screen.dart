@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 
 class Hoteles extends StatefulWidget {
   const Hoteles({super.key});
@@ -43,35 +41,6 @@ class _HotelesState extends State<Hoteles> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight + 1),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: const Color(0xFFFFBD59).withOpacity(0.5),
-                width: 1,
-              ),
-            ),
-          ),
-          child: AppBar(
-            backgroundColor: Colors.black,
-            title:
-                const Text("Index", style: TextStyle(color: Color(0xFFFFBD59))),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.login),
-                tooltip: 'Iniciar sesión',
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const InicioSesion()));
-                },
-              ),
-            ],
-            iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
-          ),
-        ),
-      ),
       body: FutureBuilder<dynamic>(
         future: _getListado(),
         builder: (context, snapshot) {
@@ -107,16 +76,14 @@ class _HotelesState extends State<Hoteles> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      flex: 1,
-                      child: 
-                        CachedNetworkImage(
+                        flex: 1,
+                        child: CachedNetworkImage(
                           imageUrl: element["hote_Imagen"],
                           fit: BoxFit.cover,
-                          placeholder: (context, url)=> const Center(
+                          placeholder: (context, url) => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                        )
-                    ),
+                        )),
                     const SizedBox(width: 8),
                     Expanded(
                       flex: 2,

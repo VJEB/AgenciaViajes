@@ -2,14 +2,17 @@
 
 import 'package:flutter/material.dart';
 
-class PersonaForm extends StatefulWidget {
-  const PersonaForm({super.key});
+const Duration fakeAPIDuration = Duration(seconds: 1);
+const Duration debounceDuration = Duration(milliseconds: 500);
+
+class RegistroPersona extends StatefulWidget {
+  const RegistroPersona({super.key});
 
   @override
-  State<PersonaForm> createState() => _PersonaFormState();
+  State<RegistroPersona> createState() => _RegistroPersonaState();
 }
 
-class _PersonaFormState extends State<PersonaForm> {
+class _RegistroPersonaState extends State<RegistroPersona> {
   final _formKey = GlobalKey<FormState>();
   // ignore: duplicate_ignore
   // ignore: unused_field
@@ -23,6 +26,8 @@ class _PersonaFormState extends State<PersonaForm> {
       _esCiId = '',
       _ciudId = '',
       _estadoCivil = '';
+
+  String? _pais;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +80,16 @@ class _PersonaFormState extends State<PersonaForm> {
                   onSaved: (value) => _apellido = value ?? '',
                   decoration: const InputDecoration(labelText: 'Apellido'),
                 ),
+                TextFormField(
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'Por favor ingrese su teléfono';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _telefono = value ?? '',
+                  decoration: const InputDecoration(labelText: 'Teléfono'),
+                ),
                 ListTile(
                   title: const Text('Sexo'),
                   subtitle: _sexo == null
@@ -122,16 +137,6 @@ class _PersonaFormState extends State<PersonaForm> {
                       ),
                     );
                   },
-                ),
-                TextFormField(
-                  validator: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return 'Por favor ingrese su teléfono';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => _telefono = value ?? '',
-                  decoration: const InputDecoration(labelText: 'Teléfono'),
                 ),
                 ListTile(
                   title: const Text('Estado civil'),
@@ -183,6 +188,28 @@ class _PersonaFormState extends State<PersonaForm> {
                       ),
                     );
                   },
+                ),
+                TextFormField(
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'Por favor ingrese su país';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _pais = value,
+                  decoration: const InputDecoration(labelText: 'País'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      // Call your database insert function here with the form data
+                      // For demonstration purposes, print the selected country
+                      print('Selected country: $_pais');
+                    }
+                  },
+                  child: const Text('Guardar'),
                 ),
                 TextFormField(
                   validator: (value) {

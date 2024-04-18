@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
-environment: 
+environment:
   sdk: ">=3.3.3 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
@@ -34,7 +34,10 @@ dependencies:
   google_fonts: ^2.1.0
 
   http:
-  cached_network_image: 
+
+  cached_network_image:
+
+  fl_chart:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6

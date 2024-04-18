@@ -5,7 +5,7 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:agencia_viajes/screen/home_screen.dart';
+import 'package:agencia_viajes/screen/layout.dart';
 
 class InicioSesion extends StatefulWidget {
   /// Callback for when this form is submitted successfully. Parameters are (email, password)
@@ -66,7 +66,7 @@ class _InicioSesionState extends State<InicioSesion> {
   void submit() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const Home()),
+      MaterialPageRoute(builder: (_) => const Layout()),
     );
     if (validate()) {
       if (onSubmitted != null) {
@@ -166,7 +166,7 @@ class _InicioSesionState extends State<InicioSesion> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const SimpleRegisterScreen(),
+                    builder: (_) => const RegistroUsuario(),
                   ),
                 ),
                 child: RichText(
@@ -193,16 +193,16 @@ class _InicioSesionState extends State<InicioSesion> {
   }
 }
 
-class SimpleRegisterScreen extends StatefulWidget {
+class RegistroUsuario extends StatefulWidget {
   final Function(String? email, String? password)? onSubmitted;
 
-  const SimpleRegisterScreen({this.onSubmitted, super.key});
+  const RegistroUsuario({this.onSubmitted, super.key});
 
   @override
-  State<SimpleRegisterScreen> createState() => _SimpleRegisterScreenState();
+  State<RegistroUsuario> createState() => _RegistroUsuarioState();
 }
 
-class _SimpleRegisterScreenState extends State<SimpleRegisterScreen> {
+class _RegistroUsuarioState extends State<RegistroUsuario> {
   late String email, password, confirmPassword;
   String? emailError, passwordError;
   Function(String? email, String? password)? get onSubmitted =>
