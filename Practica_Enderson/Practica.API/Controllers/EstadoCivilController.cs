@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Practica.BussinesLogic.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,22 @@ namespace Practica.API.Controllers
     [Route("API/[Controller]")]
     public class EstadoCivilController : Controller
     {
-        [HttpGet("Index")]
+        private readonly GeneralServicio _generalServicio;
+        //private readonly IMapper _mapper;
 
-        public IActionResult Index()
+
+        public EstadoCivilController(GeneralServicio generalServicio/*, IMapper mapper*/)
         {
-            return View();
+
+            //_mapper = mapper;
+            _generalServicio = generalServicio;
+        }
+
+        [HttpGet]
+        public IActionResult EstadosCivilesList()
+        {
+            var list = _generalServicio.ListEstadosCiviles();
+            return Ok(list);
         }
     }
 }
