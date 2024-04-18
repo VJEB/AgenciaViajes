@@ -34,16 +34,20 @@ namespace Agencia.DataAcces.Repositorio
             throw new NotImplementedException();
         }
 
-        public IEnumerable<tbHoteles> List()
+        public IEnumerable<tbHoteles> List(string Ciud_Id)
         {
             List<tbHoteles> result = new List<tbHoteles>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
-                result = db.Query<tbHoteles>(ScriptBaseDatos.Hote_Mostrar, commandType: CommandType.Text).ToList();
+                var parameters = new { Ciud_Id };
+                result = db.Query<tbHoteles>(ScriptBaseDatos.Hote_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
                 return result;
             }
         }
 
-        
+        public IEnumerable<tbHoteles> List()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

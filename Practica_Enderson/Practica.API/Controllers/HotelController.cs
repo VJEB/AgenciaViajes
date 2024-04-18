@@ -26,9 +26,9 @@ namespace Agencia.API.Controllers
         }
 
         [HttpGet("HotelesList/{Ciud_Id}")]
-        public IActionResult HotelesList()
+        public IActionResult HotelesList(string Ciud_Id)
         {
-            var list = _agenciaServicio.ListHoteles();
+            var list = _agenciaServicio.ListHoteles(Ciud_Id);
             return Ok(list);
         }
     }

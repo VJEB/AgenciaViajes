@@ -25,8 +25,8 @@ namespace Practica.API.Controllers
         [HttpGet]
         public IActionResult EstadosCivilesList()
         {
-            var list = _generalServicio.ListEstadosCiviles();
-            return Ok(list);
+            //var list = _generalServicio.ListEstadosCiviles();
+            return Ok("list");
         }
     }
 }

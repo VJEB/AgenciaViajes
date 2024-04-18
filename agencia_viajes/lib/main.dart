@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'screen/home_screen.dart';
+// import 'screen/home_screen.dart';
 // import 'screen/persona_registro_screen.dart';
 // import 'screen/iniciosesion_screen.dart';
+import 'screen/usuarios_screen2.dart';
+// import 'screen/usuarios_screen2.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Agencia Viajes',
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      home: CatCategoriesDataTable(),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))

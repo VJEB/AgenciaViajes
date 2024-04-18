@@ -269,12 +269,12 @@ namespace Agencia.BussinesLogic.Servicios
         #endregion
 
         #region Hoteles
-        public ServiceResult ListHoteles()
+        public ServiceResult ListHoteles(string Ciud_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _hotelRepositorio.List();
+                var lost = _hotelRepositorio.List(Ciud_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)

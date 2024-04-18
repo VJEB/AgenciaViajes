@@ -12,8 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String url =
-      "https://api.thecatapi.com/v1/images/search?limit=10&api_key=live_svNggot0QuFvpCKGlKx5JCR3riTy1FAfV15cqsWY5apGugXQYgsLyt2B2wFBG8ln";
+  String url = "https://localhost:44372/API/Hotel/HotelesList/0501";
 
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
@@ -94,7 +93,7 @@ class _HomeState extends State<Home> {
                     Expanded(
                       flex: 1,
                       child: Image.network(
-                        element["url"],
+                        element["Hote_Imagen"],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -112,14 +111,14 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'ID: ${element["id"]}',
+                                  'ID: ${element["Hote_Nombre"]}',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                   ),
                                 ),
                                 Text(
-                                  'Desde: L.${element["width"]}',
+                                  'Desde: L.${element["HaHo_PrecioPorNoche"]}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     color: Color.fromARGB(255, 44, 214, 50),
@@ -130,19 +129,19 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 4.0),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
                             child: Row(
                               children: [
                                 Text(
-                                  '*****',
-                                  style: TextStyle(
+                                  '${element["Hote_Estrellas"]}',
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.white,
                                   ),
                                 ),
-                                SizedBox(width: 30),
-                                Text(
+                                const SizedBox(width: 30),
+                                const Text(
                                   'Estrellas',
                                   style: TextStyle(
                                     fontSize: 12,
@@ -152,15 +151,15 @@ class _HomeState extends State<Home> {
                               ],
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 4.0),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Direccion',
-                                  style: TextStyle(
+                                  element["Hote_DireccionExacta"],
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                   ),
@@ -171,16 +170,16 @@ class _HomeState extends State<Home> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Ciudad',
-                                      style: TextStyle(
+                                      element["Ciud_Descripcion"],
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
-                                      'Pais',
-                                      style: TextStyle(
+                                      element["Pais_Descripcion"],
+                                      style: const TextStyle(
                                         fontSize: 11,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
