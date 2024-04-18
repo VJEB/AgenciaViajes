@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class Paquetes extends StatefulWidget {
+  const Paquetes({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<Paquetes> createState() => _PaquetesState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _PaquetesState extends State<Paquetes> {
   String url = "https://api.thecatapi.com/v1/categories";
 
   Future<dynamic> _getListado() async {

@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class CatCategoriesDataTable extends StatefulWidget {
+class Usuarios extends StatefulWidget {
   @override
-  _CatCategoriesDataTableState createState() => _CatCategoriesDataTableState();
+  _UsuariosState createState() => _UsuariosState();
 }
 
-class _CatCategoriesDataTableState extends State<CatCategoriesDataTable> {
+class _UsuariosState extends State<Usuarios> {
   late Future<List<dynamic>> _fetchData;
   late String _sortColumn;
   bool _sortAscending = true;

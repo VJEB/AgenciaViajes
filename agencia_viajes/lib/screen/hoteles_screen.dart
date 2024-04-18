@@ -5,74 +5,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:agencia_viajes/screen/usuarios_screen1.dart';
-import 'package:agencia_viajes/screen/paquetes_screen.dart';
 
-class Navbar extends StatefulWidget {
-  const Navbar({super.key}); // Agrega el constructor key
-  @override
-  State<Navbar> createState() => _NavbarState();
-}
-
-class _NavbarState extends State<Navbar> {
-  int _selectedIndex = 1;
-
-  // Lista de páginas para cada ícono
-  final List<Widget> _widgetOptions = <Widget>[
-    const Paquetes(),
-    const Home(),
-    Usuarios(),
-  ];
-
-  // Función para cambiar de página al hacer clic en un ícono
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+class Hoteles extends StatefulWidget {
+  const Hoteles({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('AAAAAAAA'),
-      ),
-      body: _widgetOptions.elementAt(_selectedIndex), // Página seleccionada
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.trolley),
-            label: 'Listar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-        currentIndex: _selectedIndex, // Índice de la página seleccionada
-        onTap: _onItemTapped, // Función para manejar el evento de clic
-      ),
-    );
-  }
+  State<Hoteles> createState() => _HotelesState();
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
+class _HotelesState extends State<Hoteles> {
   // int _selectedIndex = 1;
 
   // final List<Widget> _widgetOptions = <Widget>[
   //   const Paquetes(),
-  //   const Home(),
+  //   const Hoteles(),
   //   Usuarios(),
   // ];
 

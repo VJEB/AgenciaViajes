@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'screen/home_screen.dart';
+// import 'screen/home_screen.dart';
 // import 'screen/persona_registro_screen.dart';
 // import 'screen/iniciosesion_screen.dart';
-// import 'screen/usuarios_screen2.dart';
+import 'screen/usuarios_screen1.dart';
 // import 'screen/usuarios_screen2.dart';
 
 void main() {
@@ -18,11 +18,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Agencia Viajes',
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Usuarios(),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))
-            .copyWith(background: Colors.black),
+            .copyWith(background: Colors.white),
       ),
     );
   }
