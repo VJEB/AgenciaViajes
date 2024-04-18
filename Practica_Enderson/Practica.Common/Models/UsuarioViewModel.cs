@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,10 @@ namespace Practica.Common.Models
 {
     public class UsuarioViewModel
     {
-
+        [NotMapped]
+        public string Persona { get; set; }
+        [NotMapped]
+        public string Rol_Descripcion { get; set; }
         public int Usua_Id { get; set; }
         public string Usua_Usuario { get; set; }
         public string Usua_Contra { get; set; }
