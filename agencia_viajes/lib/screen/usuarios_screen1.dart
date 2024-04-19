@@ -11,7 +11,6 @@ class _UsuariosState extends State<Usuarios> {
   late Future<List<dynamic>> _fetchData;
   late String _sortColumn;
   bool _sortAscending = true;
- 
 
   @override
   void initState() {
@@ -22,7 +21,7 @@ class _UsuariosState extends State<Usuarios> {
 
   Future<List<dynamic>> _fetchCatCategories() async {
     final response =
-        await http.get(Uri.parse("https://localhost:44372/API/Usuario/List"));
+        await http.get(Uri.parse("https://etravel.somee.com/API/Usuario/List"));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data;

@@ -1,20 +1,16 @@
-﻿using AutoMapper;
-using Practica.Common.Models;
+﻿using Agencia.Common.Models;
 using Agencia.Entities.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Agencia.Common.Models;
+using AutoMapper;
+using Practica.Common.Models;
 
 namespace Practica.API.Extensiones
 {
-    public class MappingProfileExtensions: Profile
+    public class MappingProfileExtensions : Profile
     {
         public MappingProfileExtensions()
         {
             CreateMap<EstadoViewModel, tbEstados>().ReverseMap();
-            
+
             CreateMap<PersonaViewModel, tbPersonas>().ReverseMap();
             CreateMap<HabitacionViewModel, tbHabitaciones>().ReverseMap();
             CreateMap<HabitacionPorHotelViewModel, tbHabitacionesPorHotel>().ReverseMap();

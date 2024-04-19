@@ -3,10 +3,7 @@ using Agencia.Common.Models;
 using Agencia.Entities.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Agencia.API.Controllers
 {
@@ -45,15 +42,15 @@ namespace Agencia.API.Controllers
         [HttpPost("Create")]
         public IActionResult Create(PaqueteViewModel item)
         {
-           
+
             //var model = _mapper.Map<tbPlanes>(item);
             var modelo = new tbPaquetes()
             {
                 Paqu_Nombre = item.Paqu_Nombre,
-                Paqu_Precio = item.Paqu_Precio, 
+                Paqu_Precio = item.Paqu_Precio,
                 Pers_Id = item.Pers_Id
             };
-          
+
             int paqueId;
             var prueba = _agenciaServicio.InsertarPaquete(modelo, out paqueId);
             var hola = prueba;
@@ -69,7 +66,7 @@ namespace Agencia.API.Controllers
 
         }
 
-       
+
         [HttpPut("Edit/{id}")]
         public IActionResult Edit(int id, PaqueteViewModel item)
         {
@@ -80,7 +77,7 @@ namespace Agencia.API.Controllers
                 Paqu_Precio = item.Paqu_Precio,
                 Pers_Id = item.Pers_Id
             };
-          
+
 
             var prueba = _agenciaServicio.ActualizarPaquete(id, modelo);
             if (prueba.Code == 200)
@@ -98,9 +95,9 @@ namespace Agencia.API.Controllers
         {
             if (id > 0)
             {
-               
 
-               var prueba = _agenciaServicio.EliminarPaquete(id);
+
+                var prueba = _agenciaServicio.EliminarPaquete(id);
                 return Ok(prueba);
             }
             else

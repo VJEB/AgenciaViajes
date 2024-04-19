@@ -3,10 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Practica.BussinesLogic.Servicios;
 using Practica.Common.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Practica.API.Controllers
 {
@@ -45,7 +42,7 @@ namespace Practica.API.Controllers
         [HttpPost("Create")]
         public IActionResult Create(PersonaViewModel item)
         {
-           
+
             var modelo = new tbPersonas()
             {
                 Pers_DNI = item.Pers_DNI,

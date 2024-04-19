@@ -14,39 +14,9 @@ namespace Practica.DataAcces.Repositorio
     {
         public RequestStatus Actualizar(tbEstados item)
         {
-            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-            {
-                var parametro = new DynamicParameters();
-                parametro.Add("Dept_Id", item.Esta_Id);
-                parametro.Add("Dept_Descripcion", item.Esta_Descripcion);
-                parametro.Add("Dept_Usua_Modifica", item.Esta_Usua_Modifica);
-                parametro.Add("Dept_Fecha_Modifica", DateTime.Now);
-
-                var result = db.Execute(ScriptBaseDatos.Dept_Actualizar,
-                    parametro,
-                     commandType: CommandType.StoredProcedure
-                    );
-
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
-            }
+            throw new NotImplementedException();
         }
-        public RequestStatus Eliminarr(string? id)
-        {
 
-            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-            {
-                var parametro = new DynamicParameters();
-                parametro.Add("Dept_Id", id);
-                var result = db.Execute(ScriptBaseDatos.Dept_Eliminar,
-                    parametro,
-                     commandType: CommandType.StoredProcedure
-                    );
-
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
-            }
-        }
         public RequestStatus Eliminar(int? id)
         {
             throw new NotImplementedException();
@@ -59,72 +29,24 @@ namespace Practica.DataAcces.Repositorio
 
         public RequestStatus Insertar(tbEstados item)
         {
-            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<tbEstados> List(int Pais_Id)
+        {
+            List<tbEstados> result = new List<tbEstados>();
+            using ( var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
-                var parametro = new DynamicParameters();
-                parametro.Add("Dept_Id", item.Esta_Id);
-                parametro.Add("Dept_Descripcion", item.Esta_Descripcion);
-                parametro.Add("Dept_Usua_Creacion", item.Esta_Usua_Creacion);
-                parametro.Add("Dept_Fecha_Creacion", DateTime.Now);
-
-                var result = db.Execute(ScriptBaseDatos.Dept_Insertar,
-                    parametro,
-                     commandType: CommandType.StoredProcedure
-                    );
-
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
+                var parameters = new { Pais_Id };
+                result = db.Query<tbEstados>(ScriptBaseDatos.Esta_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
             }
         }
 
         public IEnumerable<tbEstados> List()
         {
-            List<tbEstados> result = new List<tbEstados>();
-            using ( var db = new SqlConnection(AgenciaContext.ConnectionString))
-            {
-                result = db.Query<tbEstados>(ScriptBaseDatos.Esta_Mostrar, commandType: CommandType.StoredProcedure).ToList();
-                return result;
-            }
+            throw new NotImplementedException();
         }
-
-        //public IEnumerable<tbMunicipios> ListMaster(string Dept_Id)
-        //{
-
-        //    List<tbMunicipios> result = new List<tbMunicipios>();
-        //    using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-        //    {
-        //        var parameters = new { Dept_Id = Dept_Id };
-        //        result = db.Query<tbMunicipios>(ScriptBaseDatos.Dept_VistaMaestra, parameters, commandType: CommandType.Text).ToList();
-        //        return result;
-        //    }
-        //}
-        //public IEnumerable<tbDepartamentos> Detalle(string Dept_Id)
-        //{
-
-
-        //    List<tbDepartamentos> result = new List<tbDepartamentos>();
-        //    using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-        //    {
-        //        var parameters = new { Dept_Id = Dept_Id };
-        //        result = db.Query<tbDepartamentos>(ScriptBaseDatos.Dept_Detalles, parameters, commandType: CommandType.StoredProcedure).ToList();
-        //        return result;
-        //    }
-        //}
-        //public IEnumerable<tbMunicipios> ListaMunicipiosID(string id)
-        //{
- 
-
-        //    List<tbMunicipios> result = new List<tbMunicipios>();
-        //    using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-        //    {
-        //        var parameters = new { Dept_Id = id };
-        //        result = db.Query<tbMunicipios>(ScriptBaseDatos.Dept_MuniXDepa, parameters, commandType: CommandType.StoredProcedure).ToList();
-        //        return result;
-        //    }
-        //}
-
-      
-        
 
         tbEstados IRepository<tbEstados>.Find(int? id)
         {

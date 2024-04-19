@@ -5,10 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Practica.BussinesLogic.Servicios;
 using Practica.Common.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Practica.API.Controllers
 {
@@ -50,7 +47,7 @@ namespace Practica.API.Controllers
             var modelo = _accesoServicio.ObtenerUsuaID(id);
             return Json(modelo.Data);
         }
-     
+
         [HttpGet("Login/{usuario}/{contraseña}")]
         public IActionResult Login(string usuario, string contraseña)
         {
@@ -71,7 +68,7 @@ namespace Practica.API.Controllers
                 Usua_Admin = item.Usua_Admin,
                 Pers_Id = item.Pers_Id,
                 Rol_Id = item.Rol_Id,
-               
+
             };
             var listado = _accesoServicio.ListUsua();
 
@@ -92,7 +89,7 @@ namespace Practica.API.Controllers
                     Usua_Admin = item.Usua_Admin,
                     Pers_Id = item.Pers_Id,
                     Rol_Id = item.Rol_Id,
-                 
+
 
                 };
                 var listado = _accesoServicio.ListUsua();

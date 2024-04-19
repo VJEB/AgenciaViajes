@@ -3,10 +3,7 @@ using Agencia.Common.Models;
 using Agencia.Entities.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Agencia.API.Controllers
 {
