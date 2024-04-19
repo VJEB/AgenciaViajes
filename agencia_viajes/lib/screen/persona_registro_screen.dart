@@ -1,9 +1,11 @@
 // ignore_for_file: unused_field
 
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-const Duration fakeAPIDuration = Duration(seconds: 1);
-const Duration debounceDuration = Duration(milliseconds: 500);
+import 'package:flutter/material.dart';
+import 'package:agencia_viajes/models/pais.dart';
+import 'package:http/http.dart' as http;
+
 
 class RegistroPersona extends StatefulWidget {
   const RegistroPersona({super.key});
@@ -27,7 +29,30 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       _ciudId = '',
       _estadoCivil = '';
 
-  String? _pais;
+  String? _paisSeleccionado;
+  List<Pais> _paises = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarPaises();
+  }
+  
+  Future<void> _cargarPaises() async {
+    const url = "https://localhost:44372/API/Pais/List";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200) {
+      setState(() {
+        final List<dynamic> paisesJson = jsonDecode(respuesta.body);
+        _paises = paisesJson.map((json) => Pais.fromJson(json)).toList();
+        if (_paises.isNotEmpty) {
+          print(_paises[0].paisDescripcion);
+          _paisSeleccionado = _paises.first.paisId; 
+        }
+      });
+    } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,27 +214,21 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                     );
                   },
                 ),
-                TextFormField(
-                  validator: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return 'Por favor ingrese su país';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => _pais = value,
-                  decoration: const InputDecoration(labelText: 'País'),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // Call your database insert function here with the form data
-                      // For demonstration purposes, print the selected country
-                      print('Selected country: $_pais');
-                    }
-                  },
-                  child: const Text('Guardar'),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('País'),
+                    FutureBuilder<dynamic>(
+                      future: _cargarPaises(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return PaisesDdl(paises: _paises);
+                        } else {
+                          return const Text("Cargando...");
+                        }
+                      },
+                    ),
+                  ],
                 ),
                 TextFormField(
                   validator: (value) {
@@ -255,6 +274,56 @@ class _RegistroPersonaState extends State<RegistroPersona> {
           ),
         ),
       ),
+    );
+  }
+}
+
+// Widget listadoPaises(List<Pais> paises) {
+//   // List<Widget> lista = [];
+//   // if (paises != null) {
+//   //   for (var pais in paises) {
+//   //     lista.add(Text(pais.paisDescripcion));
+//   //   }
+//   // }
+//   return Autocomplete<String>(
+//     optionsBuilder: (TextEditingValue textEditingValue) {
+//       if (textEditingValue.text == '') {
+//         return const Iterable<String>.empty();
+//       }
+//       return paises.where((Pais pais) {
+//         return pais.paisDescripcion.contains(textEditingValue.text.toLowerCase());
+//       });
+//     },
+//     onSelected: (String selection) {
+//       debugPrint('You just selected $selection');
+//     },
+//   );
+// }
+
+class PaisesDdl extends StatefulWidget {
+  final List<Pais> paises;
+  const PaisesDdl({super.key, required this.paises});
+
+  @override
+  State<PaisesDdl> createState() => _PaisesDdl();
+}
+
+class _PaisesDdl extends State<PaisesDdl> {
+  @override
+  Widget build(BuildContext context) {
+    List<String> nombrePaises = widget.paises.map((pais) => pais.paisDescripcion).toList();
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+        return nombrePaises.where((String pais) {
+          return nombrePaises.contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      onSelected: (String selection) {
+        debugPrint('You just selected $selection');
+      },
     );
   }
 }
