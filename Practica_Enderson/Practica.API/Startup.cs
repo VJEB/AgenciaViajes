@@ -2,18 +2,12 @@ using Agencia.API.Configuration;
 using Agencia.BussinesLogic.Servicios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Practica.API.Extensiones;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Practica.API
 {
@@ -34,8 +28,9 @@ namespace Practica.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { 
-                    Title = "SistemaAsilos.API", 
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "SistemaAsilos.API",
                     Version = "v1",
                     Contact = new OpenApiContact
                     {
@@ -50,7 +45,8 @@ namespace Practica.API
             services.AddAutoMapper(typeof(Startup));
             services.AddHttpContextAccessor();
             services.AddDistributedMemoryCache();
-            services.AddSession(options => {
+            services.AddSession(options =>
+            {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
@@ -75,10 +71,10 @@ namespace Practica.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Practica.API v1"));
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Practica.API v1"));
             app.UseSession();
             app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();

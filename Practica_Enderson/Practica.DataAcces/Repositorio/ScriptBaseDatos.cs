@@ -29,21 +29,11 @@ namespace Practica.DataAcces.Repositorio
 
         #region Estados
         public static string Esta_Mostrar = "Gral.SP_Estados_Mostrar";
-        public static string Dept_Insertar = "Gral.SP_Departamentos_Insertar";
-        public static string Dept_Actualizar = "Gral.SP_Departamentos_Actualizar";
-        public static string Dept_Eliminar = "Gral.SP_Departamentos_Eliminar";
-        public static string Dept_Detalles = "Gral.SP_Departamentos_Llenar";
-        public static string Dept_VistaMaestra = "[Gral].[SP_Departamentos_VistaMaster] ";
-        public static string Dept_MuniXDepa = "[Gral].[SP_Municipios_MostrarPorDepartamento]";
         #endregion
 
 
         #region Ciudades
         public static string Ciud_Mostrar = "Gral.SP_Ciudades_Mostrar";
-        public static string Muni_Insertar = "Gral.SP_Municipios_Insertar";
-        public static string Muni_Actualizar = "Gral.SP_Municipios_Actualizar";
-        public static string Muni_Eliminar = "Gral.SP_Municipios_Eliminar";
-        public static string Muni_Detalles = "Gral.SP_Municipios_Detalles";
         #endregion
 
         #region Clientes

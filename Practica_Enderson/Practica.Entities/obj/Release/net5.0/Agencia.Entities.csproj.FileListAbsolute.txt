@@ -1,0 +1,12 @@
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Release\net5.0\Agencia.Entities.deps.json
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Release\net5.0\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Release\net5.0\ref\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Release\net5.0\Agencia.Entities.pdb
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.csproj.AssemblyReference.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.AssemblyInfoInputs.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.AssemblyInfo.cs
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.csproj.CoreCompileInputs.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\ref\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Release\net5.0\Agencia.Entities.pdb

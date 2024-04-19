@@ -11,30 +11,29 @@ namespace Practica.BussinesLogic.Servicios
 {
     public class GeneralServicio
     {
-        private readonly EstadoRepositorio _departamentoRepositorio;
+        private readonly EstadoRepositorio _estadoRepositorio;
         private readonly EstadoCivilRepositorio _estadoCivilRepositorio;
-        private readonly CiudadRepositorio _municipioRepositorio;
+        private readonly CiudadRepositorio _ciudadRepositorio;
        
         private readonly PersonaRepositorio _personaRepositorio;
 
-        public GeneralServicio(EstadoRepositorio departamentoRepositorio, EstadoCivilRepositorio estadoCivilRepositorio, CiudadRepositorio municipioRepositorio
-              ,PersonaRepositorio clienteRepositorio)
+        public GeneralServicio(EstadoRepositorio estadoRepositorio, 
+            EstadoCivilRepositorio estadoCivilRepositorio, 
+            CiudadRepositorio ciudadRepositorio,
+            PersonaRepositorio clienteRepositorio)
         {
-            _departamentoRepositorio = departamentoRepositorio;
+            _estadoRepositorio = estadoRepositorio;
             _estadoCivilRepositorio = estadoCivilRepositorio;
-            _municipioRepositorio = municipioRepositorio;
-
+            _ciudadRepositorio = ciudadRepositorio;
             _personaRepositorio = clienteRepositorio;
-            
-
         }
-        #region Departamentos
-        public ServiceResult ListDepto()
+        #region Estados
+        public ServiceResult ListEsta(int Pais_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _departamentoRepositorio.List();
+                var lost = _estadoRepositorio.List(Pais_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)
@@ -43,94 +42,15 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
-        //public IEnumerable<tbCiudades> ListMaster(string id)
-        //{
-        //    return _departamentoRepositorio.ListMaster(id);
-        //}
-
-        public ServiceResult InsertarDepto(tbEstados item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _departamentoRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult ActualizarDepto(tbEstados item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _departamentoRepositorio.Actualizar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult EliminarDepto(string id)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _departamentoRepositorio.Eliminarr(id);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-       
-        //public IEnumerable<tbEstados> Detalles(string id)
-        //{
-        //    return _departamentoRepositorio.Detalles(id);
-        //}
         #endregion
 
-        #region Municipios
-        public ServiceResult ListMuni()
+        #region Ciudades
+        public ServiceResult ListCiud(string Esta_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var lost = _municipioRepositorio.List();
+                var lost = _ciudadRepositorio.List(Esta_Id);
                 return result.Ok(lost);
             }
             catch (Exception ex)
@@ -138,81 +58,6 @@ namespace Practica.BussinesLogic.Servicios
 
                 return result.Error(ex.Message);
             }
-        }
-
-        public ServiceResult InsertarMuni(tbCiudades item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _municipioRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult ActualizarMuni(tbCiudades item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _municipioRepositorio.Actualizar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult EliminarMuni(int id)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _municipioRepositorio.Eliminar(id);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        
-        public IEnumerable<tbCiudades> DetallesMuni(string id)
-        {
-            return _municipioRepositorio.Detalle(id);
         }
 
         #endregion

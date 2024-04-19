@@ -1,0 +1,12 @@
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Release\net5.0\Agencia.Common.deps.json
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Release\net5.0\Agencia.Common.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Release\net5.0\ref\Agencia.Common.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\bin\Release\net5.0\Agencia.Common.pdb
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.csproj.AssemblyReference.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.AssemblyInfoInputs.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.AssemblyInfo.cs
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.csproj.CoreCompileInputs.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\ref\Agencia.Common.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Common\obj\Release\net5.0\Agencia.Common.pdb

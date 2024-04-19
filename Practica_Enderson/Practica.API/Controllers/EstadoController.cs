@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Practica.BussinesLogic.Servicios;
 
 namespace Practica.API.Controllers
 {
@@ -10,11 +7,19 @@ namespace Practica.API.Controllers
     [Route("API/[Controller]")]
     public class EstadoController : Controller
     {
-        [HttpGet("Index")]
 
-        public IActionResult Index()
+        private readonly GeneralServicio _generalServicio;
+        public EstadoController(GeneralServicio generalServicio)
         {
-            return View();
+            _generalServicio = generalServicio;
+        }
+
+        [HttpGet("List/{Pais_Id}")]
+
+        public IActionResult Index(int Pais_Id)
+        {
+            var result = _generalServicio.ListEsta(Pais_Id);
+            return Ok(result.Data);
         }
     }
 }

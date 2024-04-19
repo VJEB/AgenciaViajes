@@ -12,21 +12,7 @@ class Hoteles extends StatefulWidget {
 }
 
 class _HotelesState extends State<Hoteles> {
-  // int _selectedIndex = 1;
-
-  // final List<Widget> _widgetOptions = <Widget>[
-  //   const Paquetes(),
-  //   const Hoteles(),
-  //   Usuarios(),
-  // ];
-
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
-
-  String url = "https://www.etravel.somee.com/API/Hotel/HotelesList/0501";
+  String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
 
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
