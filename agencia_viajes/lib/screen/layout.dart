@@ -45,7 +45,7 @@ class _LayoutState extends State<Layout> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.trolley),
-            tooltip: 'Iniciar sesión',
+            tooltip: 'Carrito',
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) =>  ShoppingCart()));

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screen/layout.dart';
-// import 'screen/persona_registro_screen.dart';
+// import 'screen/layout.dart';
+import 'screen/persona_registro_screen.dart';
 // import 'screen/iniciosesion_screen.dart';
 // import 'screen/usuarios_screen1.dart';
 // import 'screen/usuarios_screen2.dart';
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Agencia Viajes',
       debugShowCheckedModeBanner: false,
-      home: const Layout(),
+      home: const RegistroPersona(),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))

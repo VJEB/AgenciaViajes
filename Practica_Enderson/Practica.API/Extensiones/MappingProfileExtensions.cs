@@ -9,6 +9,7 @@ namespace Practica.API.Extensiones
     {
         public MappingProfileExtensions()
         {
+            CreateMap<PaisesViewModel, tbEstados>().ReverseMap();
             CreateMap<EstadoViewModel, tbEstados>().ReverseMap();
 
             CreateMap<PersonaViewModel, tbPersonas>().ReverseMap();

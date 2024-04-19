@@ -27,6 +27,10 @@ namespace Practica.DataAcces.Repositorio
         public static string Rol_Detalles = "Acce.SP_Roles_Llenar";
         #endregion
 
+        #region Paises
+        public static string Pais_Mostrar = "Gral.SP_Paises_Mostrar";
+        #endregion
+        
         #region Estados
         public static string Esta_Mostrar = "Gral.SP_Estados_Mostrar";
         #endregion

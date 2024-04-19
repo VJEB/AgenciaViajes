@@ -16,6 +16,7 @@ namespace Agencia.BussinesLogic.Servicios
     {
         public static void DataAcces(this IServiceCollection service ,string conn )
         {
+            service.AddScoped<PaisRepositorio>();
             service.AddScoped<EstadoRepositorio>();
             service.AddScoped<CiudadRepositorio>();
             service.AddScoped<EstadoCivilRepositorio>();
