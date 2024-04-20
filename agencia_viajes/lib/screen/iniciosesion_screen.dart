@@ -113,7 +113,7 @@ class _InicioSesionState extends State<InicioSesion> {
                 ),
               ),
               SizedBox(height: screenHeight * .05),
-              TextFormField(
+              TextInput(
                 onChanged: (value) {
                   setState(() {
                     email = value;
@@ -126,7 +126,7 @@ class _InicioSesionState extends State<InicioSesion> {
                 autoFocus: true,
               ),
               SizedBox(height: screenHeight * .025),
-              TextFormField(
+              TextInput(
                 onChanged: (value) {
                   setState(() {
                     password = value;
@@ -302,7 +302,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 ),
               ),
               SizedBox(height: screenHeight * .05),
-              TextFormField(
+              TextInput(
                 onChanged: (value) {
                   setState(() {
                     email = value;
@@ -315,7 +315,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 autoFocus: true,
               ),
               SizedBox(height: screenHeight * .025),
-              TextFormField(
+              TextInput(
                 onChanged: (value) {
                   setState(() {
                     password = value;
@@ -327,7 +327,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 textInputAction: TextInputAction.next,
               ),
               SizedBox(height: screenHeight * .025),
-              TextFormField(
+              TextInput(
                 onChanged: (value) {
                   setState(() {
                     confirmPassword = value;
@@ -412,7 +412,7 @@ class FormButton extends StatelessWidget {
   }
 }
 
-class TextFormField extends StatelessWidget {
+class TextInput extends StatelessWidget {
   final String? labelText;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
@@ -421,7 +421,7 @@ class TextFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final bool autoFocus;
   final bool obscureText;
-  const TextFormField(
+  const TextInput(
       {this.labelText,
       this.onChanged,
       this.onSubmitted,

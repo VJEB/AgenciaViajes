@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))
-            .copyWith(background: Colors.white),
+            .copyWith(background: Colors.black),
       ),
     );
   }
