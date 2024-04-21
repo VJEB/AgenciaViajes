@@ -1,122 +1,151 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agencia_viajes/screen/paquetes.dart';
 
-class ShoppingCart extends StatefulWidget {
+class Carrito extends StatefulWidget {
+  const Carrito({Key? key}) : super(key: key);
+
   @override
-  _ShoppingCartState createState() => _ShoppingCartState();
+  State<Carrito> createState() => _CarritoState();
 }
 
-class _ShoppingCartState extends State<ShoppingCart> {
-  List<dynamic> _categories = [];
+class _CarritoState extends State<Carrito> {
+  String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
+  List<dynamic> carrito = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchCatCategories();
+    _cargarCarrito();
   }
 
-  Future<void> _fetchCatCategories() async {
-    final response = await http.get(Uri.parse('https://api.thecatapi.com/v1/categories'));
-    if (response.statusCode == 200) {
-      setState(() {
-        _categories = jsonDecode(response.body);
-      });
+  Future<void> _cargarCarrito() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String carritoJson = prefs.getString('carrito') ?? '[]';
+    setState(() {
+      carrito = jsonDecode(carritoJson);
+    });
+  }
+
+  Future<void> _guardarCarrito() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('carrito', jsonEncode(carrito));
+  }
+
+  Future<dynamic> _getListado() async {
+    final result = await http.get(Uri.parse(url));
+    if (result.statusCode >= 200) {
+      return jsonDecode(result.body);
     } else {
-      throw Exception('Failed to load categories');
+      print("Error en el endPoint");
+      // return const Center(child: Text("Error en el endPoint"));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _cargarCarrito(); // Cargar el carrito cada vez que se construye la pantalla
     return Scaffold(
       appBar: AppBar(
-        title: Text('Carrito de Compras'),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => Paquete()),
+            );
+          },
+        ),
       ),
-      body: ListView.builder(
-        itemCount: _categories.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              elevation: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                    title: Text(
-                      _categories[index]['name'],
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Precio: \$${_categories[index]['id'].toDouble().toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.visibility),
-                      onPressed: () {
-                        // Aquí puedes agregar la lógica para mostrar más detalles del producto
-                      },
-                    ),
-                  ),
-                  if (_categories[index]['description'] != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      child: Text(
-                        _categories[index]['description'],
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.payment),
-                        onPressed: () {
-                          // Aquí puedes agregar la lógica para finalizar la compra del producto
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          // Aquí puedes agregar la lógica para eliminar el producto del carrito
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+      body: Container(
+        color: Colors.black,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: listadoCarrito(),
               ),
             ),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total: 400',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Aquí puedes agregar la lógica para finalizar toda la compra
-                },
-                child: Text('Finalizar Compra'),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
+
+  List<Widget> listadoCarrito() {
+    List<Widget> lista = [];
+    for (var element in carrito) {
+      lista.add(
+        Card(
+          color: Colors.white10,
+          clipBehavior: Clip.hardEdge,
+          child: InkWell(
+            splashColor:
+                const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
+            onTap: () {
+              debugPrint('Card tapped.');
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${element["hote_Nombre"]}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFFFFBD59),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                carrito.remove(element);
+                              });
+                              _guardarCarrito();
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.payment, color: Colors.white),
+                            onPressed: () {
+                              // Acción al pagar
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.visibility, color: Colors.white),
+                            onPressed: () {
+                              // Acción al ver
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Precio: L.${element["haHo_PrecioPorNoche"]}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return lista;
+  }
 }
-
-
