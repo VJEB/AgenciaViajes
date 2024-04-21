@@ -3,7 +3,8 @@ import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/screen/usuarios_screen1.dart';
 import 'package:agencia_viajes/screen/paquetes_screen.dart';
-import 'package:agencia_viajes/screen/carrito.dart';
+import 'package:agencia_viajes/screen/paquetes.dart';
+
 
 class Layout extends StatefulWidget {
   const Layout({Key? key}) : super(key: key);
@@ -32,25 +33,20 @@ class _LayoutState extends State<Layout> {
     // Por ejemplo, puedes navegar a la pantalla de inicio de sesión
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const InicioSesion()));
   }
- void _carrito() {
+
+   void _paquetes() {
     // Aquí puedes agregar la lógica para cerrar sesión
     // Por ejemplo, puedes navegar a la pantalla de inicio de sesión
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) =>  ShoppingCart()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) =>  Paquete()));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.trolley),
-            tooltip: 'Carrito',
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) =>  ShoppingCart()));
-            },
-          ),
+         
         ],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
@@ -78,9 +74,7 @@ class _LayoutState extends State<Layout> {
                       child: ListTile(
                         leading: Icon(Icons.home, color: Color(0xFFFFBD59)),
                         title: Text('Paquetes', style: TextStyle(color: Color(0xFFFFBD59))),
-                        onTap: () {
-                          // Aquí puedes agregar la lógica para navegar a la página de inicio, por ejemplo.
-                        },
+                        onTap: _paquetes,
                       ),
                     ),
                     Padding(
