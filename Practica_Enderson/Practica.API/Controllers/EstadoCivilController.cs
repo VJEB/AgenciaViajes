@@ -15,11 +15,11 @@ namespace Practica.API.Controllers
             _generalServicio = generalServicio;
         }
 
-        [HttpGet]
-        public IActionResult EstadosCivilesList()
+        [HttpGet("List")]
+        public IActionResult List()
         {
-            //var list = _generalServicio.ListEstadosCiviles();
-            return Ok("list");
+            var list = _generalServicio.ListEsCi();
+            return Ok(list.Data);
         }
     }
 }

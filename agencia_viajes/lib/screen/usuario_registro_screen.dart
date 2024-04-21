@@ -4,21 +4,19 @@
   lib/screens/simple_login.dart
 */
 
-import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:agencia_viajes/screen/layout.dart';
 
-class InicioSesion extends StatefulWidget {
-  /// Callback for when this form is submitted successfully. Parameters are (email, password)
+class RegistroUsuario extends StatefulWidget {
   final Function(String? email, String? password)? onSubmitted;
 
-  const InicioSesion({this.onSubmitted, super.key});
+  const RegistroUsuario({this.onSubmitted, super.key});
+
   @override
-  State<InicioSesion> createState() => _InicioSesionState();
+  State<RegistroUsuario> createState() => _RegistroUsuarioState();
 }
 
-class _InicioSesionState extends State<InicioSesion> {
-  late String email, password;
+class _RegistroUsuarioState extends State<RegistroUsuario> {
+  late String email, password, confirmPassword;
   String? emailError, passwordError;
   Function(String? email, String? password)? get onSubmitted =>
       widget.onSubmitted;
@@ -28,6 +26,7 @@ class _InicioSesionState extends State<InicioSesion> {
     super.initState();
     email = '';
     password = '';
+    confirmPassword = '';
 
     emailError = null;
     passwordError = null;
@@ -54,9 +53,15 @@ class _InicioSesionState extends State<InicioSesion> {
       isValid = false;
     }
 
-    if (password.isEmpty) {
+    if (password.isEmpty || confirmPassword.isEmpty) {
       setState(() {
         passwordError = 'Por favor ingrese su contraseña';
+      });
+      isValid = false;
+    }
+    if (password != confirmPassword) {
+      setState(() {
+        passwordError = 'Las contraseñas no coinciden';
       });
       isValid = false;
     }
@@ -65,10 +70,6 @@ class _InicioSesionState extends State<InicioSesion> {
   }
 
   void submit() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const Layout()),
-    );
     if (validate()) {
       if (onSubmitted != null) {
         onSubmitted!(email, password);
@@ -96,7 +97,7 @@ class _InicioSesionState extends State<InicioSesion> {
                 ),
               ),
               const Text(
-                'Bienvenido,',
+                'Crear una cuenta,',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
@@ -106,7 +107,7 @@ class _InicioSesionState extends State<InicioSesion> {
               ),
               SizedBox(height: screenHeight * .01),
               const Text(
-                'Inicia sesión para continuar!',
+                'Registrate para empezar!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -120,7 +121,7 @@ class _InicioSesionState extends State<InicioSesion> {
                     email = value;
                   });
                 },
-                labelText: 'Correo electrónico',
+                labelText: 'Email',
                 errorText: emailError,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -133,50 +134,43 @@ class _InicioSesionState extends State<InicioSesion> {
                     password = value;
                   });
                 },
-                onSubmitted: (val) => submit(),
-                labelText: 'Constraseña',
+                labelText: 'Contraseña',
                 errorText: passwordError,
                 obscureText: true,
                 textInputAction: TextInputAction.next,
-                // style: tex,
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Olvidé mi contraseña',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              SizedBox(height: screenHeight * .025),
+              TextInput(
+                onChanged: (value) {
+                  setState(() {
+                    confirmPassword = value;
+                  });
+                },
+                onSubmitted: (value) => submit(),
+                labelText: 'Confirmar Contraseña',
+                errorText: passwordError,
+                obscureText: true,
+                textInputAction: TextInputAction.done,
               ),
               SizedBox(
                 height: screenHeight * .03,
               ),
               FormButton(
-                text: 'Iniciar Sesión',
+                text: 'Registrarse',
                 onPressed: submit,
-                iconData: Icons.login,
               ),
               SizedBox(
                 height: screenHeight * .075,
               ),
               TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const RegistroPersona(),
-                  ),
-                ),
+                onPressed: () => Navigator.pop(context),
                 child: RichText(
                   text: const TextSpan(
-                    text: "Soy un usuario nuevo, ",
+                    text: "Ya tengo una cuenta, ",
                     style: TextStyle(color: Colors.white),
                     children: [
                       TextSpan(
-                        text: 'Registrarse',
+                        text: 'Iniciar Sesión',
                         style: TextStyle(
                           color: Color(0xFFFFBD59),
                           fontWeight: FontWeight.bold,

@@ -5,9 +5,6 @@ class Pais {
   final String paisFechaCreacion;
   final int? paisUsuaModifica;
   final String? paisFechaModifica;
-  final dynamic paisUsuaCreacionNavigation;
-  final dynamic paisUsuaModificaNavigation;
-  final List<dynamic> tbEstados;
 
   Pais({
     required this.paisId,
@@ -16,10 +13,12 @@ class Pais {
     required this.paisFechaCreacion,
     this.paisUsuaModifica,
     this.paisFechaModifica,
-    this.paisUsuaCreacionNavigation,
-    this.paisUsuaModificaNavigation,
-    required this.tbEstados,
   });
+
+  @override
+  String toString() {
+    return paisDescripcion;
+  }
 
   factory Pais.fromJson(Map<String, dynamic> json) {
     return Pais(
@@ -29,9 +28,6 @@ class Pais {
       paisFechaCreacion: json['pais_Fecha_Creacion'],
       paisUsuaModifica: json['pais_Usua_Modifica'],
       paisFechaModifica: json['pais_Fecha_Modifica'],
-      paisUsuaCreacionNavigation: json['pais_Usua_CreacionNavigation'],
-      paisUsuaModificaNavigation: json['pais_Usua_ModificaNavigation'],
-      tbEstados: List<dynamic>.from(json['tbEstados'] ?? []),
     );
   }
 }

@@ -2,10 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:agencia_viajes/models/estadoCivil.dart';
+import 'package:agencia_viajes/models/persona.dart';
 import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/models/pais.dart';
-import 'package:flutter/widgets.dart';
+import 'package:agencia_viajes/models/estado.dart';
+import 'package:agencia_viajes/models/ciudad.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class RegistroPersona extends StatefulWidget {
@@ -20,23 +24,62 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   // ignore: duplicate_ignore
   // ignore: unused_field
   String _dni = '',
+      _pasaporte = '',
       _nombre = '',
       _apellido = '',
-      _sexo = '',
       _telefono = '',
-      _pasaporte = '',
-      // ignore: prefer_final_fields
-      _esCiId = '',
-      _ciudId = '',
+      _sexo = '',
       _estadoCivil = '';
+
+  int _estadoCivilSeleccionado = 0;
+  final List<EstadoCivil> _estadosCiviles = [];
 
   int _paisSeleccionado = 0;
   final List<Pais> _paises = [];
 
+  String _estadoSeleccionado = '';
+  final List<Estado> _estados = [];
+
+  String _ciudadSeleccionada = '';
+  final List<Ciudad> _ciudades = [];
+
+  Future<List<EstadoCivil>>? _estadosCivilesFuture;
+  Future<List<Pais>>? _paisesFuture;
+  Future<List<Estado>>? _estadosFuture;
+  Future<List<Ciudad>>? _ciudadesFuture;
+
   @override
   void initState() {
     super.initState();
-    _cargarPaises();
+    _estadosCivilesFuture ??= _cargarEstadosCiviles();
+    _paisesFuture ??= _cargarPaises();
+    _paisesFuture?.then((_) {
+      _estadosFuture ??= _cargarEstados();
+      _estadosFuture?.then((_) {
+        _ciudadesFuture ??= _cargarCiudades();
+      });
+    });
+  }
+
+  Future<List<EstadoCivil>> _cargarEstadosCiviles() async {
+    List<EstadoCivil> list = [];
+    const url = "https://etravel.somee.com/API/EstadoCivil/List";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
+        list = estadosCivilesJson
+            .map((json) => EstadoCivil.fromJson(json))
+            .toList();
+        if (list.isNotEmpty) {
+          _estadoCivilSeleccionado = list.first.esCiId;
+        } else {
+          print('Error al cargar los paises');
+        }
+      });
+    }
+    return list;
   }
 
   Future<List<Pais>> _cargarPaises() async {
@@ -44,7 +87,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
     const url = "https://etravel.somee.com/API/Pais/List";
     final respuesta = await http.get(Uri.parse(url));
 
-    if (respuesta.statusCode >= 200) {
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
       setState(() {
         final List<dynamic> paisesJson = jsonDecode(respuesta.body);
         list = paisesJson.map((json) => Pais.fromJson(json)).toList();
@@ -56,6 +99,141 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       });
     }
     return list;
+  }
+
+  void _onPaisSelected(Pais selectedPais) {
+    setState(() {
+      _paisSeleccionado = selectedPais.paisId;
+      _estados.clear();
+    });
+    _estadosFuture = _cargarEstados();
+  }
+
+  Future<List<Estado>> _cargarEstados() async {
+    List<Estado> list = [];
+    String url = "https://etravel.somee.com/API/Estado/List/$_paisSeleccionado";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> estadosJson = jsonDecode(respuesta.body);
+        list = estadosJson.map((json) => Estado.fromJson(json)).toList();
+        if (list.isNotEmpty) {
+          _estadoSeleccionado = list.first.estaId;
+        } else {
+          print('Error al cargar los estados');
+        }
+      });
+    }
+    return list;
+  }
+
+  void _onEstadoSelected(Estado selectedEstado) {
+    setState(() {
+      _estadoSeleccionado = selectedEstado.estaId;
+      _ciudades.clear();
+    });
+    _ciudadesFuture = _cargarCiudades();
+  }
+
+  Future<List<Ciudad>> _cargarCiudades() async {
+    List<Ciudad> list = [];
+    String url =
+        "https://etravel.somee.com/API/Ciudad/List/$_estadoSeleccionado";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> estadosJson = jsonDecode(respuesta.body);
+        list = estadosJson.map((json) => Ciudad.fromJson(json)).toList();
+        if (list.isNotEmpty) {
+          _estadoSeleccionado = list.first.estaId;
+        } else {
+          print('Error al cargar las ciudades');
+        }
+      });
+    }
+    return list;
+  }
+
+  void _onCiudadSelected(Ciudad selectedCiudad) {
+    setState(() {
+      _ciudadSeleccionada = selectedCiudad.ciudId;
+    });
+  }
+
+  void guardarPersona(BuildContext context, [bool mounted = true]) async {
+    // show the loading dialog
+    showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return const Dialog(
+            // The background color
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Color(0xC6FFFFFF), // You can adjust the color here
+                width: 0.5, // You can adjust the width here
+              ),
+            ),
+            backgroundColor: Color.fromARGB(211, 0, 0, 0),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // The loading indicator
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('Cargando...')
+                ],
+              ),
+            ),
+          );
+        });
+
+    await postPersona();
+    if (!mounted) return;
+    Navigator.of(context).pop();
+  }
+
+  Future<void> postPersona() async {
+    const String url = "https://localhost:44372/API/Persona/Create";
+    Persona persona = Persona(
+        persId: 0,
+        persDNI: _dni,
+        persPasaporte: _pasaporte,
+        persNombre: _nombre,
+        persApellido: _apellido,
+        persTelefono: int.parse(_telefono),
+        ciudId: _ciudadSeleccionada,
+        persSexo: _sexo,
+        esCiId: _estadoCivilSeleccionado,
+        persUsuaCreacion: 1,
+        persFechaCreacion: DateTime.now().toUtc().toIso8601String());
+
+    var resultado = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(persona.toJson()),
+    );
+
+    if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Insertado con Éxito')),
+      );
+      // Navigator.pushNamed(context, '/usuario/registro');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red[400],
+            content: const Text('Ya existe una persona con esa información')),
+      );
+    }
   }
 
   @override
@@ -87,6 +265,17 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                   children: <Widget>[
                     TextFormField(
                       style: const TextStyle(color: Color(0xFFFFBD59)),
+                      inputFormatters: [
+                        TextInputFormatter.withFunction(
+                          (TextEditingValue oldValue,
+                              TextEditingValue newValue) {
+                            return RegExp(r'^[a-zA-Z0-9]*$')
+                                    .hasMatch(newValue.text)
+                                ? newValue
+                                : oldValue;
+                          },
+                        ),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Por favor ingrese su número de identidad';
@@ -97,29 +286,36 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                       decoration: const InputDecoration(
                         labelText: 'Número de identidad',
                         labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                        hintText: '0501200504202', // Hint text
+                        hintText: '0501200504202',
                         hintStyle: TextStyle(color: Colors.grey),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFC28427)),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFFFBD59)),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       style: const TextStyle(color: Color(0xFFFFBD59)),
+                      inputFormatters: [
+                        TextInputFormatter.withFunction(
+                          (TextEditingValue oldValue,
+                              TextEditingValue newValue) {
+                            return RegExp(r'^[a-zA-Z0-9]*$')
+                                    .hasMatch(newValue.text)
+                                ? newValue
+                                : oldValue;
+                          },
+                        ),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Por favor ingrese su pasaporte';
@@ -130,29 +326,36 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                       decoration: const InputDecoration(
                         labelText: 'Pasaporte',
                         labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                        hintText: 'A05045DA540', // Hint text
+                        hintText: 'A05045DA540',
                         hintStyle: TextStyle(color: Colors.grey),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFC28427)),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFFFBD59)),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       style: const TextStyle(color: Color(0xFFFFBD59)),
+                      inputFormatters: [
+                        TextInputFormatter.withFunction(
+                          (TextEditingValue oldValue,
+                              TextEditingValue newValue) {
+                            return RegExp(r'^[a-zA-Z\s]*$')
+                                    .hasMatch(newValue.text)
+                                ? newValue
+                                : oldValue;
+                          },
+                        ),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Por favor ingrese su nombre';
@@ -163,29 +366,36 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                       decoration: const InputDecoration(
                         labelText: 'Nombre',
                         labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                        hintText: 'John', // Hint text
+                        hintText: 'John',
                         hintStyle: TextStyle(color: Colors.grey),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFC28427)),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFFFBD59)),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       style: const TextStyle(color: Color(0xFFFFBD59)),
+                      inputFormatters: [
+                        TextInputFormatter.withFunction(
+                          (TextEditingValue oldValue,
+                              TextEditingValue newValue) {
+                            return RegExp(r'^[a-zA-Z\s]*$')
+                                    .hasMatch(newValue.text)
+                                ? newValue
+                                : oldValue;
+                          },
+                        ),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Por favor ingrese su apellido';
@@ -196,29 +406,35 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                       decoration: const InputDecoration(
                         labelText: 'Apellido',
                         labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                        hintText: 'Doe', // Hint text
+                        hintText: 'Doe',
                         hintStyle: TextStyle(color: Colors.grey),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFC28427)),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFFFBD59)),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       style: const TextStyle(color: Color(0xFFFFBD59)),
+                      inputFormatters: [
+                        TextInputFormatter.withFunction(
+                          (TextEditingValue oldValue,
+                              TextEditingValue newValue) {
+                            return RegExp(r'^[0-9]*$').hasMatch(newValue.text)
+                                ? newValue
+                                : oldValue;
+                          },
+                        ),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Por favor ingrese su teléfono';
@@ -229,23 +445,19 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                       decoration: const InputDecoration(
                         labelText: 'Teléfono',
                         labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                        hintText: '31466774', // Hint text
+                        hintText: '31466774',
                         hintStyle: TextStyle(color: Colors.grey),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFC28427)),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFFFBD59)),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
                     ),
@@ -316,116 +528,165 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    ListTile(
-                      title: const Text(
-                        'Estado civil',
-                        style: TextStyle(color: Color(0xFFFFBD59)),
-                      ),
-                      subtitle: Text(
-                        _estadoCivil,
-                        style: const TextStyle(color: Color(0xFFC28427)),
-                      ), // Display selected state as subtitle
-                      trailing: const Icon(Icons
-                          .keyboard_arrow_down), // Optional: Add dropdown icon
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              side: const BorderSide(
-                                color: Color(
-                                    0xC6FFFFFF), // You can adjust the color here
-                                width: 0.5, // You can adjust the width here
-                              ),
-                            ),
-                            backgroundColor: const Color(0x6A040000),
-                            title: const Text(
-                              'Por favor seleccione su estado civil',
+                    FutureBuilder(
+                      future: _estadosCivilesFuture,
+                      builder:
+                          (context, AsyncSnapshot<List<EstadoCivil>> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                            child: Text(
+                              'Error al cargar los estados civiles',
                               style: TextStyle(color: Color(0xFFFFBD59)),
                             ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                RadioListTile(
-                                  title: const Text('Soltero/a',
-                                      style:
-                                          TextStyle(color: Color(0xFFFFBD59))),
-                                  value: 'Soltero/a',
-                                  groupValue: _estadoCivil,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _estadoCivil = value!;
-                                    });
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: const Text('Casado/a',
-                                      style:
-                                          TextStyle(color: Color(0xFFFFBD59))),
-                                  value: 'Casado/a',
-                                  groupValue: _estadoCivil,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _estadoCivil = value!;
-                                    });
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                ),
-                                // Add more radio options for different civil statuses
-                              ],
+                          );
+                        } else if (snapshot.data == null ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'No hay estados civiles',
+                              style: TextStyle(color: Color(0xFFFFBD59)),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    FutureBuilder<List<Pais>>(
-                      future: _cargarPaises(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return PaisesDdl(paises: snapshot.data);
+                          );
                         } else {
-                          return const Text(
-                            "Cargando...",
-                            style: TextStyle(color: Color(0xFFFFBD59)),
+                          final List<EstadoCivil> estadosCiviles =
+                              snapshot.data!;
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    side: const BorderSide(
+                                      color: Color(
+                                          0xC6FFFFFF), // You can adjust the color here
+                                      width:
+                                          0.5, // You can adjust the width here
+                                    ),
+                                  ),
+                                  backgroundColor: const Color(0x6A040000),
+                                  title: const Text(
+                                    'Por favor seleccione su estado civil',
+                                    style: TextStyle(color: Color(0xFFFFBD59)),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: estadosCiviles.map((estadoCivil) {
+                                      return RadioListTile(
+                                        title: Text(
+                                          estadoCivil.esCiDescripcion,
+                                          style: const TextStyle(
+                                              color: Color(0xFFFFBD59)),
+                                        ),
+                                        value: estadoCivil.esCiId,
+                                        groupValue: _estadoCivilSeleccionado,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _estadoCivilSeleccionado =
+                                                value as int;
+                                            _estadoCivil =
+                                                estadoCivil.esCiDescripcion;
+                                          });
+                                          Navigator.of(context)
+                                              .pop(); // Close dialog
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ListTile(
+                              title: const Text(
+                                'Seleccione su estado civil',
+                                style: TextStyle(color: Color(0xFFFFBD59)),
+                              ),
+                              subtitle: Text(
+                                _estadoCivil,
+                                style:
+                                    const TextStyle(color: Color(0xFFC28427)),
+                              ), // Display selected gender as subtitle
+                              trailing: const Icon(Icons.keyboard_arrow_down),
+                            ),
                           );
                         }
                       },
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      style: const TextStyle(color: Color(0xFFFFBD59)),
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return 'Por favor ingrese Ciud_Id';
+                    FutureBuilder<List<Pais>>(
+                      future: _paisesFuture, // Use the assigned future
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                            "Cargando...",
+                            style: TextStyle(color: Color(0xFFFFBD59)),
+                          );
+                        } else if (snapshot.hasData) {
+                          _paises.addAll(snapshot.data as Iterable<Pais>);
+                          return PaisesDdl(
+                              paises: _paises, onPaisSelected: _onPaisSelected);
+                        } else {
+                          return const Text(
+                            "Error al cargar los países",
+                            style: TextStyle(color: Colors.red),
+                          );
                         }
-                        return null;
                       },
-                      onSaved: (value) => _ciudId = value ?? '',
-                      decoration: const InputDecoration(
-                        labelText: 'Ciudad',
-                        labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                        hintText: 'San Pedro Sula', // Hint text
-                        hintStyle: TextStyle(color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFC28427)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFFFBD59)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .red), // Border color when focused and in error state
-                        ),
-                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    FutureBuilder<List<Estado>>(
+                      future:
+                          _estadosFuture, // Use the assigned future for estados
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                            "Cargando estados...",
+                            style: TextStyle(color: Color(0xFFFFBD59)),
+                          );
+                        } else if (snapshot.hasData) {
+                          _estados.addAll(snapshot.data as Iterable<Estado>);
+                          return EstadosDdl(
+                            estados: _estados,
+                            onEstadoSelected: _onEstadoSelected,
+                          );
+                        } else {
+                          return const Text(
+                            "Error al cargar los estados",
+                            style: TextStyle(color: Colors.red),
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    FutureBuilder<List<Ciudad>>(
+                      future:
+                          _ciudadesFuture, // Use the assigned future for estados
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                            "Cargando ciudades...",
+                            style: TextStyle(color: Color(0xFFFFBD59)),
+                          );
+                        } else if (snapshot.hasData) {
+                          _ciudades.addAll(snapshot.data as Iterable<Ciudad>);
+                          return CiudadesDdl(
+                            ciudades: _ciudades,
+                            onCiudadSelected: _onCiudadSelected,
+                          );
+                        } else {
+                          return const Text(
+                            "Error al cargar las ciudades",
+                            style: TextStyle(color: Colors.red),
+                          );
+                        }
+                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -438,7 +699,6 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (_sexo.isEmpty) {
-                                    // Show validation message for Sexo or Estado Civil
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         backgroundColor:
@@ -448,7 +708,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                                       ),
                                     );
                                   }
-                                  if (_estadoCivil.isEmpty) {
+                                  if (_estadoCivilSeleccionado == 0) {
                                     // Show validation message for Sexo or Estado Civil
                                     if (_sexo.isNotEmpty) {
                                       ScaffoldMessenger.of(context)
@@ -463,9 +723,9 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                                     }
                                   }
                                   if (_sexo.isNotEmpty &&
-                                      _estadoCivil.isNotEmpty) {
+                                      _estadoCivilSeleccionado != 0) {
                                     _formKey.currentState!.save();
-                                    // Call your database insert function here with the form data
+                                    guardarPersona(context);
                                   }
                                 }
                               },
@@ -489,45 +749,49 @@ class _RegistroPersonaState extends State<RegistroPersona> {
 
 class PaisesDdl extends StatelessWidget {
   final List<Pais>? paises;
+  final Function(Pais) onPaisSelected;
 
-  const PaisesDdl({super.key, required this.paises});
+  const PaisesDdl(
+      {super.key, required this.paises, required this.onPaisSelected});
 
   @override
   Widget build(BuildContext context) {
-    List<String> nombrePaises =
-        paises!.map((pais) => pais.paisDescripcion).toList();
     if (paises != null) {
-      return Autocomplete<String>(
+      return Autocomplete<Pais>(
         optionsBuilder: (TextEditingValue textEditingValue) {
-          return nombrePaises.where((String option) {
-            return option
+          Set<Pais> uniqueOptions = {};
+          paises!.forEach((Pais option) {
+            if (option.paisDescripcion
                 .toLowerCase()
-                .contains(textEditingValue.text.toLowerCase());
+                .contains(textEditingValue.text.toLowerCase())) {
+              uniqueOptions.add(option);
+            }
           });
+          return uniqueOptions.toList();
         },
-        onSelected: (String selection) {
-          debugPrint('You just selected $selection');
+        onSelected: (Pais selection) {
+          onPaisSelected(selection);
+          debugPrint('You just selected ${selection.paisId}');
         },
         optionsViewBuilder: (BuildContext context,
-            AutocompleteOnSelected<String> onSelected,
-            Iterable<String> options) {
+            AutocompleteOnSelected<Pais> onSelected, Iterable<Pais> options) {
           return Material(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
               side: const BorderSide(
-                color: Color(0xC6FFFFFF), // You can adjust the color here
-                width: 0.5, // You can adjust the width here
+                color: Color(0xC6FFFFFF),
+                width: 0.5,
               ),
             ),
             color: const Color(0xDA040000),
-            elevation: 4.0, // Add elevation to the list
+            elevation: 4.0,
             child: SizedBox(
-              height: 200.0, // Set a fixed height for the list
+              height: 200.0,
               child: ListView(
                 children: options
-                    .map((String option) => ListTile(
+                    .map((Pais option) => ListTile(
                           title: Text(
-                            option,
+                            option.paisDescripcion,
                             style: const TextStyle(color: Color(0xFFC28427)),
                           ),
                           onTap: () {
@@ -553,11 +817,10 @@ class PaisesDdl extends StatelessWidget {
               }
               return null;
             },
-            // onSaved: (value) => _ciudId = value ?? '',
             decoration: const InputDecoration(
               labelText: 'País',
               labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-              hintText: 'Honduras', // Hint text
+              hintText: 'Honduras',
               hintStyle: TextStyle(color: Colors.grey),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFC28427)),
@@ -565,7 +828,7 @@ class PaisesDdl extends StatelessWidget {
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,
-                ), // Border color when focused and in error state
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFFFBD59)),
@@ -573,7 +836,203 @@ class PaisesDdl extends StatelessWidget {
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,
-                ), // Border color when focused and in error state
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      return const Text("Cargando...");
+    }
+  }
+}
+
+class EstadosDdl extends StatelessWidget {
+  final List<Estado>? estados;
+  final Function(Estado) onEstadoSelected;
+
+  const EstadosDdl(
+      {super.key, required this.estados, required this.onEstadoSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    if (estados != null) {
+      return Autocomplete<Estado>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          return estados!.where((Estado option) {
+            return option.estaDescripcion
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          });
+        },
+        onSelected: (Estado selection) {
+          onEstadoSelected(selection);
+          debugPrint('You just selected ${selection.estaId}');
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<Estado> onSelected,
+            Iterable<Estado> options) {
+          return Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              side: const BorderSide(
+                color: Color(0xC6FFFFFF),
+                width: 0.5,
+              ),
+            ),
+            color: const Color(0xDA040000),
+            elevation: 4.0,
+            child: SizedBox(
+              height: 200.0,
+              child: ListView(
+                children: options
+                    .map((Estado option) => ListTile(
+                          title: Text(
+                            option.estaDescripcion,
+                            style: const TextStyle(color: Color(0xFFC28427)),
+                          ),
+                          onTap: () {
+                            onSelected(option);
+                          },
+                        ))
+                    .toList(),
+              ),
+            ),
+          );
+        },
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            controller: textEditingController,
+            focusNode: focusNode,
+            style: const TextStyle(color: Color(0xFFFFBD59)),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Por favor seleccione un estado';
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              labelText: 'Estado',
+              labelStyle: TextStyle(color: Color(0xFFFFBD59)),
+              hintText: 'Cortés',
+              hintStyle: TextStyle(color: Colors.grey),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFC28427)),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFFFBD59)),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      return const Text("Cargando...");
+    }
+  }
+}
+
+class CiudadesDdl extends StatelessWidget {
+  final List<Ciudad>? ciudades;
+  final Function(Ciudad) onCiudadSelected;
+
+  const CiudadesDdl(
+      {super.key, required this.ciudades, required this.onCiudadSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    if (ciudades != null) {
+      return Autocomplete<Ciudad>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          return ciudades!.where((Ciudad option) {
+            return option.ciudDescripcion
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          });
+        },
+        onSelected: (Ciudad selection) {
+          onCiudadSelected(selection);
+          debugPrint('You just selected ${selection.ciudId}');
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<Ciudad> onSelected,
+            Iterable<Ciudad> options) {
+          return Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              side: const BorderSide(
+                color: Color(0xC6FFFFFF),
+                width: 0.5,
+              ),
+            ),
+            color: const Color(0xDA040000),
+            elevation: 4.0,
+            child: SizedBox(
+              height: 200.0,
+              child: ListView(
+                children: options
+                    .map((Ciudad option) => ListTile(
+                          title: Text(
+                            option.ciudDescripcion,
+                            style: const TextStyle(color: Color(0xFFC28427)),
+                          ),
+                          onTap: () {
+                            onSelected(option);
+                          },
+                        ))
+                    .toList(),
+              ),
+            ),
+          );
+        },
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            controller: textEditingController,
+            focusNode: focusNode,
+            style: const TextStyle(color: Color(0xFFFFBD59)),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Por favor seleccione una ciudad';
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              labelText: 'Ciudad',
+              labelStyle: TextStyle(color: Color(0xFFFFBD59)),
+              hintText: 'Tegucigalpa',
+              hintStyle: TextStyle(color: Colors.grey),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFC28427)),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFFFBD59)),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
               ),
             ),
           );

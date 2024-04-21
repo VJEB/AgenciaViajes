@@ -16,7 +16,7 @@ namespace Agencia.Entities.Entities
             tbUsuarios = new HashSet<tbUsuarios>();
         }
 
-        public int Pers_Id { get; set; }
+        public int? Pers_Id { get; set; }
         public string Pers_DNI { get; set; }
         public string Pers_Nombre { get; set; }
         public string Pers_Apellido { get; set; }
@@ -30,7 +30,7 @@ namespace Agencia.Entities.Entities
         public DateTime? Pers_Fecha_Modifica { get; set; }
         public bool? Pers_Habilitado { get; set; }
         public string Pers_Pasaporte { get; set; }
-        public string Pers_Email { get; set; }
+        public string? Pers_Email { get; set; }
         public int? Carg_Id { get; set; }
 
         public virtual tbCargos Carg { get; set; }

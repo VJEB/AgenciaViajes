@@ -82,10 +82,6 @@ namespace Practica.DataAcces.Repositorio
  
         #region Estados Civiles
         public static string EsCi_Mostrar = "Gral.SP_EstadosCiviles_Mostrar";
-        public static string Esta_Insertar = "Gral.SP_EstadosCiviles_Insertar";
-        public static string Esta_Actualizar = "Gral.SP_EstadosCiviles_Actualizar";
-        public static string Esta_Eliminar = "Gral.SP_EstadosCiviles_Eliminar";
-        public static string Esta_Detalles = "Gral.SP_EstadosCiviles_Llenar";
         #endregion
 
 

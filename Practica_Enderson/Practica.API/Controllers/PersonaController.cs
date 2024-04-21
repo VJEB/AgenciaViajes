@@ -42,31 +42,29 @@ namespace Practica.API.Controllers
         [HttpPost("Create")]
         public IActionResult Create(PersonaViewModel item)
         {
-
             var modelo = new tbPersonas()
             {
                 Pers_DNI = item.Pers_DNI,
                 Pers_Pasaporte = item.Pers_Pasaporte,
-                Pers_Email = item.Pers_Email,
                 Pers_Nombre = item.Pers_Nombre,
                 Pers_Apellido = item.Pers_Apellido,
                 Pers_Sexo = item.Pers_Sexo,
                 Pers_Telefono = item.Pers_Telefono,
                 EsCi_Id = item.EsCi_Id,
-                Carg_Id = item.Carg_Id,
                 Ciud_Id = item.Ciud_Id,
+                Pers_Usua_Creacion = item.Pers_Usua_Creacion,
+                Pers_Fecha_Creacion = item.Pers_Fecha_Creacion
             };
             int personId;
-            var prueba = _generalServicio.InsertarPerson(modelo, out personId);
-            var hola = prueba;
+            var result = _generalServicio.InsertarPerson(modelo, out personId);
             if (personId > 0)
             {
-                hola.Message = personId.ToString();
-                return Ok(prueba);
+                result.Message = personId.ToString();
+                return Ok(result);
             }
             else
             {
-                return BadRequest(prueba);
+                return BadRequest(result);
             }
         }
     }

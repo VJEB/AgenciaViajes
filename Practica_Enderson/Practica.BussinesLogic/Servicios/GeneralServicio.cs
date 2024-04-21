@@ -103,16 +103,15 @@ namespace Practica.BussinesLogic.Servicios
             personId = 0;
             try
             {
-                var (lost, idGenerado) = _personaRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
+                var (list, idGenerado) = _personaRepositorio.Insertar(item);
+                if (list.CodeStatus > 0)
                 {
                     personId = idGenerado;
-                    return result.Ok(lost);
+                    return result.Ok("Datos de la persona guardados con exito!", list);
                 }
                 else
                 {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
+                    return result.Error("Ya hay una persona con esa informacion");
                 }
 
             }
@@ -132,9 +131,7 @@ namespace Practica.BussinesLogic.Servicios
 
 
         #region Estados Civiles
-
-
-        public ServiceResult EstadoList()
+        public ServiceResult ListEsCi()
         {
             var result = new ServiceResult();
             try
@@ -147,87 +144,7 @@ namespace Practica.BussinesLogic.Servicios
 
                 return result.Error(ex.Message);
             }
-        }
-
-        public ServiceResult InsertarEstado(tbEstadosCiviles item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _estadoCivilRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult ActualizarEstado(tbEstadosCiviles item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _estadoCivilRepositorio.Actualizar(item);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-        public ServiceResult EliminarEstado(int id)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var lost = _estadoCivilRepositorio.Eliminar(id);
-                if (lost.CodeStatus > 0)
-                {
-                    return result.Ok(lost);
-                }
-                else
-                {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return result.Error(ex.Message);
-            }
-        }
-      
-        public IEnumerable<tbEstadosCiviles> Detalles(int id)
-        {
-            return _estadoCivilRepositorio.Detalle(id);
-        }
-
-      
+        }      
         #endregion
-       
-
-        
     }
 }

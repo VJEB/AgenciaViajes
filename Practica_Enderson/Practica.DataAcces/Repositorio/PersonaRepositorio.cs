@@ -76,32 +76,28 @@ namespace Practica.DataAcces.Repositorio
 
                 parametro.Add("Pers_DNI", item.Pers_DNI);
                 parametro.Add("Pers_Pasaporte", item.Pers_Pasaporte);
-                parametro.Add("Pers_Email", item.Pers_Email);
                 parametro.Add("Pers_Nombre", item.Pers_Nombre);
                 parametro.Add("Pers_Apellido", item.Pers_Apellido);
                 parametro.Add("Pers_Sexo", item.Pers_Sexo);
                 parametro.Add("Pers_Telefono", item.Pers_Telefono);
                 parametro.Add("EsCi_Id", item.EsCi_Id);
-                parametro.Add("Carg_Id", item.Carg_Id);
                 parametro.Add("Ciud_Id", item.Ciud_Id);
-                parametro.Add("Pers_Usua_Creacion", 1);
-                parametro.Add("Pers_Fecha_Creacion", DateTime.Now);
+                parametro.Add("Pers_Usua_Creacion", item.Pers_Usua_Creacion);
+                parametro.Add("Pers_Fecha_Creacion", item.Pers_Fecha_Creacion);
                 parametro.Add("Pers_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                 var result = db.Execute(ScriptBaseDatos.Pers_Insertar,
+                 var result = db.QueryFirst(ScriptBaseDatos.Pers_Insertar,
                     parametro,
                     commandType: CommandType.StoredProcedure
                     );
 
-
                 int perso = 0;
-                if (result > 0)
+                if (result.Resultado == 1)
                 {
                     perso = parametro.Get<int>("Pers_Id");
                 }
 
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return (new RequestStatus { CodeStatus = result, MessageStatus = mensaje }, perso);
+                return (new RequestStatus { CodeStatus = result.Resultado }, perso);
             }
         }
 

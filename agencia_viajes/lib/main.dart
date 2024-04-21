@@ -1,3 +1,4 @@
+import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
 // import 'screen/layout.dart';
 import 'screen/persona_registro_screen.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))
             .copyWith(background: Colors.black),
       ),
+      routes: {
+        '/register': (context) => const RegistroUsuario(),
+      },
     );
   }
 }
