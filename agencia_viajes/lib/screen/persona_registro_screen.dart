@@ -760,13 +760,13 @@ class PaisesDdl extends StatelessWidget {
       return Autocomplete<Pais>(
         optionsBuilder: (TextEditingValue textEditingValue) {
           Set<Pais> uniqueOptions = {};
-          paises!.forEach((Pais option) {
+          for (var option in paises!) {
             if (option.paisDescripcion
                 .toLowerCase()
                 .contains(textEditingValue.text.toLowerCase())) {
               uniqueOptions.add(option);
             }
-          });
+          }
           return uniqueOptions.toList();
         },
         onSelected: (Pais selection) {

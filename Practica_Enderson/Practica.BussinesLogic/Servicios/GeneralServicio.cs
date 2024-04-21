@@ -107,7 +107,7 @@ namespace Practica.BussinesLogic.Servicios
                 if (list.CodeStatus > 0)
                 {
                     personId = idGenerado;
-                    return result.Ok("Datos de la persona guardados con exito!", list);
+                    return result.Ok(list);
                 }
                 else
                 {

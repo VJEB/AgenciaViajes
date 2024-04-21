@@ -1,13 +1,11 @@
+import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:agencia_viajes/screen/hoteles_screen.dart';
-import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/screen/usuarios_screen1.dart';
-import 'package:agencia_viajes/screen/paquetes_screen.dart';
-import 'package:agencia_viajes/screen/paquetes.dart';
-
+import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 
 class Layout extends StatefulWidget {
-  const Layout({Key? key}) : super(key: key);
+  const Layout({super.key});
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -17,7 +15,7 @@ class _LayoutState extends State<Layout> {
   int _selectedIndex = 1;
 
   final List<Widget> _widgetOptions = <Widget>[
-    const Paquetes(),
+    const PaquetesForm(),
     const Hoteles(),
     Usuarios(),
   ];
@@ -28,109 +26,27 @@ class _LayoutState extends State<Layout> {
     });
   }
 
-  void _cerrarSesion() {
-    // Aquí puedes agregar la lógica para cerrar sesión
-    // Por ejemplo, puedes navegar a la pantalla de inicio de sesión
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const InicioSesion()));
-  }
-
-   void _paquetes() {
-    // Aquí puedes agregar la lógica para cerrar sesión
-    // Por ejemplo, puedes navegar a la pantalla de inicio de sesión
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) =>  Paquete()));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        actions: <Widget>[
-         
-        ],
+        actions: <Widget>[],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
-      drawer: Drawer(
-        child: Container(
-          color: Colors.black,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    UserAccountsDrawerHeader(
-                      accountName: Text(''),
-                      accountEmail: Text(''),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        image: DecorationImage(
-                          image: AssetImage('lib/assets/Logo-agencia-viajes.png'),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: ListTile(
-                        leading: Icon(Icons.home, color: Color(0xFFFFBD59)),
-                        title: Text('Paquetes', style: TextStyle(color: Color(0xFFFFBD59))),
-                        onTap: _paquetes,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: ListTile(
-                        leading: Icon(Icons.trolley, color: Color(0xFFFFBD59)),
-                        title: Text('Facturas', style: TextStyle(color: Color(0xFFFFBD59))),
-                        onTap: () {
-                          // Aquí puedes agregar la lógica para navegar a la página de listar, por ejemplo.
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: ListTile(
-                        leading: Icon(Icons.person, color: Color(0xFFFFBD59)),
-                        title: Text('Administrar Usuarios', style: TextStyle(color: Color(0xFFFFBD59))),
-                        onTap: () {
-                          // Aquí puedes agregar la lógica para navegar a la página de perfil, por ejemplo.
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 2),
-                padding: const EdgeInsets.all(20),
-                width: double.infinity,
-                color: Color(0xFFFFBD59),
-                alignment: Alignment.center,
-                child: GestureDetector(
-                  
-                  onTap: _cerrarSesion,
-                  child: const Text(
-                    'Salir',
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                    
-                  ),
-                
-                ),
-              ),
-            ],
-          ),
-        ),
+      drawer: MenuLateral(
+        context: context,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.pie_chart_rounded),
+            label: 'Gráficos',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.trolley),
-            label: 'Listar',
+            icon: Icon(Icons.hotel),
+            label: 'Hoteles',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -138,9 +54,15 @@ class _LayoutState extends State<Layout> {
           ),
         ],
         currentIndex: _selectedIndex,
+        selectedItemColor: const Color(0xFFFFBD59),
+        unselectedItemColor:
+            Colors.grey, // Change the color of unselected items
+        selectedLabelStyle: const TextStyle(
+            color:
+                Color(0xFFFFBD59)), // Change the label color of selected item
+        unselectedLabelStyle: const TextStyle(color: Colors.grey),
         onTap: _onItemTapped,
       ),
     );
   }
 }
-

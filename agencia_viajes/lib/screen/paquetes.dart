@@ -1,22 +1,28 @@
 import 'dart:convert';
+import 'package:agencia_viajes/models/paquete.dart';
+import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
+import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/carrito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Paquete extends StatefulWidget {
-  const Paquete({Key? key}) : super(key: key);
+class Paquetes extends StatefulWidget {
+  const Paquetes({super.key});
 
   @override
-  State<Paquete> createState() => _PaqueteState();
+  State<Paquetes> createState() => _PaquetesState();
 }
 
-class _PaqueteState extends State<Paquete> {
+class _PaquetesState extends State<Paquetes> {
+  final _formKey = GlobalKey<FormState>();
+
   String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
   List<dynamic> carrito = [];
-
+  String _paquNombre = "";
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
     if (result.statusCode >= 200) {
@@ -43,17 +49,136 @@ class _PaqueteState extends State<Paquete> {
     }
   }
 
+  void crearPaquete(BuildContext context, [bool mounted = true]) async {
+    // show the loading dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          side: const BorderSide(
+            color: Color(0xC6FFFFFF), // You can adjust the color here
+            width: 0.5, // You can adjust the width here
+          ),
+        ),
+        backgroundColor: const Color(0xC9040000),
+        title: const Text(
+          'Nuevo paquete',
+          style: TextStyle(color: Color(0xFFFFBD59)),
+        ),
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                style: const TextStyle(color: Color(0xFFFFBD59)),
+                inputFormatters: [
+                  TextInputFormatter.withFunction(
+                    (TextEditingValue oldValue, TextEditingValue newValue) {
+                      return RegExp(r'^[a-zA-Z0-9]*$').hasMatch(newValue.text)
+                          ? newValue
+                          : oldValue;
+                    },
+                  ),
+                ],
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'Por favor ingrese el nombre del paquete';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _paquNombre = value ?? '',
+                decoration: const InputDecoration(
+                  labelText: 'Nombre del paquete',
+                  labelStyle: TextStyle(color: Color(0xFFFFBD59)),
+                  hintText: 'Vacaciones en Nueva Zelanda',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFC28427)),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFFFBD59)),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Icon(
+                      Icons.logout,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 150, // max width of the button
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            await postPaquete();
+                            if (!mounted) return;
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        icon: const Icon(Icons.save),
+                        label: const Text('Guardar'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> postPaquete() async {
+    const String url = "https://localhost:44372/API/Paquete/Create";
+    Paquete paquete = Paquete(
+        paquId: 0,
+        paquNombre: _paquNombre,
+        paquPrecio: 0,
+        paquEstado: 0,
+        paquUsuaCreacion: 1,
+        paquFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+        persId: 1);
+
+    var resultado = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(paquete.toJson()),
+    );
+
+    if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const PaquetesForm()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red[400],
+            content: const Text('Ya existe un paquete con ese nombre')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Paquetes"),
         backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => Layout()));
-          },
-        ),
         actions: <Widget>[
           Stack(
             children: [
@@ -73,7 +198,7 @@ class _PaqueteState extends State<Paquete> {
                     radius: 8,
                     child: Text(
                       '${carrito.length}',
-                      style: TextStyle(color: Colors.white, fontSize: 10),
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ),
                 ),
@@ -82,16 +207,21 @@ class _PaqueteState extends State<Paquete> {
         ],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
+      drawer: MenuLateral(
+        context: context,
+      ),
       body: Container(
         color: Colors.black,
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             FutureBuilder<dynamic>(
               future: _getListado(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return CarouselWithHoteles(listadoHoteles: snapshot.data, agregarAlCarrito: _agregarAlCarrito);
+                  return CarouselWithHoteles(
+                      listadoHoteles: snapshot.data,
+                      agregarAlCarrito: _agregarAlCarrito);
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -106,11 +236,13 @@ class _PaqueteState extends State<Paquete> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         return Card(
-                          margin: EdgeInsets.only(top: 15),
+                          margin: const EdgeInsets.only(top: 15),
                           color: Colors.white10,
                           clipBehavior: Clip.hardEdge,
                           child: InkWell(
-                            splashColor: const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
+                            splashColor:
+                                const Color.fromARGB(255, 255, 239, 120)
+                                    .withAlpha(30),
                             onTap: () {
                               _mostrarDetalles(context, snapshot.data![index]);
                             },
@@ -120,7 +252,8 @@ class _PaqueteState extends State<Paquete> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '${snapshot.data![index]["hote_Nombre"]}',
@@ -132,15 +265,17 @@ class _PaqueteState extends State<Paquete> {
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
-                                          _agregarAlCarrito(snapshot.data![index]);
+                                          _agregarAlCarrito(
+                                              snapshot.data![index]);
                                         },
-                                        child: Text('Agregar'),
+                                        child: const Text('Agregar'),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         'Precio: L.${snapshot.data![index]["haHo_PrecioPorNoche"]}',
@@ -153,7 +288,7 @@ class _PaqueteState extends State<Paquete> {
                                         onPressed: () {
                                           // Lógica para editar
                                         },
-                                        child: Text('Editar'),
+                                        child: const Text('Editar'),
                                       ),
                                     ],
                                   ),
@@ -175,11 +310,12 @@ class _PaqueteState extends State<Paquete> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Lógica para agregar un nuevo elemento
-          // Puedes agregar aquí la lógica para abrir una nueva pantalla o realizar una acción al hacer clic en el botón de más
+          crearPaquete(context);
         },
-        backgroundColor: Colors.black, // Cambia el color de fondo del botón flotante
-        child: Icon(Icons.add, color: Color(0xFFFFBD59)), // Icono de más con color blanco
+        backgroundColor: const Color(
+            0xFFFFBD59), // Cambia el color de fondo del botón flotante
+        child: const Icon(Icons.add,
+            color: Colors.black), // Icono de más con color blanco
       ),
     );
   }
@@ -201,7 +337,7 @@ class _PaqueteState extends State<Paquete> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Detalles del Hotel'),
+          title: const Text('Detalles del Hotel'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -216,7 +352,7 @@ class _PaqueteState extends State<Paquete> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cerrar'),
+              child: const Text('Cerrar'),
             ),
           ],
         );
@@ -225,7 +361,7 @@ class _PaqueteState extends State<Paquete> {
   }
 
   void _mostrarCarrito(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => Carrito()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const Carrito()));
   }
 }
 
@@ -233,7 +369,8 @@ class CarouselWithHoteles extends StatelessWidget {
   final List<dynamic>? listadoHoteles;
   final Function(dynamic) agregarAlCarrito;
 
-  const CarouselWithHoteles({Key? key, this.listadoHoteles, required this.agregarAlCarrito}) : super(key: key);
+  const CarouselWithHoteles(
+      {super.key, this.listadoHoteles, required this.agregarAlCarrito});
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +406,7 @@ class CarouselWithHoteles extends StatelessWidget {
                     onPressed: () {
                       agregarAlCarrito(hotel);
                     },
-                    child: Text('Agregar'),
+                    child: const Text('Agregar'),
                   ),
                 ),
               ],
@@ -282,8 +419,8 @@ class CarouselWithHoteles extends StatelessWidget {
         viewportFraction: 0.8,
         enlargeCenterPage: true,
         autoPlay: true,
-        autoPlayInterval: Duration(seconds: 3),
-        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
       ),
     );

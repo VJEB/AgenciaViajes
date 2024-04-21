@@ -53,16 +53,15 @@ namespace Agencia.BussinesLogic.Servicios
             paqueteId = 0;
             try
             {
-                var (lost, idGenerado) = _paqueteRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
+                var (response, idGenerado) = _paqueteRepositorio.Insertar(item);
+                if (response.CodeStatus == 1)
                 {
                     paqueteId = idGenerado;
-                    return result.Ok(lost);
+                    return result.Ok(response);
                 }
                 else
                 {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
+                    return result.Error("Ya existe un paquete con ese nombre");
                 }
 
             }
@@ -132,16 +131,15 @@ namespace Agencia.BussinesLogic.Servicios
             var result = new ServiceResult();
             try
             {
-                var lost = _detallexpaqueteRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
+                var response = _detallexpaqueteRepositorio.Insertar(item);
+                if (response.CodeStatus == 1)
                 {
                     
-                    return result.Ok(lost);
+                    return result.Ok(response);
                 }
                 else
                 {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
+                    return result.Error("Error al guardar la información.");
                 }
 
             }

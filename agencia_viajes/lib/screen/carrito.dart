@@ -51,11 +51,11 @@ class _CarritoState extends State<Carrito> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => Paquete()),
+              MaterialPageRoute(builder: (_) => const Paquetes()),
             );
           },
         ),
@@ -83,8 +83,7 @@ class _CarritoState extends State<Carrito> {
           color: Colors.white10,
           clipBehavior: Clip.hardEdge,
           child: InkWell(
-            splashColor:
-                const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
+            splashColor: const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
             onTap: () {
               debugPrint('Card tapped.');
             },

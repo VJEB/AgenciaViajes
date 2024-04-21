@@ -63,11 +63,11 @@ namespace Agencia.DataAcces.Repositorio
                 var parametro = new DynamicParameters();
                 parametro.Add("Paqu_Nombre", item.Paqu_Nombre);
                 parametro.Add("Pers_Id",item.Pers_Id);
-                parametro.Add("Paqu_Precio", item.Paqu_Precio);
-                parametro.Add("Paqu_Usua_Creacion", 1);
-                parametro.Add("Paqu_Fecha_Creacion", DateTime.Now);
+                parametro.Add("Paqu_Usua_Creacion", item.Paqu_Usua_Creacion);
+                parametro.Add("Paqu_Fecha_Creacion", item.Paqu_Fecha_Creacion);
                 parametro.Add("Paqu_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                var result = db.Execute(ScriptBaseDatos.Paque_Insertar,
+                
+                var result = db.QueryFirst(ScriptBaseDatos.Paque_Insertar,
                     parametro,
                     commandType: CommandType.StoredProcedure
                     );
@@ -78,9 +78,7 @@ namespace Agencia.DataAcces.Repositorio
                 {
                     paque = parametro.Get<int>("Paqu_Id");
                 }
-
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return (new RequestStatus { CodeStatus = result, MessageStatus = mensaje }, paque);
+                return (new RequestStatus { CodeStatus = result.Resultado }, paque);
             }
         }
 

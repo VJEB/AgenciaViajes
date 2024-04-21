@@ -48,15 +48,16 @@ namespace Agencia.API.Controllers
             {
                 Paqu_Nombre = item.Paqu_Nombre,
                 Paqu_Precio = item.Paqu_Precio,
-                Pers_Id = item.Pers_Id
+                Pers_Id = item.Pers_Id,
+                Paqu_Usua_Creacion = item.Paqu_Usua_Creacion,
+                Paqu_Fecha_Creacion = item.Paqu_Fecha_Creacion
             };
 
             int paqueId;
             var prueba = _agenciaServicio.InsertarPaquete(modelo, out paqueId);
-            var hola = prueba;
             if (paqueId > 0)
             {
-                hola.Message = paqueId.ToString();
+                prueba.Message = paqueId.ToString();
                 return Ok(prueba);
             }
             else

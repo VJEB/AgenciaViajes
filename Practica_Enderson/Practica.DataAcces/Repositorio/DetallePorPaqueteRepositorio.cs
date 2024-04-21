@@ -70,20 +70,16 @@ namespace Agencia.DataAcces.Repositorio
             {
                 var parametro = new DynamicParameters();
                 parametro.Add("HaHo_Tran_Id", item.HaHo_Tran_Id);
-                parametro.Add("DePa_Precio", item.DePa_Precio);
                 parametro.Add("Paqu_Id", item.Paqu_Id);
-                parametro.Add("DePa_Cantidad", item.DePa_Cantidad);
                 parametro.Add("DePa_NumNoches", item.DePa_NumNoches);
                 parametro.Add("DePa_PrecioTodoIncluido", item.DePa_PrecioTodoIncluido);
-                parametro.Add("DePa_Usua_Creacion", 1);
-                parametro.Add("DePa_Fecha_Creacion", DateTime.Now);
-                var result = db.Execute(ScriptBaseDatos.DePa_Insertar,
+                parametro.Add("DePa_Usua_Creacion", item.DePa_Usua_Creacion);
+                parametro.Add("DePa_Fecha_Creacion", item.DePa_Fecha_Creacion);
+                var result = db.QueryFirst(ScriptBaseDatos.DePa_Insertar,
                     parametro,
                     commandType: CommandType.StoredProcedure
                     );
-
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return (new RequestStatus { CodeStatus = result, MessageStatus = mensaje });
+                return (new RequestStatus { CodeStatus = result.Resultado });
             }
         }
 

@@ -41,17 +41,16 @@ namespace Agencia.API.Controllers
             //var model = _mapper.Map<tbPlanes>(item);
             var modelo = new tbDetallePorPaquete()
             {
-                HaHo_Tran_Id = item.HaHo_Tran_Id,
-                DePa_Precio = item.DePa_Precio,
                 Paqu_Id = item.Paqu_Id,
-                DePa_Cantidad = item.DePa_Cantidad,
+                HaHo_Tran_Id = item.HaHo_Tran_Id,
                 DePa_NumNoches = item.DePa_NumNoches,
-                DePa_PrecioTodoIncluido = item.DePa_PrecioTodoIncluido
+                DePa_PrecioTodoIncluido = item.DePa_PrecioTodoIncluido,
+                DePa_Usua_Creacion = item.DePa_Usua_Creacion,
+                DePa_Fecha_Creacion = item.DePa_Fecha_Creacion
             };
 
             var prueba = _agenciaServicio.InsertarDetallePaquete(modelo);
             return Ok(prueba);
-
         }
 
 
