@@ -4,16 +4,26 @@ import 'package:agencia_viajes/models/detalle_de_paquete.dart';
 import 'package:agencia_viajes/models/paquete.dart';
 import 'package:agencia_viajes/screen/paquetes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class PaquetesForm extends StatefulWidget {
-  const PaquetesForm({super.key});
+  final Paquete paquete;
+  const PaquetesForm({super.key, required this.paquete});
 
   @override
   State<PaquetesForm> createState() => _PaquetesState();
 }
 
 class _PaquetesState extends State<PaquetesForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  late Paquete paquete;
+
+  String _paqueteNombre = "";
+
+  String url = "https://localhost:44372/API/Paquete/Edit/";
+
   List<DetalleDePaquete> _detalles = [];
 
   Future<List<DetalleDePaquete>>? _detallesFuture;
@@ -22,6 +32,113 @@ class _PaquetesState extends State<PaquetesForm> {
   void initState() {
     super.initState();
     _detallesFuture ??= _cargarDetalles();
+    paquete = widget.paquete;
+    url += paquete.paquId.toString();
+  }
+
+  void mostrarDialogNombre(BuildContext context, [bool mounted = true]) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          side: const BorderSide(
+            color: Color(0xC6FFFFFF), // You can adjust the color here
+            width: 0.5, // You can adjust the width here
+          ),
+        ),
+        backgroundColor: const Color(0xC9040000),
+        title: const Text(
+          'Cambiar nombre del paquete',
+          style: TextStyle(color: Color(0xFFFFBD59)),
+        ),
+        content: Form(
+          key: _formKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TextFormField(
+              initialValue: paquete.paquNombre,
+              style: const TextStyle(color: Color(0xFFFFBD59)),
+              inputFormatters: [
+                TextInputFormatter.withFunction(
+                  (TextEditingValue oldValue, TextEditingValue newValue) {
+                    return RegExp(r'^[a-zA-Z0-9]*$').hasMatch(newValue.text)
+                        ? newValue
+                        : oldValue;
+                  },
+                ),
+              ],
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Por favor ingrese el nombre del paquete';
+                }
+                return null;
+              },
+              onSaved: (value) => _paqueteNombre = value ?? '',
+              decoration: const InputDecoration(
+                labelText: 'Nombre del paquete',
+                labelStyle: TextStyle(color: Color(0xFFFFBD59)),
+                hintText: 'Vacaciones en Nueva Zelanda',
+                hintStyle: TextStyle(color: Colors.grey),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFC28427)),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFFFBD59)),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  await putNombreDelPaquete();
+                }
+              },
+              icon: const Icon(Icons.save),
+              label: const Text('Guardar'),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Future<void> putNombreDelPaquete() async {
+    Paquete paqu = Paquete(
+        paquId: paquete.paquId,
+        paquNombre: _paqueteNombre,
+        paquUsuaCreacion: 0,
+        paquFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+        paquUsuaModifica: 1,
+        paquFechaModifica: DateTime.now().toUtc().toIso8601String(),
+        persId: 1,
+        paquEstado: 0);
+
+    var resultado = await http.put(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(paqu.toJson()),
+    );
+
+    if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            backgroundColor: Color.fromARGB(255, 62, 208, 57),
+            content: const Text('Nombre del paque actualizado con exito!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red[400],
+            content: const Text('Ya existe un paquete con ese nombre')),
+      );
+    }
   }
 
   Future<List<DetalleDePaquete>> _cargarDetalles() async {
@@ -45,81 +162,13 @@ class _PaquetesState extends State<PaquetesForm> {
     return list;
   }
 
-  void guardarDetalleDePaquete(BuildContext context,
-      [bool mounted = true]) async {
-    showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return const Dialog(
-            // The background color
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Color(0xC6FFFFFF), // You can adjust the color here
-                width: 0.5, // You can adjust the width here
-              ),
-            ),
-            backgroundColor: Color.fromARGB(211, 0, 0, 0),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text('Cargando...')
-                ],
-              ),
-            ),
-          );
-        });
-
-    await postDetalleDePaquete();
-    if (!mounted) return;
-    Navigator.of(context).pop();
-  }
-
-  Future<void> postDetalleDePaquete() async {
-    const String url = "https://localhost:44372/API/DetallePorPaquete/Create";
-    Paquete paquete = Paquete(
-        paquId: 0,
-        paquNombre: "aa",
-        paquUsuaCreacion: 1,
-        paquFechaCreacion: DateTime.now().toUtc().toIso8601String(),
-        persId: 1);
-
-    var resultado = await http.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(paquete.toJson()),
-    );
-
-    if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: Colors.red[400], content: const Text('Exito?')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: Colors.red[400],
-            content: const Text('Ya existe un paquete con ese nombre')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Nombre del paquete",
-          style: TextStyle(color: Color(0xFFFFBD59)),
+        title: Text(
+          paquete.paquNombre,
+          style: const TextStyle(color: Color(0xFFFFBD59)),
         ),
         backgroundColor: Colors.black,
         leading: IconButton(
@@ -131,11 +180,18 @@ class _PaquetesState extends State<PaquetesForm> {
             );
           },
         ),
-        actions: <Widget>[],
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.edit, color: Color(0xFFFFBD59)),
+            onPressed: () {
+              mostrarDialogNombre(context);
+            },
+          ),
+        ],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       body: ListView(
-        reverse: true, // This will make the list view start from the bottom
+        reverse: true,
         children: [
           Card(
             color: Colors.white10,
@@ -147,7 +203,7 @@ class _PaquetesState extends State<PaquetesForm> {
                     future: _detallesFuture,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return ListView(
+                        return Column(
                           children: listadoPaquetes(snapshot.data),
                         );
                       } else {

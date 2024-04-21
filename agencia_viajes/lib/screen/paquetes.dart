@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:agencia_viajes/models/paquete.dart';
+import 'package:agencia_viajes/models/service_result.dart';
 import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/carrito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,7 +50,6 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   void crearPaquete(BuildContext context, [bool mounted = true]) async {
-    // show the loading dialog
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -123,9 +122,27 @@ class _PaquetesState extends State<Paquetes> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            await postPaquete();
-                            if (!mounted) return;
-                            Navigator.of(context).pop();
+                            bool response;
+                            Paquete paqu;
+                            (response, paqu) = await postPaquete();
+                            if (response) {
+                              if (!mounted) return;
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => PaquetesForm(
+                                          paquete: paqu,
+                                        )),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    backgroundColor: Colors.red[400],
+                                    content: const Text(
+                                        'Ya existe un paquete con ese nombre')),
+                              );
+                            }
                           }
                         },
                         icon: const Icon(Icons.save),
@@ -142,7 +159,7 @@ class _PaquetesState extends State<Paquetes> {
     );
   }
 
-  Future<void> postPaquete() async {
+  Future<(bool, Paquete)> postPaquete() async {
     const String url = "https://localhost:44372/API/Paquete/Create";
     Paquete paquete = Paquete(
         paquId: 0,
@@ -160,17 +177,19 @@ class _PaquetesState extends State<Paquetes> {
     );
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PaquetesForm()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: Colors.red[400],
-            content: const Text('Ya existe un paquete con ese nombre')),
-      );
+      setState(() {
+        final responseJson = jsonDecode(resultado.body);
+        final response =
+            ServiceResult.fromJson(responseJson); // Parsing the whole response
+        if (response.code >= 200 && response.code < 300) {
+          paquete.paquId = int.parse(response.message);
+        } else {
+          print('Error al cargar los estados');
+        }
+      });
+      return (true, paquete);
     }
+    return (false, paquete);
   }
 
   @override

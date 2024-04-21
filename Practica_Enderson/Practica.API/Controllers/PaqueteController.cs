@@ -54,15 +54,15 @@ namespace Agencia.API.Controllers
             };
 
             int paqueId;
-            var prueba = _agenciaServicio.InsertarPaquete(modelo, out paqueId);
+            var response = _agenciaServicio.InsertarPaquete(modelo, out paqueId);
             if (paqueId > 0)
             {
-                prueba.Message = paqueId.ToString();
-                return Ok(prueba);
+                response.Message = paqueId.ToString();
+                return Ok(response);
             }
             else
             {
-                return BadRequest(prueba);
+                return BadRequest(response);
             }
 
         }
@@ -76,18 +76,19 @@ namespace Agencia.API.Controllers
                 Paqu_Id = id,
                 Paqu_Nombre = item.Paqu_Nombre,
                 Paqu_Precio = item.Paqu_Precio,
-                Pers_Id = item.Pers_Id
+                Paqu_Usua_Modifica = item.Paqu_Usua_Modifica,
+                Paqu_Fecha_Modifica = item.Paqu_Fecha_Modifica
             };
 
 
-            var prueba = _agenciaServicio.ActualizarPaquete(id, modelo);
-            if (prueba.Code == 200)
+            var response = _agenciaServicio.ActualizarPaquete(id, modelo);
+            if (response.Code >= 200 && response.Code <= 300)
             {
-                return Ok(prueba);
+                return Ok(response);
             }
             else
             {
-                return BadRequest(prueba);
+                return BadRequest(response);
             }
         }
 

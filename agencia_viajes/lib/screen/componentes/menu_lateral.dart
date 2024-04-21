@@ -11,6 +11,7 @@ class MenuLateral extends StatelessWidget {
     super.key,
     required this.context,
   });
+
   void _inicio() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const Layout()));
