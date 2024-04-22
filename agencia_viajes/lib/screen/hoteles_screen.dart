@@ -13,7 +13,11 @@ class Hoteles extends StatefulWidget {
 
 class _HotelesState extends State<Hoteles> {
   String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
+  
+  // URL para obtener las fotos por hotel
+  String fotosPorHotelUrl = "https://etravel.somee.com/API/Habitacion/FotoPorHotelList/";
 
+  // Función para obtener la lista de hoteles
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
     if (result.statusCode >= 200) {
@@ -21,6 +25,17 @@ class _HotelesState extends State<Hoteles> {
     } else {
       print("Error en el endPoint");
       // return const Center(child: Text("Error en el endPoint"));
+    }
+  }
+
+  // Función para obtener las fotos por hotel
+  Future<dynamic> _getFotosPorHotel(int hotelId) async {
+    final result = await http.get(Uri.parse("$fotosPorHotelUrl$hotelId"));
+    if (result.statusCode >= 200) {
+      return jsonDecode(result.body);
+    } else {
+      print("Error al obtener las fotos por hotel");
+      // return const Center(child: Text("Error al obtener las fotos por hotel"));
     }
   }
 
@@ -176,19 +191,37 @@ class _HotelesState extends State<Hoteles> {
                 ),
               ),
               children: [
-  Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: CachedNetworkImage(
-      imageUrl: element["hote_Imagen"],
-      fit: BoxFit.cover,
-      width: 100, // Ancho de la imagen
-      placeholder: (context, url) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    ),
-  ),
-],
-
+                // Mostrar las fotos por hotel
+                FutureBuilder<dynamic>(
+                  future: _getFotosPorHotel(element["hote_Id"]),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return SizedBox(
+                        height: 100, // Altura de las imágenes
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CachedNetworkImage(
+                                imageUrl: snapshot.data[index]["foHa_UrlImagen"],
+                                fit: BoxFit.cover,
+                                width: 100, // Ancho de cada imagen
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              ],
             ),
           ),
         );

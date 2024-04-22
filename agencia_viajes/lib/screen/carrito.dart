@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:agencia_viajes/screen/paquetes.dart';
+import 'package:http/http.dart' as http;
 
 class Carrito extends StatefulWidget {
   const Carrito({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class Carrito extends StatefulWidget {
 
 class _CarritoState extends State<Carrito> {
   String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
-  List<dynamic> carrito = [];
+  List<Map<String, dynamic>> carrito = [];
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _CarritoState extends State<Carrito> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String carritoJson = prefs.getString('carrito') ?? '[]';
     setState(() {
-      carrito = jsonDecode(carritoJson);
+      carrito = jsonDecode(carritoJson).cast<Map<String, dynamic>>();
     });
   }
 
@@ -35,13 +35,20 @@ class _CarritoState extends State<Carrito> {
   }
 
   Future<dynamic> _getListado() async {
-    final result = await http.get(Uri.parse(url));
-    if (result.statusCode >= 200) {
-      return jsonDecode(result.body);
+    // Obtener la lista de hoteles del servidor
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     } else {
-      print("Error en el endPoint");
-      // return const Center(child: Text("Error en el endPoint"));
+      throw Exception('Failed to load hotels');
     }
+  }
+
+  void _eliminarElementoDelCarrito(Map<String, dynamic> elemento) {
+    setState(() {
+      carrito.remove(elemento);
+    });
+    _guardarCarrito();
   }
 
   @override
@@ -66,7 +73,7 @@ class _CarritoState extends State<Carrito> {
           children: [
             Expanded(
               child: ListView(
-                children: listadoCarrito(),
+                children: _buildCarritoList(),
               ),
             ),
           ],
@@ -75,77 +82,113 @@ class _CarritoState extends State<Carrito> {
     );
   }
 
-  List<Widget> listadoCarrito() {
+  List<Widget> _buildCarritoList() {
     List<Widget> lista = [];
-    for (var element in carrito) {
+    // Agrupar elementos del carrito por nombre y precio
+    final Map<String, dynamic> groupedCarrito = {};
+    carrito.forEach((element) {
+      final key = '${element["hote_Nombre"]}_${element["haHo_PrecioPorNoche"]}';
+      groupedCarrito[key] ??= [];
+      groupedCarrito[key].add(element);
+    });
+    // Construir la lista de elementos agrupados
+    groupedCarrito.forEach((key, value) {
+      final cantidad = value.length;
+      final element = value.first;
       lista.add(
         Card(
           color: Colors.white10,
           clipBehavior: Clip.hardEdge,
-          child: InkWell(
-            splashColor:
-                const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
-            onTap: () {
-              debugPrint('Card tapped.');
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
+            children: [
+              InkWell(
+                splashColor: const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
+                onTap: () {
+                  debugPrint('Card tapped.');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${element["hote_Nombre"]}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Color(0xFFFFBD59),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.delete, color: Colors.white),
-                            onPressed: () {
-                              setState(() {
-                                carrito.remove(element);
-                              });
-                              _guardarCarrito();
-                            },
+                          Row(
+                            children: [
+                              _buildQuantityCircle(cantidad),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${element["hote_Nombre"]}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xFFFFBD59),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          IconButton(
-                            icon: Icon(Icons.payment, color: Colors.white),
-                            onPressed: () {
-                              // Acción al pagar
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.visibility, color: Colors.white),
-                            onPressed: () {
-                              // Acción al ver
-                            },
-                          ),
+                          // Espacio reservado para el icono de eliminar
+                          SizedBox(width: 24),
                         ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Precio: L.${element["haHo_PrecioPorNoche"]}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Precio: L.${element["haHo_PrecioPorNoche"]}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: IconButton(
+                  icon: Icon(Icons.close, color: Colors.red),
+                  onPressed: () {
+                    _eliminarElementoDelCarrito(element);
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: IconButton(
+                  icon: Icon(Icons.payment, color: Colors.white),
+                  onPressed: () {
+                    // Lógica para el pago
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       );
-    }
+    });
     return lista;
-  } 
+  }
+
+  Widget _buildQuantityCircle(int cantidad) {
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          '$cantidad',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 }
