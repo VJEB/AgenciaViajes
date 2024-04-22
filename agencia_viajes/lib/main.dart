@@ -23,50 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Agencia Viajes',
       debugShowCheckedModeBanner: false,
-      home: HotelScreen(
-        hotel: Hotel(
-            hoteId: 1,
-            hoteNombre: "Hotel",
-            hoteDireccionExacta: "Direccion",
-            hotePrecioTodoIncluido: 200,
-            haHoPrecioPorNoche: 500,
-            hoteEstrellas: 5,
-            ciudId: "ciudId",
-            ciudDescripcion: "DescripcionCiud",
-            estaDescripcion: "DescripcionEsta",
-            hoteEstado: 1,
-            hoteFechaCreacion: "FechaCreacion",
-            hoteHoraSalida: "HoraSalida",
-            hoteImagen: "https://cdn2.thecatapi.com/images/b9r.jpg",
-            hoteUsuaCreacion: 1,
-            paisDescripcion: "pais"),
-        place: const Place(
-            address: "adress",
-            bathCount: 5,
-            bedCount: 5,
-            bedroomCount: 5,
-            city: "city",
-            costPerNight: 500,
-            country: "country",
-            guestCount: 50,
-            imageUrls: [
-              "https://cdn2.thecatapi.com/images/3ql.jpg",
-              "https://cdn2.thecatapi.com/images/9p2.jpg",
-              "https://cdn2.thecatapi.com/images/b9r.jpg"
-            ],
-            numberOfRatings: 500,
-            owner: Profile(
-              isSuperhost: true,
-              name: "owner",
-              profileImageUrl: "profileImageUrl",
-            ),
-            rating: 5,
-            state: "state",
-            title: "title",
-            type: PlaceType.apartment,
-            zipcode: "zipcode",
-            description: "description"),
-      ),
+      home: const Layout(),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))

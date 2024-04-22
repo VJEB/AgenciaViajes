@@ -22,7 +22,7 @@ class _PaquetesState extends State<Paquetes> {
 
   String persId = 1.toString();
 
-  String url = "https://localhost:44372/API/Paquete/ListPaquetes/";
+  String url = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
   List<dynamic> carrito = [];
   String _paquNombre = "";
 
@@ -38,7 +38,7 @@ class _PaquetesState extends State<Paquetes> {
 
   // String _paqueteSeleccionado = '';
 
-  final List<Paquete> _paquetes = [];
+  // final List<Paquete> _paquetes = [];
   Future<List<Paquete>>? _paquetesFuture;
 
   @override

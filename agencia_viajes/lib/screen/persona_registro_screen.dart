@@ -770,7 +770,6 @@ class PaisesDdl extends StatelessWidget {
         },
         onSelected: (Pais selection) {
           onPaisSelected(selection);
-          debugPrint('You just selected ${selection.paisId}');
         },
         optionsViewBuilder: (BuildContext context,
             AutocompleteOnSelected<Pais> onSelected, Iterable<Pais> options) {
@@ -867,7 +866,6 @@ class EstadosDdl extends StatelessWidget {
         },
         onSelected: (Estado selection) {
           onEstadoSelected(selection);
-          debugPrint('You just selected ${selection.estaId}');
         },
         optionsViewBuilder: (BuildContext context,
             AutocompleteOnSelected<Estado> onSelected,
@@ -965,7 +963,6 @@ class CiudadesDdl extends StatelessWidget {
         },
         onSelected: (Ciudad selection) {
           onCiudadSelected(selection);
-          debugPrint('You just selected ${selection.ciudId}');
         },
         optionsViewBuilder: (BuildContext context,
             AutocompleteOnSelected<Ciudad> onSelected,

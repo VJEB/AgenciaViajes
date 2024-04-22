@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:agencia_viajes/models/hotel.dart';
+import 'package:agencia_viajes/models/paquete.dart';
 import 'package:agencia_viajes/models/place.dart';
+import 'package:agencia_viajes/screen/layout.dart';
+import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 // import 'package:flutter/gestures.dart';
 // import 'dart:collection';
 
@@ -14,20 +20,220 @@ class HotelScreen extends StatefulWidget {
 }
 
 class _HotelScreenState extends State<HotelScreen> {
+
+  final _formKey = GlobalKey<FormState>();
+
+  String persId = 1.toString();
+
+  String urlPaquetes = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
+  
+  DateTime fechaInicio = DateTime.now();
+  DateTime fechaFin = DateTime.now();
+
   var tipoDeCama;
 
   var numeroDeCamas;
 
   var numeroDePersonas;
+  
+  String _paquNombre = '';
+  
+  
 
   Place get place => widget.place;
   Hotel get hotel => widget.hotel;
 
-  late bool isFavorited;
+
+  late Paquete _paqueteSeleccionado;
+  final List<Paquete> _paquetes = [];
+
+  Future<List<Paquete>>? _paquetesFuture;
   @override
   void initState() {
     super.initState();
-    isFavorited = true;
+    urlPaquetes += persId;
+    _paquetesFuture ??= _cargarPaquetes();
+    // _habitacionesFuture ??= _habitacionesPaquetes();
+  }
+  void _onPaqueteSelected(Paquete paquete) {
+    setState(() {
+      _paqueteSeleccionado = paquete;
+    });
+  }
+  Future<List<Paquete>> _cargarPaquetes() async {
+    List<Paquete> list = [];
+    final respuesta = await http.get(Uri.parse(urlPaquetes));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> paquetesJson = jsonDecode(respuesta.body);
+        list = paquetesJson.map((json) => Paquete.fromJson(json)).toList();
+        if (list.isNotEmpty) {
+          // _estadoSeleccionado = list.first.estaId;
+        } else {
+          print('Error al cargar los paquetes');
+        }
+      });
+    }
+    return list;
+  }
+
+  void _selectDate(BuildContext context, bool modificarFechaInicio) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: modificarFechaInicio ? fechaInicio : fechaFin, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+      helpText: 'Seleccione la fecha ${modificarFechaInicio ?  'de inicio.' : 'final.'}' , // Can be used as title
+      cancelText: 'Cancelar',
+      confirmText: 'Ok',
+    );
+    if (picked != null && picked != fechaInicio) {
+      setState(() {
+        if (modificarFechaInicio) {
+          fechaInicio = picked;
+        } else {
+          fechaFin = picked;
+        }
+      });
+    }
+  }
+  void mostrarDialog(BuildContext context, [bool mounted = true]) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          side: const BorderSide(
+            color: Color(0xC6FFFFFF), // You can adjust the color here
+            width: 0.5, // You can  adjust the width here
+          ),
+        ),
+        backgroundColor: const Color(0xC9040000),
+        title: const Text(
+          'Reservacion',
+          style: TextStyle(color: Color(0xFFFFBD59)),
+        ),
+        content: Form(
+          key: _formKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text(
+              "${fechaInicio.toLocal()}".split(' ')[0],
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFFFBD59)),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => _selectDate(context, true), // Refer step 3
+              label: const Text(
+                'Fecha inicio',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              icon: const Icon(Icons.calendar_today),
+              // style: ButtonStyle(backgroundColor: Color(0xFFFFBD59)) ,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              "${fechaInicio.toLocal()}".split(' ')[0],
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFFFBD59)),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => _selectDate(context, false), // Refer step 3
+              label: const Text(
+                'Fecha fin',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              icon: const Icon(Icons.calendar_today),
+               // style: ButtonStyle(backgroundColor: Color(0xFFFFBD59)) ,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            FutureBuilder<List<Paquete>>(
+                      future: _paquetesFuture, // Use the assigned future
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                            "Cargando...",
+                            style: TextStyle(color: Color(0xFFFFBD59)),
+                          );
+                        } else if (snapshot.hasData) {
+                          _paquetes.addAll(snapshot.data as Iterable<Paquete>);
+                          return PaquetesDdl(
+                              paises: _paquetes, onPaisSelected: _onPaqueteSelected);
+                        } else {
+                          return const Text(
+                            "Error al cargar los países",
+                            style: TextStyle(color: Colors.red),
+                          );
+                        }
+                      },
+                    ),
+            
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  SizedBox(
+                    width: 150, // max width of the button
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          await postReservacion();
+                          
+                        }
+                      },
+                      icon: const Icon(Icons.save),
+                      label: const Text('Guardar'),
+                    ),
+                  )
+                ]))
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Future<void> postReservacion() async {
+    String url = "https://etravel.somee.com/API/Reservacion/Create";
+    
+    // Reservacion reser = Reservacion(
+    // );
+
+    // var resultado = await http.post(
+    //   Uri.parse(url),
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: jsonEncode(reser.toJson()),
+    // );
+
+    // if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+    //   setState(() {
+    //     //AAAa???
+    //   });
+        Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PaquetesForm(
+                  paquete: _paqueteSeleccionado
+                  ),
+                ));
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //         backgroundColor: Color.fromARGB(255, 62, 208, 57),
+    //         content: const Text('Reservacion agregada al paquete con exito!')),
+    //   );
+    //   Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (_) => const PaquetesForm(paquete: paqu,)));
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //         backgroundColor: Colors.red[400],
+    //         content: const Text('Error al agregar la reservación.')),
+    //   );
+    // }
   }
 
   @override
@@ -105,7 +311,9 @@ class _HotelScreenState extends State<HotelScreen> {
                     size: 20,
                     color: Colors.black,
                   ), // Increase icon size
-                  onPressed: () {},
+                  onPressed: () {
+                    mostrarDialog(context);
+                  },
                 ),
               ),
             ],
@@ -120,7 +328,8 @@ class _HotelScreenState extends State<HotelScreen> {
             leading: CircularIconButton(
               iconData: Icons.close,
               onPressed: () {
-                Navigator.pop(context);
+                                        Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => const Layout()));
               },
               iconColor: Colors.grey[800],
             ),
@@ -354,7 +563,105 @@ class RatingRow extends StatelessWidget {
     );
   }
 }
+class PaquetesDdl extends StatelessWidget {
+  final List<Paquete>? paises;
+  final Function(Paquete) onPaisSelected;
 
+  const PaquetesDdl(
+      {super.key, required this.paises, required this.onPaisSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    if (paises != null) {
+      return Autocomplete<Paquete>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          Set<Paquete> uniqueOptions = {};
+          for (var option in paises!) {
+            if (option.paquNombre
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase())) {
+              uniqueOptions.add(option);
+            }
+          }
+          return uniqueOptions.toList();
+        },
+        onSelected: (Paquete selection) {
+          onPaisSelected(selection);
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<Paquete> onSelected, Iterable<Paquete> options) {
+          return Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              side: const BorderSide(
+                color: Color(0xC6FFFFFF),
+                width: 0.5,
+              ),
+            ),
+            color: const Color(0xDA040000),
+            elevation: 4.0,
+            child: SizedBox(
+              height: 200.0,
+              child: ListView(
+                children: options
+                    .map((Paquete option) => ListTile(
+                          title: Text(
+                            option.paquNombre,
+                            style: const TextStyle(color: Color(0xFFC28427)),
+                          ),
+                          onTap: () {
+                            onSelected(option);
+                          },
+                        ))
+                    .toList(),
+              ),
+            ),
+          );
+        },
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            controller: textEditingController,
+            focusNode: focusNode,
+            style: const TextStyle(color: Color(0xFFFFBD59)),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Por favor seleccione un paquete';
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              labelText: 'Paquete',
+              labelStyle: TextStyle(color: Color(0xFFFFBD59)),
+              hintText: 'Vacaciones Dubai',
+              hintStyle: TextStyle(color: Colors.grey),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFC28427)),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFFFBD59)),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      return const Text("Cargando...");
+    }
+  }
+}
 class CircularIconButton extends StatelessWidget {
   const CircularIconButton(
       {this.iconData,
