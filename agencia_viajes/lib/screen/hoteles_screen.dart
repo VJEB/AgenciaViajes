@@ -87,17 +87,19 @@ class _HotelesState extends State<Hoteles> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  '${element["hote_Nombre"]}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xFFFFBD59),
+                                Flexible(
+                                  child: Text(
+                                    '${element["hote_Nombre"]}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFFFBD59),
+                                    ),
                                   ),
                                 ),
                                 Text(
                                   'Desde: L.${element["haHo_PrecioPorNoche"]}',
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     color: Color.fromARGB(255, 44, 214, 50),
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -110,17 +112,15 @@ class _HotelesState extends State<Hoteles> {
                             padding: const EdgeInsets.only(right: 4.0),
                             child: Row(
                               children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 12,
+                                ),
+                                const SizedBox(width: 5),
                                 Text(
                                   '${element["hote_Estrellas"]}',
                                   style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(width: 30),
-                                const Text(
-                                  'Estrellas',
-                                  style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                   ),
@@ -134,11 +134,15 @@ class _HotelesState extends State<Hoteles> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  element["hote_DireccionExacta"],
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
+                                Expanded(
+                                  // Wrap the first Text widget with Expanded
+                                  child: Text(
+                                    element["hote_DireccionExacta"],
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                    softWrap: true,
                                   ),
                                 ),
                                 Column(
@@ -151,15 +155,13 @@ class _HotelesState extends State<Hoteles> {
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       element["pais_Descripcion"],
                                       style: const TextStyle(
-                                        fontSize: 11,
+                                        fontSize: 10,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],

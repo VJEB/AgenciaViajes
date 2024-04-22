@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:agencia_viajes/models/paquete.dart';
+import 'package:agencia_viajes/models/service_result.dart';
 import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,12 @@ class Paquetes extends StatefulWidget {
 class _PaquetesState extends State<Paquetes> {
   final _formKey = GlobalKey<FormState>();
 
-  String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
+  String persId = 1.toString();
+
+  String url = "https://localhost:44372/API/Paquete/ListPaquetes/";
   List<dynamic> carrito = [];
   String _paquNombre = "";
+
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
     if (result.statusCode >= 200) {
@@ -32,10 +36,35 @@ class _PaquetesState extends State<Paquetes> {
     }
   }
 
+  // String _paqueteSeleccionado = '';
+
+  final List<Paquete> _paquetes = [];
+  Future<List<Paquete>>? _paquetesFuture;
+
   @override
   void initState() {
     super.initState();
+    url += persId;
+    _paquetesFuture ??= _cargarPaquetes();
     _cargarCarrito();
+  }
+
+  Future<List<Paquete>> _cargarPaquetes() async {
+    List<Paquete> list = [];
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> paquetesJson = jsonDecode(respuesta.body);
+        list = paquetesJson.map((json) => Paquete.fromJson(json)).toList();
+        if (list.isNotEmpty) {
+          // _estadoSeleccionado = list.first.estaId;
+        } else {
+          print('Error al cargar los paquetes');
+        }
+      });
+    }
+    return list;
   }
 
   void _cargarCarrito() async {
@@ -49,15 +78,14 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   void crearPaquete(BuildContext context, [bool mounted = true]) async {
-    // show the loading dialog
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
           side: const BorderSide(
-            color: Color(0xC6FFFFFF), // You can adjust the color here
-            width: 0.5, // You can adjust the width here
+            color: Color(0xC6FFFFFF),
+            width: 0.5,
           ),
         ),
         backgroundColor: const Color(0xC9040000),
@@ -75,7 +103,7 @@ class _PaquetesState extends State<Paquetes> {
                 inputFormatters: [
                   TextInputFormatter.withFunction(
                     (TextEditingValue oldValue, TextEditingValue newValue) {
-                      return RegExp(r'^[a-zA-Z0-9]*$').hasMatch(newValue.text)
+                      return RegExp(r'^[a-zA-Z0-9\s]*$').hasMatch(newValue.text)
                           ? newValue
                           : oldValue;
                     },
@@ -112,19 +140,33 @@ class _PaquetesState extends State<Paquetes> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Icon(
-                      Icons.logout,
-                      color: Colors.black,
-                    ),
                     SizedBox(
                       width: 150, // max width of the button
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            await postPaquete();
-                            if (!mounted) return;
-                            Navigator.of(context).pop();
+                            bool response;
+                            Paquete paqu;
+                            (response, paqu) = await postPaquete();
+                            if (response) {
+                              if (!mounted) return;
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => PaquetesForm(
+                                          paquete: paqu,
+                                        )),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    backgroundColor: Colors.red[400],
+                                    content: const Text(
+                                        'Ya existe un paquete con ese nombre')),
+                              );
+                            }
                           }
                         },
                         icon: const Icon(Icons.save),
@@ -141,7 +183,7 @@ class _PaquetesState extends State<Paquetes> {
     );
   }
 
-  Future<void> postPaquete() async {
+  Future<(bool, Paquete)> postPaquete() async {
     const String url = "https://localhost:44372/API/Paquete/Create";
     Paquete paquete = Paquete(
         paquId: 0,
@@ -159,17 +201,19 @@ class _PaquetesState extends State<Paquetes> {
     );
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PaquetesForm()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: Colors.red[400],
-            content: const Text('Ya existe un paquete con ese nombre')),
-      );
+      setState(() {
+        final responseJson = jsonDecode(resultado.body);
+        final response =
+            ServiceResult.fromJson(responseJson); // Parsing the whole response
+        if (response.code >= 200 && response.code < 300) {
+          paquete.paquId = int.parse(response.message);
+        } else {
+          print('Error al cargar los estados');
+        }
+      });
+      return (true, paquete);
     }
+    return (false, paquete);
   }
 
   @override
@@ -215,89 +259,119 @@ class _PaquetesState extends State<Paquetes> {
           children: [
             const SizedBox(height: 20),
             FutureBuilder<dynamic>(
-              future: _getListado(),
+              future: _paquetesFuture,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return CarouselWithHoteles(
-                      listadoHoteles: snapshot.data,
-                      agregarAlCarrito: _agregarAlCarrito);
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return CarouselPaquetes(
+                      listadoPaquetes: snapshot.data,
+                      agregarAlCarrito: _agregarAlCarrito,
+                    );
+                  } else {
+                    return const Center(child: Text('No data available'));
+                  }
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
               },
             ),
+
+            // FutureBuilder<dynamic>(
+            //   future: _getListado(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return CarouselWithHoteles(
+            //           listadoHoteles: snapshot.data,
+            //           agregarAlCarrito: _agregarAlCarrito);
+            //     } else {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //   },
+            // ),
             Expanded(
-              child: FutureBuilder<dynamic>(
-                future: _getListado(),
+              child: FutureBuilder<List<Paquete>>(
+                future: _paquetesFuture,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.only(top: 15),
-                          color: Colors.white10,
-                          clipBehavior: Clip.hardEdge,
-                          child: InkWell(
-                            splashColor:
-                                const Color.fromARGB(255, 255, 239, 120)
-                                    .withAlpha(30),
-                            onTap: () {
-                              _mostrarDetalles(context, snapshot.data![index]);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${snapshot.data![index]["hote_Nombre"]}',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xFFFFBD59),
-                                          fontWeight: FontWeight.bold,
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            margin: const EdgeInsets.only(top: 15),
+                            color: Colors.white10,
+                            clipBehavior: Clip.hardEdge,
+                            child: InkWell(
+                              splashColor:
+                                  const Color.fromARGB(255, 255, 239, 120)
+                                      .withAlpha(30),
+                              onTap: () {
+                                _mostrarDetalles(
+                                    context, snapshot.data![index]);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          snapshot.data![index].paquNombre,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Color(0xFFFFBD59),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          _agregarAlCarrito(
-                                              snapshot.data![index]);
-                                        },
-                                        child: const Text('Agregar'),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Precio: L.${snapshot.data![index]["haHo_PrecioPorNoche"]}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            _agregarAlCarrito(
+                                                snapshot.data![index]);
+                                          },
+                                          child: const Text('Agregar'),
                                         ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Lógica para editar
-                                        },
-                                        child: const Text('Editar'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total: L.${snapshot.data![index].paquPrecio}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        PaquetesForm(
+                                                          paquete: snapshot
+                                                              .data![index],
+                                                        )));
+                                          },
+                                          child: const Text('Editar'),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(child: Text('No data available'));
+                    }
                   } else {
                     return const Center(child: CircularProgressIndicator());
                   }
@@ -311,10 +385,8 @@ class _PaquetesState extends State<Paquetes> {
         onPressed: () {
           crearPaquete(context);
         },
-        backgroundColor: const Color(
-            0xFFFFBD59), // Cambia el color de fondo del botón flotante
-        child: const Icon(Icons.add,
-            color: Colors.black), // Icono de más con color blanco
+        backgroundColor: const Color(0xFFFFBD59),
+        child: const Icon(Icons.add, color: Colors.black),
       ),
     );
   }
@@ -336,12 +408,12 @@ class _PaquetesState extends State<Paquetes> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Detalles del Hotel'),
+          title: const Text('Detalles del Paquete'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Nombre: ${hotel["hote_Nombre"]}'),
-                Text('Precio por Noche: L.${hotel["haHo_PrecioPorNoche"]}'),
+                Text('Nombre: ${hotel["paqu_Nombre"]}'),
+                Text('Total: L.${hotel["paqu_Precio"]}'),
                 // Agrega más detalles aquí si es necesario
               ],
             ),
@@ -364,17 +436,17 @@ class _PaquetesState extends State<Paquetes> {
   }
 }
 
-class CarouselWithHoteles extends StatelessWidget {
-  final List<dynamic>? listadoHoteles;
+class CarouselPaquetes extends StatelessWidget {
+  final List<Paquete>? listadoPaquetes;
   final Function(dynamic) agregarAlCarrito;
 
-  const CarouselWithHoteles(
-      {super.key, this.listadoHoteles, required this.agregarAlCarrito});
+  const CarouselPaquetes(
+      {super.key, this.listadoPaquetes, required this.agregarAlCarrito});
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      items: listadoHoteles!.map<Widget>((hotel) {
+      items: listadoPaquetes!.map<Widget>((paque) {
         return Card(
           color: Colors.white10,
           child: Padding(
@@ -383,7 +455,7 @@ class CarouselWithHoteles extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${hotel["hote_Nombre"]}',
+                  paque.paquNombre,
                   style: const TextStyle(
                     fontSize: 18,
                     color: Color(0xFFFFBD59),
@@ -392,7 +464,7 @@ class CarouselWithHoteles extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Precio: L.${hotel["haHo_PrecioPorNoche"]}',
+                  'Total: L.${paque.paquPrecio}',
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -403,7 +475,7 @@ class CarouselWithHoteles extends StatelessWidget {
                   alignment: Alignment.center,
                   child: ElevatedButton(
                     onPressed: () {
-                      agregarAlCarrito(hotel);
+                      agregarAlCarrito(paque);
                     },
                     child: const Text('Agregar'),
                   ),

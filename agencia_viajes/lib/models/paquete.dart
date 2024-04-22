@@ -1,6 +1,6 @@
 class Paquete {
-  final int paquId;
-  final String paquNombre;
+  int paquId;
+  String paquNombre;
   final int persId;
   final int paquUsuaCreacion;
   final String paquFechaCreacion;

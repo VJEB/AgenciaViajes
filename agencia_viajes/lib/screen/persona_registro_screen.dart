@@ -67,17 +67,16 @@ class _RegistroPersonaState extends State<RegistroPersona> {
     final respuesta = await http.get(Uri.parse(url));
 
     if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
-        list = estadosCivilesJson
-            .map((json) => EstadoCivil.fromJson(json))
-            .toList();
-        if (list.isNotEmpty) {
-          _estadoCivilSeleccionado = list.first.esCiId;
-        } else {
-          print('Error al cargar los paises');
-        }
-      });
+      final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
+      list =
+          estadosCivilesJson.map((json) => EstadoCivil.fromJson(json)).toList();
+      if (list.isNotEmpty) {
+        _estadoCivilSeleccionado = list.first.esCiId;
+      } else {
+        print('Error al cargar los paises');
+      }
+      // setState(() {
+      // });
     }
     return list;
   }
@@ -88,15 +87,15 @@ class _RegistroPersonaState extends State<RegistroPersona> {
     final respuesta = await http.get(Uri.parse(url));
 
     if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> paisesJson = jsonDecode(respuesta.body);
-        list = paisesJson.map((json) => Pais.fromJson(json)).toList();
-        if (list.isNotEmpty) {
-          _paisSeleccionado = list.first.paisId;
-        } else {
-          print('Error al cargar los paises');
-        }
-      });
+      final List<dynamic> paisesJson = jsonDecode(respuesta.body);
+      list = paisesJson.map((json) => Pais.fromJson(json)).toList();
+      if (list.isNotEmpty) {
+        _paisSeleccionado = list.first.paisId;
+      } else {
+        print('Error al cargar los paises');
+      }
+      // setState(() {
+      // });
     }
     return list;
   }
