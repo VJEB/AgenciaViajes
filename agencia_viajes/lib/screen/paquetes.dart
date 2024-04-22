@@ -22,7 +22,7 @@ class _PaquetesState extends State<Paquetes> {
 
   String persId = 1.toString();
 
-  String url = "https://localhost:44372/API/Paquete/ListPaquetes/";
+  String url = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
   List<dynamic> carrito = [];
   String _paquNombre = "";
 
@@ -220,13 +220,13 @@ class _PaquetesState extends State<Paquetes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Paquetes"),
+        title: const Text("Paquetes",style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
         actions: <Widget>[
           Stack(
             children: [
               IconButton(
-                icon: const Icon(Icons.trolley),
+                icon: const Icon(Icons.shopping_cart),
                 tooltip: 'Iniciar sesión',
                 onPressed: () {
                   _mostrarCarrito(context);
@@ -492,7 +492,7 @@ class CarouselPaquetes extends StatelessWidget {
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlayCurve: Curves.easeInBack,
       ),
     );
   }

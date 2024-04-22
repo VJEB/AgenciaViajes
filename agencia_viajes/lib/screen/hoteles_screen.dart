@@ -12,7 +12,7 @@ class Hoteles extends StatefulWidget {
 }
 
 class _HotelesState extends State<Hoteles> {
-  String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
+  String url = "https://etravel.somee.com/API/Hotel/HotelesList/1";
   
   // URL para obtener las fotos por hotel
   String fotosPorHotelUrl = "https://etravel.somee.com/API/Habitacion/FotoPorHotelList/";

@@ -87,7 +87,7 @@ class _CarritoState extends State<Carrito> {
     // Agrupar elementos del carrito por nombre y precio
     final Map<String, dynamic> groupedCarrito = {};
     carrito.forEach((element) {
-      final key = '${element["hote_Nombre"]}_${element["haHo_PrecioPorNoche"]}';
+      final key = '${element["paqu_Nombre"]}_${element["paqu_Precio"]}';
       groupedCarrito[key] ??= [];
       groupedCarrito[key].add(element);
     });
@@ -119,7 +119,7 @@ class _CarritoState extends State<Carrito> {
                               _buildQuantityCircle(cantidad),
                               const SizedBox(width: 8),
                               Text(
-                                '${element["hote_Nombre"]}',
+                                '${element["paqu_Nombre"]}',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   color: Color(0xFFFFBD59),
@@ -134,7 +134,7 @@ class _CarritoState extends State<Carrito> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Precio: L.${element["haHo_PrecioPorNoche"]}',
+                        'Precio: L.${element["paqu_Precio"]}',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -154,16 +154,7 @@ class _CarritoState extends State<Carrito> {
                   },
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: IconButton(
-                  icon: Icon(Icons.payment, color: Colors.white),
-                  onPressed: () {
-                    // Lógica para el pago
-                  },
-                ),
-              ),
+              
             ],
           ),
         ),
