@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Usuarios extends StatefulWidget {
+  const Usuarios({super.key});
+
   @override
-  _UsuariosState createState() => _UsuariosState();
+  State<Usuarios> createState() => _UsuariosState();
 }
 
 class _UsuariosState extends State<Usuarios> {

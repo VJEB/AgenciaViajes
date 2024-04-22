@@ -201,7 +201,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   }
 
   Future<void> postPersona() async {
-    const String url = "https://localhost:44372/API/Persona/Create";
+    const String url = "https://etravel.somee.com/API/Persona/Create";
     Persona persona = Persona(
         persId: 0,
         persDNI: _dni,

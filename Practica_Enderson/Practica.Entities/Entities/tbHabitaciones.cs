@@ -14,7 +14,6 @@ namespace Agencia.Entities.Entities
         }
 
         public int Habi_Id { get; set; }
-        public string Habi_Numero { get; set; }
         public int Habi_NumCamas { get; set; }
         public int Habi_NumPersonas { get; set; }
         public int TiCa_Id { get; set; }
