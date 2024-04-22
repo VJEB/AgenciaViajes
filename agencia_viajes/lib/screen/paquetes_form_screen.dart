@@ -18,12 +18,6 @@ class PaquetesForm extends StatefulWidget {
 class _PaquetesState extends State<PaquetesForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late Paquete paquete;
-
-  String _paqueteNombre = "";
-
-  String url = "https://localhost:44372/API/Paquete/Edit/";
-
   List<DetalleDePaquete> _detalles = [];
 
   Future<List<DetalleDePaquete>>? _detallesFuture;
@@ -35,6 +29,33 @@ class _PaquetesState extends State<PaquetesForm> {
     paquete = widget.paquete;
     url += paquete.paquId.toString();
   }
+
+  Future<List<DetalleDePaquete>> _cargarDetalles() async {
+    List<DetalleDePaquete> list = [];
+    const url = "https://etravel.somee.com/API/DetallePorPaquete/List";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
+        list = estadosCivilesJson
+            .map((json) => DetalleDePaquete.fromJson(json))
+            .toList();
+        if (list.isNotEmpty) {
+          ////////////////////////////////
+        } else {
+          print('Error al cargar los detalles');
+        }
+      });
+    }
+    return list;
+  }
+
+  late Paquete paquete;
+
+  String _paqueteNombre = "";
+
+  String url = "https://localhost:44372/API/Paquete/Edit/";
 
   void mostrarDialogNombre(BuildContext context, [bool mounted = true]) async {
     showDialog(
@@ -61,7 +82,7 @@ class _PaquetesState extends State<PaquetesForm> {
               inputFormatters: [
                 TextInputFormatter.withFunction(
                   (TextEditingValue oldValue, TextEditingValue newValue) {
-                    return RegExp(r'^[a-zA-Z0-9]*$').hasMatch(newValue.text)
+                    return RegExp(r'^[a-zA-Z0-9\s]*$').hasMatch(newValue.text)
                         ? newValue
                         : oldValue;
                   },
@@ -93,16 +114,24 @@ class _PaquetesState extends State<PaquetesForm> {
                 ),
               ),
             ),
-            ElevatedButton.icon(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  await putNombreDelPaquete();
-                }
-              },
-              icon: const Icon(Icons.save),
-              label: const Text('Guardar'),
-            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  SizedBox(
+                    width: 150, // max width of the button
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          await putNombreDelPaquete();
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      icon: const Icon(Icons.save),
+                      label: const Text('Guardar'),
+                    ),
+                  )
+                ]))
           ]),
         ),
       ),
@@ -118,6 +147,7 @@ class _PaquetesState extends State<PaquetesForm> {
         paquUsuaModifica: 1,
         paquFechaModifica: DateTime.now().toUtc().toIso8601String(),
         persId: 1,
+        paquPrecio: 0,
         paquEstado: 0);
 
     var resultado = await http.put(
@@ -127,6 +157,9 @@ class _PaquetesState extends State<PaquetesForm> {
     );
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+      setState(() {
+        paquete.paquNombre = _paqueteNombre;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             backgroundColor: Color.fromARGB(255, 62, 208, 57),
@@ -141,34 +174,26 @@ class _PaquetesState extends State<PaquetesForm> {
     }
   }
 
-  Future<List<DetalleDePaquete>> _cargarDetalles() async {
-    List<DetalleDePaquete> list = [];
-    const url = "https://etravel.somee.com/API/DetallePorPaquete/List";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
-        list = estadosCivilesJson
-            .map((json) => DetalleDePaquete.fromJson(json))
-            .toList();
-        if (list.isNotEmpty) {
-          ////////////////////////////////
-        } else {
-          print('Error al cargar los detalles');
-        }
-      });
-    }
-    return list;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          paquete.paquNombre,
-          style: const TextStyle(color: Color(0xFFFFBD59)),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                paquete.paquNombre,
+                style: const TextStyle(color: Color(0xFFFFBD59)),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.edit, color: Color(0xFFFFBD59)),
+              onPressed: () {
+                mostrarDialogNombre(context);
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.black,
         leading: IconButton(
@@ -180,14 +205,6 @@ class _PaquetesState extends State<PaquetesForm> {
             );
           },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.edit, color: Color(0xFFFFBD59)),
-            onPressed: () {
-              mostrarDialogNombre(context);
-            },
-          ),
-        ],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       body: ListView(

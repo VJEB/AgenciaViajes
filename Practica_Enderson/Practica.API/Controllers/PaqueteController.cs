@@ -28,7 +28,7 @@ namespace Agencia.API.Controllers
         public IActionResult List(int Pers_Id)
         {
             var list = _agenciaServicio.ListPaquetes(Pers_Id);
-            return Ok(list);
+            return Ok(list.Data);
         }
 
         [HttpGet("LlenarPaquete/{Paqu_Id}")]
