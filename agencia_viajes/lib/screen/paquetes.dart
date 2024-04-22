@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/carrito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

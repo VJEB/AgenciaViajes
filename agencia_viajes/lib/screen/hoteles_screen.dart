@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Hoteles extends StatefulWidget {
-  const Hoteles({super.key});
+  const Hoteles({Key? key});
 
   @override
   State<Hoteles> createState() => _HotelesState();
@@ -50,26 +50,30 @@ class _HotelesState extends State<Hoteles> {
           Card(
             color: Colors.white10,
             clipBehavior: Clip.hardEdge,
-            child: InkWell(
-              splashColor:
-                  const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
-              onTap: () {
-                debugPrint('Card tapped.');
-              },
-              child: SizedBox(
+            child: ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              textColor: Colors.white,
+              collapsedTextColor: Colors.white,
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              backgroundColor: Colors.transparent,
+              collapsedBackgroundColor: Colors.transparent,
+              childrenPadding: const EdgeInsets.all(16),
+              title: SizedBox(
                 height: 100,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                        flex: 1,
-                        child: CachedNetworkImage(
-                          imageUrl: element["hote_Imagen"],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        )),
+                      flex: 1,
+                      child: CachedNetworkImage(
+                        imageUrl: element["hote_Imagen"],
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       flex: 2,
@@ -169,6 +173,20 @@ class _HotelesState extends State<Hoteles> {
                   ],
                 ),
               ),
+              children: [
+  Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: CachedNetworkImage(
+      imageUrl: element["hote_Imagen"],
+      fit: BoxFit.cover,
+      width: 100, // Ancho de la imagen
+      placeholder: (context, url) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
+  ),
+],
+
             ),
           ),
         );
