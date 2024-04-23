@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:agencia_viajes/models/pais.dart';
 import 'package:agencia_viajes/models/estado.dart';
 import 'package:agencia_viajes/models/ciudad.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Transportes extends StatefulWidget {
   const Transportes({Key? key});
@@ -185,28 +186,135 @@ class _TransportesState extends State<Transportes> {
                 ),
               ),
             ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: _transportes.length,
                 itemBuilder: (context, index) { 
-                  return Card(
-                    color: Colors.white10,
-                    clipBehavior: Clip.hardEdge,
-                    child: ListTile(
-                      title: Column(
+                  return      Card(
+            color: Colors.white10,
+            clipBehavior: Clip.hardEdge,
+            child: InkWell(
+              splashColor:
+                  const Color.fromARGB(255, 255, 239, 120).withAlpha(30),
+              child: SizedBox(
+                height: 100,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: CachedNetworkImage(
+                          imageUrl:  _transportes[index]["puntoFinal"],
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildField('Precio:', _transportes[index]["tran_Precio"]),
-                          _buildField('Horario:', _transportes[index]["horT_FechaYhora"]),
-                          _buildField('Descripción:', _transportes[index]["tiTr_Descripcion"]),
-                          _buildField('Destino:', _transportes[index]["puntoFinal"]),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    _transportes[index]["puntoFinal"],
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFFFBD59),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  _transportes[index]["puntoFinal"],
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromARGB(255, 44, 214, 50),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 12,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  _transportes[index]["puntoFinal"],
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  // Wrap the first Text widget with Expanded
+                                  child: Text(
+                                    _transportes[index]["puntoFinal"],
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      _transportes[index]["puntoFinal"],
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                       _transportes[index]["puntoFinal"],
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                      onTap: () {
-                        // Agregar acción para cuando se presione en un transporte
-                      },
                     ),
-                  );
+                  ],
+                ),
+              ),
+            ),
+          );
+       
                 },
               ),
             ),
