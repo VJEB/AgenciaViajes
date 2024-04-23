@@ -236,11 +236,13 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   }
 
   Future<void> postPersona() async {
-    const String url = "https://etravel.somee.com/API/Persona/Create";
+    const String url = "https://localhost:44372/API/Persona/Create";
     Persona persona = Persona(
+        cargId: 1,
         persId: 0,
         persDNI: _dni,
         persPasaporte: _pasaporte,
+        persHabilitado: true,
         persNombre: _nombre,
         persApellido: _apellido,
         persTelefono: int.parse(_telefono),

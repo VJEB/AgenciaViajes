@@ -6258,11 +6258,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
+      "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
       "projectName": "Agencia.API",
-      "projectPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
+      "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
       "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
-      "outputPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.API\\obj\\",
+      "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6279,11 +6279,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj": {
-              "projectPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj"
+            "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj": {
+              "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj"
             },
-            "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
-              "projectPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj"
+            "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
+              "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj"
             }
           }
         }

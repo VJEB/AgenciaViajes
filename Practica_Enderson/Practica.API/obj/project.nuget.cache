@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QnRz5iKLkzveCB/gROfsj3NcRuY+C8C8a2hLZ56Lf0xT7CI6bWaK/kcvJmlAwhEJCdZ+8g3A+t9Nnu+GaiL1Bw==",
+  "dgSpecHash": "yd3mF7SecdtndOE4Td9PL5hv3S+onZ8jLrjp+LZ0l6S8YJhNWVChxf5Ch/wRCMLSKZLQ+hRq2C0+dLBta1mKvg==",
   "success": true,
-  "projectFilePath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
+  "projectFilePath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.API\\Agencia.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LAB1\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
     "C:\\Users\\LAB1\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Xqs8oMhKnQIkGFY6SDtVFDcGCd6cjZhwt7bjI34NAOjsUTtDfNpySJTQuBmC9U6sQA2z9oZi/JeidqkXKWMziw==",
+  "dgSpecHash": "Uw/dV23sLnAZTcDO441qGPy6GNCBPK93SuhVMERnaP3pd3gYV36JF2f3KZDPEznIKXKSrS2TU4CG1HbVBUK8Cw==",
   "success": true,
-  "projectFilePath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj",
+  "projectFilePath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.BussinesLogic\\Agencia.BussinesLogic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LAB1\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
     "C:\\Users\\LAB1\\.nuget\\packages\\mailkit\\3.5.0\\mailkit.3.5.0.nupkg.sha512",

@@ -23,7 +23,7 @@ namespace Practica.Common.Models
         public DateTime? Pers_Fecha_Modifica { get; set; }
         public bool? Pers_Habilitado { get; set; }
         public string Pers_Pasaporte { get; set; }
-        public string Pers_Email { get; set; }
+        public string? Pers_Email { get; set; }
         public int? Carg_Id { get; set; }
     }
 }

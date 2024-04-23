@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {}
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {}
   },
   "projects": {
-    "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
+    "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
+        "projectUniqueName": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
         "projectName": "Agencia.Common",
-        "projectPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
+        "projectPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
         "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
-        "outputPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\obj\\",
+        "outputPath": "C:\\Users\\LAB1\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
