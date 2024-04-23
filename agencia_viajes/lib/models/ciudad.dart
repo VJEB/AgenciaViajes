@@ -24,9 +24,9 @@ class Ciudad {
 
   factory Ciudad.fromJson(Map<String, dynamic> json) {
     return Ciudad(
-      ciudId: json['ciud_Id'],
+      ciudId: json['ciud_Id'].toString(),
       ciudDescripcion: json['ciud_Descripcion'],
-      estaId: json['esta_Id'],
+      estaId: json['esta_Id'].toString(),
       ciudUsuaCreacion: json['ciud_Usua_Creacion'],
       ciudFechaCreacion: json['ciud_Fecha_Creacion'],
       ciudUsuaModifica: json['ciud_Usua_Modifica'],

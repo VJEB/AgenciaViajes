@@ -32,6 +32,13 @@ namespace Practica.API.Controllers
             return Ok(list.Data);
         }
 
+        [HttpGet("List2/{Usua_Id}")]
+        public IActionResult List2(int Usua_Id)
+        {
+            var list = _accesoServicio.ListUsua2(Usua_Id);
+            return Ok(list.Data);
+        }
+
         [HttpGet("Details/{id}")]
         public IActionResult Details(int id)
         {

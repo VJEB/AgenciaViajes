@@ -3,6 +3,7 @@ import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/paquetes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:agencia_viajes/screen/transportes.dart';
 
 class MenuLateral extends StatelessWidget {
   final BuildContext context;
@@ -26,7 +27,10 @@ class MenuLateral extends StatelessWidget {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const Paquetes()));
   }
-
+ void _transportes() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => const Transportes()));
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -65,6 +69,15 @@ class MenuLateral extends StatelessWidget {
                       title: const Text('Paquetes',
                           style: TextStyle(color: Color(0xFFFFBD59))),
                       onTap: _paquetes,
+                    ),
+                  ),
+                    Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: ListTile(
+                      leading: const Icon(Icons.airplanemode_active, color: Color(0xFFFFBD59)),
+                      title: const Text('Transportes',
+                          style: TextStyle(color: Color(0xFFFFBD59))),
+                      onTap: _transportes,
                     ),
                   ),
                   Padding(

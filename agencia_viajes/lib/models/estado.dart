@@ -22,7 +22,7 @@ class Estado {
 
   factory Estado.fromJson(Map<String, dynamic> json) {
     return Estado(
-      estaId: json['esta_Id'],
+      estaId: json['esta_Id'].toString(),
       estaDescripcion: json['esta_Descripcion'],
       estaUsuaCreacion: json['esta_Usua_Creacion'],
       estaFechaCreacion: json['esta_Fecha_Creacion'],
