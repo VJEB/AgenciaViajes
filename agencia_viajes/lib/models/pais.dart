@@ -5,6 +5,8 @@ class Pais {
   final String paisFechaCreacion;
   final int? paisUsuaModifica;
   final String? paisFechaModifica;
+  final int? impuId;
+  final dynamic impu;
 
   Pais({
     required this.paisId,
@@ -13,6 +15,8 @@ class Pais {
     required this.paisFechaCreacion,
     this.paisUsuaModifica,
     this.paisFechaModifica,
+    this.impuId,
+    this.impu,
   });
 
   @override
@@ -28,6 +32,8 @@ class Pais {
       paisFechaCreacion: json['pais_Fecha_Creacion'],
       paisUsuaModifica: json['pais_Usua_Modifica'],
       paisFechaModifica: json['pais_Fecha_Modifica'],
+      impuId: json['impu_Id'],
+      impu: json['impu'],
     );
   }
 }

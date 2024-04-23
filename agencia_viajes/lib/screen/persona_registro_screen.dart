@@ -37,10 +37,10 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   int _paisSeleccionado = 0;
   final List<Pais> _paises = [];
 
-  String _estadoSeleccionado = '';
+  int _estadoSeleccionado = 0;
   final List<Estado> _estados = [];
 
-  String _ciudadSeleccionada = '';
+  int _ciudadSeleccionada = 0;
   final List<Ciudad> _ciudades = [];
 
   Future<List<EstadoCivil>>? _estadosCivilesFuture;

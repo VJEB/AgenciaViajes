@@ -1,7 +1,8 @@
 class Ciudad {
-  final String ciudId;
+  final int ciudId;
+  final String ciudCodigo;
   final String ciudDescripcion;
-  final String estaId;
+  final int estaId;
   final int ciudUsuaCreacion;
   final String ciudFechaCreacion;
   final int? ciudUsuaModifica;
@@ -9,6 +10,7 @@ class Ciudad {
 
   Ciudad({
     required this.ciudId,
+    required this.ciudCodigo,
     required this.ciudDescripcion,
     required this.estaId,
     required this.ciudUsuaCreacion,
@@ -25,6 +27,7 @@ class Ciudad {
   factory Ciudad.fromJson(Map<String, dynamic> json) {
     return Ciudad(
       ciudId: json['ciud_Id'],
+      ciudCodigo: json['ciud_Codigo'], // Updated to include ciudCodigo
       ciudDescripcion: json['ciud_Descripcion'],
       estaId: json['esta_Id'],
       ciudUsuaCreacion: json['ciud_Usua_Creacion'],

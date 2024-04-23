@@ -12,6 +12,17 @@ namespace Practica.DataAcces.Repositorio
 {
     public class UsuarioRepositorio : IRepository<tbUsuarios>
     {
+        public IEnumerable<tbUsuarios> List2(int Usua_Id)
+        {
+
+            List<tbUsuarios> result = new List<tbUsuarios>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Usua_Id = Usua_Id };
+                result = db.Query<tbUsuarios>(ScriptBaseDatos.Usua_Mostrar2, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
         public RequestStatus Actualizar(tbUsuarios item)
         {
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))

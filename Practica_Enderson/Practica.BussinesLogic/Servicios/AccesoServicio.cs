@@ -25,6 +25,20 @@ namespace Practica.BussinesLogic.Servicios
 
         #region Usuario
 
+        public ServiceResult ListUsua2(int Usua_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _usuarioRepositorio.List2(Usua_Id);
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult ListUsua()
         {
             var result = new ServiceResult();

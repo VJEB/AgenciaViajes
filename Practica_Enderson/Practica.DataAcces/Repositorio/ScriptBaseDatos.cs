@@ -10,6 +10,7 @@ namespace Practica.DataAcces.Repositorio
     {
         #region Usuarios
         public static string Usua_Mostrar = "Acce.SP_Usuarios_Mostrar";
+        public static string Usua_Mostrar2 = "Acce.SP_Usuarios_Mostrar2";
         public static string Usua_Insertar = "Acce.SP_Usuarios_Insertar";
         public static string Usua_Actualizar = "Acce.SP_Usuarios_Actualizar";
         public static string Usua_Codigo = "[Acce].[SP_Usuarios_ActualizarCodigoVerificacion]";

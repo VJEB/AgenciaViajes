@@ -20,6 +20,7 @@ namespace Agencia.DataAcces.Context
         {
         }
 
+        public virtual DbSet<tbAirbnbs> tbAirbnbs { get; set; }
         public virtual DbSet<tbCargos> tbCargos { get; set; }
         public virtual DbSet<tbCiudades> tbCiudades { get; set; }
         public virtual DbSet<tbDetallePorPaquete> tbDetallePorPaquete { get; set; }
@@ -27,11 +28,13 @@ namespace Agencia.DataAcces.Context
         public virtual DbSet<tbEstadosCiviles> tbEstadosCiviles { get; set; }
         public virtual DbSet<tbFacturas> tbFacturas { get; set; }
         public virtual DbSet<tbFacturasDetalles> tbFacturasDetalles { get; set; }
+        public virtual DbSet<tbFotografiasPorAirbnbs> tbFotografiasPorAirbnbs { get; set; }
         public virtual DbSet<tbFotografiasPorHabitacion> tbFotografiasPorHabitacion { get; set; }
         public virtual DbSet<tbHabitaciones> tbHabitaciones { get; set; }
         public virtual DbSet<tbHabitacionesPorHotel> tbHabitacionesPorHotel { get; set; }
         public virtual DbSet<tbHorariosTransportes> tbHorariosTransportes { get; set; }
         public virtual DbSet<tbHoteles> tbHoteles { get; set; }
+        public virtual DbSet<tbImpuestos> tbImpuestos { get; set; }
         public virtual DbSet<tbMetodosPagos> tbMetodosPagos { get; set; }
         public virtual DbSet<tbPagosTarjetas> tbPagosTarjetas { get; set; }
         public virtual DbSet<tbPaises> tbPaises { get; set; }
@@ -40,15 +43,67 @@ namespace Agencia.DataAcces.Context
         public virtual DbSet<tbPaquetes> tbPaquetes { get; set; }
         public virtual DbSet<tbPersonas> tbPersonas { get; set; }
         public virtual DbSet<tbPersonasPorTarjetas> tbPersonasPorTarjetas { get; set; }
+        public virtual DbSet<tbReservaciones> tbReservaciones { get; set; }
         public virtual DbSet<tbRoles> tbRoles { get; set; }
         public virtual DbSet<tbTiposDeCamas> tbTiposDeCamas { get; set; }
         public virtual DbSet<tbTiposTransportes> tbTiposTransportes { get; set; }
         public virtual DbSet<tbTransportes> tbTransportes { get; set; }
         public virtual DbSet<tbUsuarios> tbUsuarios { get; set; }
+        public virtual DbSet<tbViajes> tbViajes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<tbAirbnbs>(entity =>
+            {
+                entity.HasKey(e => e.Airb_Id)
+                    .HasName("PK__tbAirbnb__6419FEBFE0970E63");
+
+                entity.ToTable("tbAirbnbs", "Agen");
+
+                entity.Property(e => e.Airb_Correo)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Airb_DireccionExacta)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Airb_Fecha_Creacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Airb_Fecha_Modifica).HasColumnType("datetime");
+
+                entity.Property(e => e.Airb_Imagen)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Airb_Nombre)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Airb_Precio).HasColumnType("numeric(8, 2)");
+
+                entity.Property(e => e.Airb_PrecioTodoIncluido).HasColumnType("numeric(8, 2)");
+
+                entity.Property(e => e.Airb_Resena)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ciud_Id)
+                    .IsRequired()
+                    .HasMaxLength(4)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Airb_Usua_CreacionNavigation)
+                    .WithMany(p => p.tbAirbnbsAirb_Usua_CreacionNavigation)
+                    .HasForeignKey(d => d.Airb_Usua_Creacion);
+
+                entity.HasOne(d => d.Airb_Usua_ModificaNavigation)
+                    .WithMany(p => p.tbAirbnbsAirb_Usua_ModificaNavigation)
+                    .HasForeignKey(d => d.Airb_Usua_Modifica);
+            });
 
             modelBuilder.Entity<tbCargos>(entity =>
             {
@@ -81,7 +136,8 @@ namespace Agencia.DataAcces.Context
 
                 entity.ToTable("tbCiudades", "Gral");
 
-                entity.Property(e => e.Ciud_Id)
+                entity.Property(e => e.Ciud_Codigo)
+                    .IsRequired()
                     .HasMaxLength(4)
                     .IsUnicode(false);
 
@@ -92,14 +148,6 @@ namespace Agencia.DataAcces.Context
                 entity.Property(e => e.Ciud_Fecha_Creacion).HasColumnType("datetime");
 
                 entity.Property(e => e.Ciud_Fecha_Modifica).HasColumnType("datetime");
-
-                entity.Property(e => e.Esta_Id)
-                    .HasMaxLength(2)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Esta)
-                    .WithMany(p => p.tbCiudades)
-                    .HasForeignKey(d => d.Esta_Id);
             });
 
             modelBuilder.Entity<tbDetallePorPaquete>(entity =>
@@ -115,22 +163,21 @@ namespace Agencia.DataAcces.Context
 
                 entity.Property(e => e.DePa_Precio).HasColumnType("numeric(8, 2)");
 
-                entity.Property(e => e.DePa_PrecioTodoIncluido).HasColumnType("numeric(8, 2)");
+                entity.Property(e => e.DePa_PrecioTodoIncluido)
+                    .HasColumnType("numeric(8, 2)")
+                    .HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.DePa_Usua_CreacionNavigation)
                     .WithMany(p => p.tbDetallePorPaqueteDePa_Usua_CreacionNavigation)
-                    .HasForeignKey(d => d.DePa_Usua_Creacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.DePa_Usua_Creacion);
 
                 entity.HasOne(d => d.DePa_Usua_ModificaNavigation)
                     .WithMany(p => p.tbDetallePorPaqueteDePa_Usua_ModificaNavigation)
-                    .HasForeignKey(d => d.DePa_Usua_Modifica)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.DePa_Usua_Modifica);
 
                 entity.HasOne(d => d.Paqu)
                     .WithMany(p => p.tbDetallePorPaquete)
-                    .HasForeignKey(d => d.Paqu_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.Paqu_Id);
             });
 
             modelBuilder.Entity<tbEstados>(entity =>
@@ -140,7 +187,8 @@ namespace Agencia.DataAcces.Context
 
                 entity.ToTable("tbEstados", "Gral");
 
-                entity.Property(e => e.Esta_Id)
+                entity.Property(e => e.Esta_Codigo)
+                    .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false);
 
@@ -237,6 +285,20 @@ namespace Agencia.DataAcces.Context
                     .HasForeignKey(d => d.Paqu_Id);
             });
 
+            modelBuilder.Entity<tbFotografiasPorAirbnbs>(entity =>
+            {
+                entity.HasKey(e => e.FoAi_Id)
+                    .HasName("PK__tbFotogr__A0B70F2B6BE7AE3E");
+
+                entity.ToTable("tbFotografiasPorAirbnbs", "Agen");
+
+                entity.Property(e => e.FoAi_UrlImagen).IsUnicode(false);
+
+                entity.HasOne(d => d.Airb)
+                    .WithMany(p => p.tbFotografiasPorAirbnbs)
+                    .HasForeignKey(d => d.Airb_Id);
+            });
+
             modelBuilder.Entity<tbFotografiasPorHabitacion>(entity =>
             {
                 entity.HasKey(e => e.FoHa_Id)
@@ -265,11 +327,6 @@ namespace Agencia.DataAcces.Context
 
                 entity.Property(e => e.Habi_Fecha_Modifica).HasColumnType("datetime");
 
-                entity.Property(e => e.Habi_Numero)
-                    .IsRequired()
-                    .HasMaxLength(4)
-                    .IsUnicode(false);
-
                 entity.HasOne(d => d.Habi_Usua_CreacionNavigation)
                     .WithMany(p => p.tbHabitacionesHabi_Usua_CreacionNavigation)
                     .HasForeignKey(d => d.Habi_Usua_Creacion)
@@ -277,8 +334,7 @@ namespace Agencia.DataAcces.Context
 
                 entity.HasOne(d => d.Habi_Usua_ModificaNavigation)
                     .WithMany(p => p.tbHabitacionesHabi_Usua_ModificaNavigation)
-                    .HasForeignKey(d => d.Habi_Usua_Modifica)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.Habi_Usua_Modifica);
 
                 entity.HasOne(d => d.TiCa)
                     .WithMany(p => p.tbHabitaciones)
@@ -295,6 +351,10 @@ namespace Agencia.DataAcces.Context
                 entity.ToTable("tbHabitacionesPorHotel", "Agen");
 
                 entity.Property(e => e.HaHo_CargoExtraPersona).HasColumnType("numeric(8, 2)");
+
+                entity.Property(e => e.HaHo_Numero)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.HaHo_PrecioPorNoche).HasColumnType("numeric(8, 2)");
 
@@ -357,10 +417,9 @@ namespace Agencia.DataAcces.Context
 
                 entity.Property(e => e.Hote_PrecioTodoIncluido).HasColumnType("numeric(8, 2)");
 
-                entity.HasOne(d => d.Ciud)
-                    .WithMany(p => p.tbHoteles)
-                    .HasForeignKey(d => d.Ciud_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                entity.Property(e => e.Hote_Reseña)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Hote_Usua_CreacionNavigation)
                     .WithMany(p => p.tbHotelesHote_Usua_CreacionNavigation)
@@ -369,8 +428,32 @@ namespace Agencia.DataAcces.Context
 
                 entity.HasOne(d => d.Hote_Usua_ModificaNavigation)
                     .WithMany(p => p.tbHotelesHote_Usua_ModificaNavigation)
-                    .HasForeignKey(d => d.Hote_Usua_Modifica)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.Hote_Usua_Modifica);
+            });
+
+            modelBuilder.Entity<tbImpuestos>(entity =>
+            {
+                entity.HasKey(e => e.Impu_Id)
+                    .HasName("PK__tbImpues__23E8CC887EDF9CB6");
+
+                entity.ToTable("tbImpuestos", "Gral");
+
+                entity.Property(e => e.Impu_Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Impu_Fecha_Creacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Impu_Fecha_Modifica).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Impu_Usua_CreacionNavigation)
+                    .WithMany(p => p.tbImpuestosImpu_Usua_CreacionNavigation)
+                    .HasForeignKey(d => d.Impu_Usua_Creacion);
+
+                entity.HasOne(d => d.Impu_Usua_ModificaNavigation)
+                    .WithMany(p => p.tbImpuestosImpu_Usua_ModificaNavigation)
+                    .HasForeignKey(d => d.Impu_Usua_Modifica);
             });
 
             modelBuilder.Entity<tbMetodosPagos>(entity =>
@@ -452,6 +535,10 @@ namespace Agencia.DataAcces.Context
 
                 entity.Property(e => e.Pais_Fecha_Modifica).HasColumnType("datetime");
 
+                entity.HasOne(d => d.Impu)
+                    .WithMany(p => p.tbPaises)
+                    .HasForeignKey(d => d.Impu_Id);
+
                 entity.HasOne(d => d.Pais_Usua_CreacionNavigation)
                     .WithMany(p => p.tbPaisesPais_Usua_CreacionNavigation)
                     .HasForeignKey(d => d.Pais_Usua_Creacion)
@@ -522,6 +609,11 @@ namespace Agencia.DataAcces.Context
 
                 entity.ToTable("tbPaquetes", "Agen");
 
+                entity.HasIndex(e => e.Paqu_Nombre, "UQ_tbPaquetes_Paqu_Nombre")
+                    .IsUnique();
+
+                entity.Property(e => e.Paqu_Estado).HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Paqu_Fecha_Creacion).HasColumnType("datetime");
 
                 entity.Property(e => e.Paqu_Fecha_Modifica).HasColumnType("datetime");
@@ -532,21 +624,6 @@ namespace Agencia.DataAcces.Context
                     .IsUnicode(false);
 
                 entity.Property(e => e.Paqu_Precio).HasColumnType("numeric(8, 2)");
-
-                entity.HasOne(d => d.Paqu_Usua_CreacionNavigation)
-                    .WithMany(p => p.tbPaquetesPaqu_Usua_CreacionNavigation)
-                    .HasForeignKey(d => d.Paqu_Usua_Creacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Paqu_Usua_ModificaNavigation)
-                    .WithMany(p => p.tbPaquetesPaqu_Usua_ModificaNavigation)
-                    .HasForeignKey(d => d.Paqu_Usua_Modifica)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Pers)
-                    .WithMany(p => p.tbPaquetes)
-                    .HasForeignKey(d => d.Pers_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<tbPersonas>(entity =>
@@ -555,6 +632,17 @@ namespace Agencia.DataAcces.Context
                     .HasName("PK__tbClient__5BB95503F4A2DA75");
 
                 entity.ToTable("tbPersonas", "Gral");
+
+                entity.HasIndex(e => e.Pers_DNI, "UQ_tbPersonas_Pers_DNI")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Pers_Pasaporte, "UQ_tbPersonas_Pers_Pasaporte")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Pers_Telefono, "UQ_tbPersonas_Pers_Telefono")
+                    .IsUnique();
+
+                entity.Property(e => e.Carg_Id).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Ciud_Id)
                     .HasMaxLength(4)
@@ -591,12 +679,8 @@ namespace Agencia.DataAcces.Context
 
                 entity.HasOne(d => d.Carg)
                     .WithMany(p => p.tbPersonas)
-                    .HasForeignKey(d => d.Carg_Id);
-
-                entity.HasOne(d => d.Ciud)
-                    .WithMany(p => p.tbPersonas)
-                    .HasForeignKey(d => d.Ciud_Id)
-                    .HasConstraintName("FK_tbClientes_tbCiudades_Ciud_Id");
+                    .HasForeignKey(d => d.Carg_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.EsCi)
                     .WithMany(p => p.tbPersonas)
@@ -628,6 +712,46 @@ namespace Agencia.DataAcces.Context
                 entity.HasOne(d => d.Pers)
                     .WithMany(p => p.tbPersonasPorTarjetas)
                     .HasForeignKey(d => d.Pers_Id);
+            });
+
+            modelBuilder.Entity<tbReservaciones>(entity =>
+            {
+                entity.HasKey(e => e.Rese_Id)
+                    .HasName("PK__tbReserv__72CC329EE19E75DE");
+
+                entity.ToTable("tbReservaciones", "Agen");
+
+                entity.Property(e => e.Rese_FechaEntrada).HasColumnType("date");
+
+                entity.Property(e => e.Rese_FechaSalida).HasColumnType("date");
+
+                entity.Property(e => e.Rese_Fecha_Creacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Rese_Fecha_Modifica).HasColumnType("datetime");
+
+                entity.Property(e => e.Rese_Observacion)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Rese_Precio).HasColumnType("numeric(8, 2)");
+
+                entity.Property(e => e.Rese_PrecioTodoIncluido).HasColumnType("numeric(8, 2)");
+
+                entity.HasOne(d => d.HaHo)
+                    .WithMany(p => p.tbReservaciones)
+                    .HasForeignKey(d => d.HaHo_Id);
+
+                entity.HasOne(d => d.Paqu)
+                    .WithMany(p => p.tbReservaciones)
+                    .HasForeignKey(d => d.Paqu_Id);
+
+                entity.HasOne(d => d.Rese_Usua_CreacionNavigation)
+                    .WithMany(p => p.tbReservacionesRese_Usua_CreacionNavigation)
+                    .HasForeignKey(d => d.Rese_Usua_Creacion);
+
+                entity.HasOne(d => d.Rese_Usua_ModificaNavigation)
+                    .WithMany(p => p.tbReservacionesRese_Usua_ModificaNavigation)
+                    .HasForeignKey(d => d.Rese_Usua_Modifica);
             });
 
             modelBuilder.Entity<tbRoles>(entity =>
@@ -668,16 +792,6 @@ namespace Agencia.DataAcces.Context
                 entity.Property(e => e.TiCa_Nombre)
                     .HasMaxLength(100)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.TiCa_Usua_CreacionNavigation)
-                    .WithMany(p => p.tbTiposDeCamasTiCa_Usua_CreacionNavigation)
-                    .HasForeignKey(d => d.TiCa_Usua_Creacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.TiCa_Usua_ModificaNavigation)
-                    .WithMany(p => p.tbTiposDeCamasTiCa_Usua_ModificaNavigation)
-                    .HasForeignKey(d => d.TiCa_Usua_Modifica)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<tbTiposTransportes>(entity =>
@@ -732,14 +846,6 @@ namespace Agencia.DataAcces.Context
                     .WithMany(p => p.tbTransportes)
                     .HasForeignKey(d => d.TiTr_Id);
 
-                entity.HasOne(d => d.Tran_PuntoFinalNavigation)
-                    .WithMany(p => p.tbTransportesTran_PuntoFinalNavigation)
-                    .HasForeignKey(d => d.Tran_PuntoFinal);
-
-                entity.HasOne(d => d.Tran_PuntoInicioNavigation)
-                    .WithMany(p => p.tbTransportesTran_PuntoInicioNavigation)
-                    .HasForeignKey(d => d.Tran_PuntoInicio);
-
                 entity.HasOne(d => d.Tran_Usua_CreacionNavigation)
                     .WithMany(p => p.tbTransportesTran_Usua_CreacionNavigation)
                     .HasForeignKey(d => d.Tran_Usua_Creacion)
@@ -793,6 +899,36 @@ namespace Agencia.DataAcces.Context
                 entity.HasOne(d => d.Usua_Usua_ModificaNavigation)
                     .WithMany(p => p.InverseUsua_Usua_ModificaNavigation)
                     .HasForeignKey(d => d.Usua_Usua_Modifica);
+            });
+
+            modelBuilder.Entity<tbViajes>(entity =>
+            {
+                entity.HasKey(e => e.Viaj_Id)
+                    .HasName("PK__tbViajes__DAE951F529D52D73");
+
+                entity.ToTable("tbViajes", "Agen");
+
+                entity.Property(e => e.Viaj_Fecha_Creacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Viaj_Fecha_Modifica).HasColumnType("datetime");
+
+                entity.Property(e => e.Viaj_Precio).HasColumnType("numeric(8, 2)");
+
+                entity.HasOne(d => d.Paqu)
+                    .WithMany(p => p.tbViajes)
+                    .HasForeignKey(d => d.Paqu_Id);
+
+                entity.HasOne(d => d.Tran)
+                    .WithMany(p => p.tbViajes)
+                    .HasForeignKey(d => d.Tran_Id);
+
+                entity.HasOne(d => d.Viaj_Usua_CreacionNavigation)
+                    .WithMany(p => p.tbViajesViaj_Usua_CreacionNavigation)
+                    .HasForeignKey(d => d.Viaj_Usua_Creacion);
+
+                entity.HasOne(d => d.Viaj_Usua_ModificaNavigation)
+                    .WithMany(p => p.tbViajesViaj_Usua_ModificaNavigation)
+                    .HasForeignKey(d => d.Viaj_Usua_Modifica);
             });
 
             OnModelCreatingPartial(modelBuilder);

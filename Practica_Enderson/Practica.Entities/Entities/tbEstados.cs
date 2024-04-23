@@ -8,12 +8,8 @@ namespace Agencia.Entities.Entities
 {
     public partial class tbEstados
     {
-        public tbEstados()
-        {
-            tbCiudades = new HashSet<tbCiudades>();
-        }
-
-        public string Esta_Id { get; set; }
+        public int Esta_Id { get; set; }
+        public string Esta_Codigo { get; set; }
         public string Esta_Descripcion { get; set; }
         public int? Esta_Usua_Creacion { get; set; }
         public DateTime? Esta_Fecha_Creacion { get; set; }
@@ -24,6 +20,5 @@ namespace Agencia.Entities.Entities
         public virtual tbUsuarios Esta_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Esta_Usua_ModificaNavigation { get; set; }
         public virtual tbPaises Pais { get; set; }
-        public virtual ICollection<tbCiudades> tbCiudades { get; set; }
     }
 }

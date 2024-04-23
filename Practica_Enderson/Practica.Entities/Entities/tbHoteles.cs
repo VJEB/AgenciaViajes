@@ -22,19 +22,21 @@ namespace Agencia.Entities.Entities
         public int Hote_Estrellas { get; set; }
         public string Hote_Imagen { get; set; }
         public string Ciud_Id { get; set; }
+        public int Hote_Usua_Creacion { get; set; }
+        public DateTime Hote_Fecha_Creacion { get; set; }
+        public int? Hote_Usua_Modifica { get; set; }
+        public DateTime? Hote_Fecha_Modifica { get; set; }
+        public int Hote_Estado { get; set; }
+        public int? Hote_Telefono { get; set; }
+        public int? Hote_Correo { get; set; }
+        public string Hote_Reseña { get; set; }
         [NotMapped]
         public string Ciud_Descripcion { get; set; }
         [NotMapped]
         public string Pais_Descripcion { get; set; }
         [NotMapped]
         public double HaHo_PrecioPorNoche { get; set; }
-        public int Hote_Usua_Creacion { get; set; }
-        public DateTime Hote_Fecha_Creacion { get; set; }
-        public int Hote_Usua_Modifica { get; set; }
-        public DateTime Hote_Fecha_Modifica { get; set; }
-        public int Hote_Estado { get; set; }
 
-        public virtual tbCiudades Ciud { get; set; }
         public virtual tbUsuarios Hote_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Hote_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbHabitacionesPorHotel> tbHabitacionesPorHotel { get; set; }
