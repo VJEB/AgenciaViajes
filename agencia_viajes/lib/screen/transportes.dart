@@ -17,9 +17,9 @@ class _TransportesState extends State<Transportes> {
   String url = "https://etravel.somee.com/API/Transporte/TransporteList/2";
   
   // Variables para almacenar las selecciones de los filtros
-  String? _paisSeleccionado;
-  String? _estadoSeleccionado;
-  String? _ciudadSeleccionada;
+  int? _paisSeleccionado;
+  int? _estadoSeleccionado;
+  int? _ciudadSeleccionada;
 
   // Variables para almacenar los datos de los dropdown lists de países, estados y ciudades
   List<Pais> _paises = [];
@@ -42,7 +42,7 @@ class _TransportesState extends State<Transportes> {
     }
   }
 
-  Future<void> _cargarEstados(String paisId) async {
+  Future<void> _cargarEstados(int paisId) async {
     String url = "https://etravel.somee.com/API/Estado/List/$paisId";
     final respuesta = await http.get(Uri.parse(url));
 
@@ -57,7 +57,7 @@ class _TransportesState extends State<Transportes> {
   }
 
   // Función para cargar la lista de transportes
-  Future<void> _cargarTransportes(String ciudadId) async {
+  Future<void> _cargarTransportes(int ciudadId) async {
     String url = "https://etravel.somee.com/API/Transporte/TransporteList/$ciudadId";
     final respuesta = await http.get(Uri.parse(url));
 
@@ -71,7 +71,7 @@ class _TransportesState extends State<Transportes> {
     }
   }
 
-  Future<void> _cargarCiudades(String estadoId) async {
+  Future<void> _cargarCiudades(int estadoId) async {
     String url = "https://etravel.somee.com/API/Ciudad/List/$estadoId";
     final respuesta = await http.get(Uri.parse(url));
 
@@ -129,8 +129,8 @@ class _TransportesState extends State<Transportes> {
                       labelText: 'Pais',
                       value: _paisSeleccionado,
                       items: _paises.map((pais) {
-                        return DropdownMenuItem<String>(
-                          value: pais.paisId.toString(),
+                        return DropdownMenuItem<int>(
+                          value: pais.paisId,
                           child: Text(pais.paisDescripcion, style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
@@ -150,7 +150,7 @@ class _TransportesState extends State<Transportes> {
                       labelText: 'Estado',
                       value: _estadoSeleccionado,
                       items: _estados.map((estado) {
-                        return DropdownMenuItem<String>(
+                        return DropdownMenuItem<int>(
                           value: estado.estaId,
                           child: Text(estado.estaDescripcion, style: TextStyle(color: Colors.white)),
                         );
@@ -169,7 +169,7 @@ class _TransportesState extends State<Transportes> {
                       labelText: 'Ciudad',
                       value: _ciudadSeleccionada,
                       items: _ciudades.map((ciudad) {
-                        return DropdownMenuItem<String>(
+                        return DropdownMenuItem<int>(
                           value: ciudad.ciudId,
                           child: Text(ciudad.ciudDescripcion, style: TextStyle(color: Colors.white)),
                         );
@@ -188,7 +188,7 @@ class _TransportesState extends State<Transportes> {
             Expanded(
               child: ListView.builder(
                 itemCount: _transportes.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (context, index) { 
                   return Card(
                     color: Colors.white10,
                     clipBehavior: Clip.hardEdge,
@@ -226,11 +226,11 @@ class _TransportesState extends State<Transportes> {
 
   Widget _buildDropdown({
     required String labelText,
-    required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required void Function(String?)? onChanged,
+    required int? value,
+    required List<DropdownMenuItem<int>> items,
+    required void Function(int?)? onChanged,
   }) {
-    return DropdownButtonFormField<String>(
+    return DropdownButtonFormField<int>(
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(color: Color(0xFFFFBD59)),
