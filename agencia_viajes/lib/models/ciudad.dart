@@ -6,7 +6,7 @@ class Ciudad {
   final String ciudFechaCreacion;
   final int? ciudUsuaModifica;
   final String? ciudFechaModifica;
-
+    
   Ciudad({
     required this.ciudId,
     required this.ciudDescripcion,

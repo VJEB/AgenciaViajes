@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:http/http.dart' as http;
 
 class Usuarios extends StatefulWidget {
@@ -20,8 +22,7 @@ class _UsuariosState extends State<Usuarios> {
   }
 
   Future<List<dynamic>> _fetchCatCategories() async {
-    final response =
-        await http.get(Uri.parse("https://etravel.somee.com/API/Usuario/List"));
+    final response = await http.get(Uri.parse("https://etravel.somee.com/API/Usuario/List"));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data;
@@ -58,85 +59,120 @@ class _UsuariosState extends State<Usuarios> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cat Categories'),
+        title: const Text(
+          "Usuarios",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
-      body: FutureBuilder(
-        future: _fetchData,
-        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<dynamic> categories = _sortCategories(snapshot.data!);
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columnSpacing: 150,
-                headingTextStyle:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                dataRowHeight: 60,
-                columns: <DataColumn>[
-                  DataColumn(
-                    label: Text('Codigo'),
-                    onSort: (columnIndex, _) {
-                      _sortData('usua_Id');
-                    },
-                  ),
-                  DataColumn(
-                    label: Text('Usuario'),
-                    onSort: (columnIndex, _) {
-                      _sortData('usua_Usuario');
-                    },
-                  ),
-                  DataColumn(
-                    label: Text('Admin'),
-                  ),
-                  DataColumn(
-                    label: Text('Persona'),
-                  ),
-                  DataColumn(
-                    label: Text('Rol'),
-                  ),
-                  DataColumn(
-                    label: Text('Acciones'),
-                  ),
-                ],
-                rows: categories.map((category) {
-                  return DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(category['usua_Id'].toString())),
-                      DataCell(Text(category['usua_Usuario'])),
-                      DataCell(Text(category['usua_Admin'].toString())),
-                      DataCell(Text(category['persona'] != null
-                          ? category['persona']
-                          : '')),
-                      DataCell(Text(category['rol_Descripcion'] != null
-                          ? category['rol_Descripcion']
-                          : '')),
-                      DataCell(Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {},
+      drawer: MenuLateral(
+        context: context,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () {
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegistroUsuario()), // Reemplaza NuevaPantalla con el nombre de la pantalla de destino
+                );
+              },
+              icon: Icon(Icons.add, color: Colors.black), // Color del icono
+              label: Text(
+                'Nuevo',
+                style: TextStyle(color: Colors.black), // Color del texto
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFFFBD59), // Color de fondo del botón
+                padding: EdgeInsets.symmetric(horizontal: 16.0), // Ajuste del padding horizontal
+              ),
+            ),
+            SizedBox(height: 8), // Espacio entre el botón y la tabla
+            Card(
+              color: Colors.white10, // Color de fondo de la tarjeta
+              child: FutureBuilder(
+                future: _fetchData,
+                builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    List<dynamic> categories = _sortCategories(snapshot.data!);
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columnSpacing: 150,
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFFFFBD59)), // Estilo del encabezado de la tabla
+                        dataRowHeight: 60,
+                        columns: <DataColumn>[
+                          DataColumn(
+                            label: Text('Codigo', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                            onSort: (columnIndex, _) {
+                              _sortData('usua_Id');
+                            },
                           ),
-                          IconButton(
-                            icon: Icon(Icons.details),
-                            onPressed: () {},
+                          DataColumn(
+                            label: Text('Usuario', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                            onSort: (columnIndex, _) {
+                              _sortData('usua_Usuario');
+                            },
                           ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {},
+                          DataColumn(
+                            label: Text('Admin', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                          ),
+                          DataColumn(
+                            label: Text('Persona', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                          ),
+                          DataColumn(
+                            label: Text('Rol', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Acciones', style: TextStyle(color: Colors.white))), // Título de acciones centrado
                           ),
                         ],
-                      )),
-                    ],
-                  );
-                }).toList(),
+                        rows: categories.map((category) {
+                          return DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text(category['usua_Id'].toString(), style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['usua_Usuario'], style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['usua_Admin'].toString(), style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['persona'] != null ? category['persona'] : '', style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['rol_Descripcion'] != null ? category['rol_Descripcion'] : '', style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    color: Color(0xFFFFBD59),
+                                    onPressed: () {},
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.details),
+                                    color: Color(0xFFFFBD59),
+                                    onPressed: () {},
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    color: Color(0xFFFFBD59),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              )),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }
+                },
               ),
-            );
-          }
-        },
+            ),
+          ],
+        ),
       ),
     );
   }

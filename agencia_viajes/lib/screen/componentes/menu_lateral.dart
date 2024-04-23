@@ -4,6 +4,7 @@ import 'package:agencia_viajes/screen/paquetes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:agencia_viajes/screen/transportes.dart';
+import 'package:agencia_viajes/screen/usuarios_screen1.dart';
 
 class MenuLateral extends StatelessWidget {
   final BuildContext context;
@@ -30,6 +31,10 @@ class MenuLateral extends StatelessWidget {
  void _transportes() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const Transportes()));
+  }
+   void _AdministrarUsuarios() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => Usuarios()));
   }
   @override
   Widget build(BuildContext context) {
@@ -99,9 +104,7 @@ class MenuLateral extends StatelessWidget {
                           const Icon(Icons.people, color: Color(0xFFFFBD59)),
                       title: const Text('Administrar Usuarios',
                           style: TextStyle(color: Color(0xFFFFBD59))),
-                      onTap: () {
-                        // Aquí puedes agregar la lógica para navegar a la página de perfil, por ejemplo.
-                      },
+                      onTap: _AdministrarUsuarios,
                     ),
                   ),
                 ],
@@ -117,15 +120,18 @@ class MenuLateral extends StatelessWidget {
                 onPressed: _cerrarSesion,
                 icon: const Icon(
                   Icons.logout,
-                  color: Colors.black,
+                  color: Color(0xFFFFBD59),
                 ),
                 label: const Text(
                   'Cerrar Sesión',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Color(0xFFFFBD59), // Cambio de color del texto
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black, // Cambio de color del botón
                 ),
               ),
             )
