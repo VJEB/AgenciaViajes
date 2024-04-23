@@ -24,5 +24,7 @@ namespace Practica.Common.Models
         public DateTime? Usua_Fecha_Modifica { get; set; }
         public bool? Usua_Estado { get; set; }
         public int? Pers_Id { get; set; }
+        [NotMapped]
+        public string? Pers_Email { get; set; }
     }
 }

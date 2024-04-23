@@ -16,7 +16,7 @@ namespace Practica.Common.Models
         public string Pers_Sexo { get; set; }
         public int? Pers_Telefono { get; set; }
         public int? EsCi_Id { get; set; }
-        public string Ciud_Id { get; set; }
+        public int Ciud_Id { get; set; }
         public int? Pers_Usua_Creacion { get; set; }
         public DateTime? Pers_Fecha_Creacion { get; set; }
         public int? Pers_Usua_Modifica { get; set; }

@@ -107,21 +107,17 @@ namespace Practica.DataAcces.Repositorio
 
                 parametro.Add("Usua_Usuario", item.Usua_Usuario);
                 parametro.Add("Usua_Contra", item.Usua_Contra);
-                parametro.Add("Usua_Admin", item.Usua_Admin);
                 parametro.Add("Pers_Id", item.Pers_Id);
-                parametro.Add("Rol_Id", item.Rol_Id);
-            
+                parametro.Add("Pers_Email", item.Pers_Email);
+                parametro.Add("Usua_Usua_Creacion", item.Usua_Usua_Creacion);
+                parametro.Add("Usua_Fecha_Creacion", item.Usua_Fecha_Creacion);
 
-                parametro.Add("Usua_Usua_Creacion", 1);
-                parametro.Add("Usua_Fecha_Creacion", DateTime.Now);
-
-                var result = db.Execute(ScriptBaseDatos.Usua_Insertar,
+                var result = db.QueryFirst(ScriptBaseDatos.Usua_Insertar,
                     parametro,
                      commandType: CommandType.StoredProcedure
                     );
 
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
+                return new RequestStatus { CodeStatus = result.Resultado};
             }
         }
 

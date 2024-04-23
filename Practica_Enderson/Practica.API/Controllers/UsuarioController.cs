@@ -72,15 +72,13 @@ namespace Practica.API.Controllers
             {
                 Usua_Usuario = item.Usua_Usuario,
                 Usua_Contra = item.Usua_Contra,
-                Usua_Admin = item.Usua_Admin,
                 Pers_Id = item.Pers_Id,
-                Rol_Id = item.Rol_Id,
-
+                Pers_Email = item.Pers_Email,
+                Usua_Usua_Creacion = item.Usua_Usua_Creacion,
+                Usua_Fecha_Creacion = item.Usua_Fecha_Creacion
             };
-            var listado = _accesoServicio.ListUsua();
-
-            _accesoServicio.Insertarusua(modelo);
-            return Ok(listado);
+            var response  = _accesoServicio.Insertarusua(modelo);
+            return Ok(response);
         }
 
         [HttpPut("Edit/{id}")]

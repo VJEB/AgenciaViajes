@@ -1,53 +1,58 @@
-class UsuarioModel {
-  int? usua_Id;
-  String? role_Id;
-  String? empl_Id;
-  int? Usua_Creacion;
-  int? Usua_Modificador;
-  String? Usua_Contrasena;
-  String? Usua_Usuario;
-  String? Admin;
-  String? Empleado;
-  bool? Usua_Administrador;
+class Usuario {
+  int? usuaId;
+  String? rolId;
+  String? persEmail;
+  int? emplId;
+  int? usuaCreacion;
+  final String? usuaFechaCreacion;
+  int? usuaModifica;
+  final String? usuaFechaModifica;
+  String? usuaContrasena;
+  String? usuaUsuario;
+  bool? admin;
+  String? empleado;
+  bool? usuaAdministrador;
 
-  UsuarioModel({
-    this.usua_Id,
-    this.role_Id,
-    this.empl_Id,
-    this.Usua_Creacion,
-    this.Usua_Contrasena,
-    this.Usua_Modificador,
-    this.Usua_Usuario,
-    this.Admin,
-    this.Usua_Administrador,
-    this.Empleado,
+  Usuario({
+    this.usuaId,
+    this.rolId,
+    this.persEmail,
+    this.emplId,
+    this.usuaCreacion,
+    this.usuaFechaCreacion,
+    this.usuaContrasena,
+    this.usuaModifica,
+    this.usuaFechaModifica,
+    this.usuaUsuario,
+    this.admin,
+    this.usuaAdministrador,
+    this.empleado,
   });
 
-  factory UsuarioModel.fromJson(Map<String, dynamic> json) {
-    return UsuarioModel(
-      Usua_Administrador : json['Usua_Administrador'] as bool?,
-      usua_Id: json['usua_Id'] as int?,
-      Usua_Creacion: json['usua_Creacion'] as int?,
-      Usua_Modificador: json['usua_Modificador'] as int?,
-      Usua_Contrasena: json['usua_Contraseña'] as String?,
-      Usua_Usuario: json['usua_Usuario'] as String?,
-      Admin: json['admin'] as String?,
-      Empleado: json['empl_Nombre'] as String?,
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    return Usuario(
+      usuaAdministrador: json['Usua_Administrador'] as bool?,
+      usuaId: json['usua_Id'] as int?,
+      emplId: json['pers_Id'] as int?,
+      usuaCreacion: json['usua_Creacion'] as int?,
+      usuaFechaCreacion: json['usua_Fecha_Creacion'],
+      usuaModifica: json['usua_Modificador'] as int?,
+      usuaFechaModifica: json['usua_Fecha_Modifica'],
+      usuaContrasena: json['usua_Contraseña'] as String?,
+      usuaUsuario: json['usua_Usuario'] as String?,
+      admin: json['admin'] as bool?,
+      empleado: json['empl_Nombre'] as String?,
     );
   }
 
-  
   Map<String, dynamic> toJson() {
     return {
-      
-      'Usua_Creacion': Usua_Creacion,
-      'Usua_Modificador': Usua_Modificador,
-      'Usua_Usuario': Usua_Usuario,
-      'Usua_Contraseña': Usua_Contrasena,
-      'Usua_Administrador': Usua_Administrador,
-      'Role_Id': role_Id,
-      'Empl_Id': empl_Id,
-
+      'usua_Usua_Creacion': usuaCreacion,
+      'usua_Fecha_Creacion': usuaFechaCreacion,
+      'usua_Usuario': usuaUsuario,
+      'usua_Contra': usuaContrasena,
+      'usua_Email': persEmail,
+      'pers_Id': emplId,
     };
   }
 }

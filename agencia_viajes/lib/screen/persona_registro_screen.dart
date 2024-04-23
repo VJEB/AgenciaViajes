@@ -30,8 +30,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       _nombre = '',
       _apellido = '',
       _telefono = '',
-      _sexo = '',
-      _estadoCivil = '';
+      _sexo = 'F',
+      _estadoCivil = 'Soltero(a)';
 
   int _estadoCivilSeleccionado = 0;
   final List<EstadoCivil> _estadosCiviles = [];
@@ -62,39 +62,6 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       });
     });
   }
-
-  // Future<(bool, Usuario)> postUsuario() async {
-  //   const String url = "https://etravel.somee.com/API/Paquete/Create";
-  //   Usuario paquete = Usuario(
-  //       paquId: 0,
-  //       paquNombre: _paquNombre,
-  //       paquPrecio: 0,
-  //       paquEstado: 0,
-  //       paquUsuaCreacion: 1,
-  //       paquFechaCreacion: DateTime.now().toUtc().toIso8601String(),
-  //       persId: 1);
-
-  //   var resultado = await http.post(
-  //     Uri.parse(url),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonEncode(paquete.toJson()),
-  //   );
-
-  //   if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
-  //     setState(() {
-  //       final responseJson = jsonDecode(resultado.body);
-  //       final response =
-  //           ServiceResult.fromJson(responseJson); // Parsing the whole response
-  //       if (response.code >= 200 && response.code < 300) {
-  //         paquete.paquId = int.parse(response.message);
-  //       } else {
-  //         print('Error al cargar los estados');
-  //       }
-  //     });
-  //     return (true, paquete);
-  //   }
-  //   return (false, paquete);
-  // }
 
   Future<List<EstadoCivil>> _cargarEstadosCiviles() async {
     List<EstadoCivil> list = [];
@@ -230,12 +197,21 @@ class _RegistroPersonaState extends State<RegistroPersona> {
           );
         });
 
-    await postPersona();
-    if (!mounted) return;
-    Navigator.of(context).pop();
+    int persId = await postPersona();
+    if (persId == 0) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => RegistroUsuario(
+                    persId: persId,
+                  )));
+    }
   }
 
-  Future<void> postPersona() async {
+  Future<int> postPersona() async {
     const String url = "https://localhost:44372/API/Persona/Create";
     Persona persona = Persona(
         cargId: 1,
@@ -260,12 +236,11 @@ class _RegistroPersonaState extends State<RegistroPersona> {
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
       final responseJson = jsonDecode(resultado.body);
-      final response =
-            ServiceResult.fromJson(responseJson);
+      final response = ServiceResult.fromJson(responseJson);
       final persId = int.parse(response.message);
-      Navigator.push(context,
-        MaterialPageRoute(builder: (_) => RegistroUsuario(persId: persId,)));
-      // Navigator.pushNamed(context, '/usuario/registro');
+      return persId;
+      // Navigator.pushNamed(context, '/Usuarios/registro',
+      //     arguments: {'persId': persId});
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -273,13 +248,17 @@ class _RegistroPersonaState extends State<RegistroPersona> {
             content: const Text('Ya existe una persona con esa información')),
       );
     }
+    return 0;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Datos generales", style: TextStyle(color: Color(0xFFFFBD59)),),
+        title: const Text(
+          "Datos generales",
+          style: TextStyle(color: Color(0xFFFFBD59)),
+        ),
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
