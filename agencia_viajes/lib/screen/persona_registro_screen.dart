@@ -4,7 +4,9 @@ import 'dart:convert';
 
 import 'package:agencia_viajes/models/estadoCivil.dart';
 import 'package:agencia_viajes/models/persona.dart';
+import 'package:agencia_viajes/models/service_result.dart';
 import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/models/pais.dart';
 import 'package:agencia_viajes/models/estado.dart';
@@ -60,6 +62,39 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       });
     });
   }
+
+  // Future<(bool, Usuario)> postUsuario() async {
+  //   const String url = "https://etravel.somee.com/API/Paquete/Create";
+  //   Usuario paquete = Usuario(
+  //       paquId: 0,
+  //       paquNombre: _paquNombre,
+  //       paquPrecio: 0,
+  //       paquEstado: 0,
+  //       paquUsuaCreacion: 1,
+  //       paquFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+  //       persId: 1);
+
+  //   var resultado = await http.post(
+  //     Uri.parse(url),
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: jsonEncode(paquete.toJson()),
+  //   );
+
+  //   if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+  //     setState(() {
+  //       final responseJson = jsonDecode(resultado.body);
+  //       final response =
+  //           ServiceResult.fromJson(responseJson); // Parsing the whole response
+  //       if (response.code >= 200 && response.code < 300) {
+  //         paquete.paquId = int.parse(response.message);
+  //       } else {
+  //         print('Error al cargar los estados');
+  //       }
+  //     });
+  //     return (true, paquete);
+  //   }
+  //   return (false, paquete);
+  // }
 
   Future<List<EstadoCivil>> _cargarEstadosCiviles() async {
     List<EstadoCivil> list = [];
@@ -222,9 +257,12 @@ class _RegistroPersonaState extends State<RegistroPersona> {
     );
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Insertado con Éxito')),
-      );
+      final responseJson = jsonDecode(resultado.body);
+      final response =
+            ServiceResult.fromJson(responseJson);
+      final persId = int.parse(response.message);
+      Navigator.push(context,
+        MaterialPageRoute(builder: (_) => RegistroUsuario(persId: persId,)));
       // Navigator.pushNamed(context, '/usuario/registro');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -239,6 +277,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Datos generales", style: TextStyle(color: Color(0xFFFFBD59)),),
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

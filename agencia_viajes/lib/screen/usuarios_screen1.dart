@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
@@ -80,27 +81,27 @@ class _UsuariosState extends State<Usuarios> {
               onPressed: () {
                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegistroUsuario()), // Reemplaza NuevaPantalla con el nombre de la pantalla de destino
+                  MaterialPageRoute(builder: (context) => const RegistroPersona()), // Reemplaza NuevaPantalla con el nombre de la pantalla de destino
                 );
               },
-              icon: Icon(Icons.add, color: Colors.black), // Color del icono
-              label: Text(
+              icon: const Icon(Icons.add, color: Colors.black), // Color del icono
+              label: const Text(
                 'Nuevo',
                 style: TextStyle(color: Colors.black), // Color del texto
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFFFBD59), // Color de fondo del botón
-                padding: EdgeInsets.symmetric(horizontal: 16.0), // Ajuste del padding horizontal
+                backgroundColor: const Color(0xFFFFBD59), // Color de fondo del botón
+                padding: const EdgeInsets.symmetric(horizontal: 16.0), // Ajuste del padding horizontal
               ),
             ),
-            SizedBox(height: 8), // Espacio entre el botón y la tabla
+            const SizedBox(height: 8), // Espacio entre el botón y la tabla
             Card(
               color: Colors.white10, // Color de fondo de la tarjeta
               child: FutureBuilder(
                 future: _fetchData,
                 builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
@@ -109,57 +110,57 @@ class _UsuariosState extends State<Usuarios> {
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
                         columnSpacing: 150,
-                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFFFFBD59)), // Estilo del encabezado de la tabla
-                        dataRowHeight: 60,
+                        headingTextStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFFFFBD59)), // Estilo del encabezado de la tabla
+                        dataRowMaxHeight: 60,
                         columns: <DataColumn>[
                           DataColumn(
-                            label: Text('Codigo', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                            label: const Text('Codigo', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
                             onSort: (columnIndex, _) {
                               _sortData('usua_Id');
                             },
                           ),
                           DataColumn(
-                            label: Text('Usuario', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
+                            label: const Text('Usuario', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
                             onSort: (columnIndex, _) {
                               _sortData('usua_Usuario');
                             },
                           ),
-                          DataColumn(
+                          const DataColumn(
                             label: Text('Admin', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
                           ),
-                          DataColumn(
+                          const DataColumn(
                             label: Text('Persona', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
                           ),
-                          DataColumn(
+                          const DataColumn(
                             label: Text('Rol', style: TextStyle(color: Colors.white)), // Estilo del texto de la columna
                           ),
-                          DataColumn(
+                          const DataColumn(
                             label: Center(child: Text('Acciones', style: TextStyle(color: Colors.white))), // Título de acciones centrado
                           ),
                         ],
                         rows: categories.map((category) {
                           return DataRow(
                             cells: <DataCell>[
-                              DataCell(Text(category['usua_Id'].toString(), style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
-                              DataCell(Text(category['usua_Usuario'], style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
-                              DataCell(Text(category['usua_Admin'].toString(), style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
-                              DataCell(Text(category['persona'] != null ? category['persona'] : '', style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
-                              DataCell(Text(category['rol_Descripcion'] != null ? category['rol_Descripcion'] : '', style: TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['usua_Id'].toString(), style: const TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['usua_Usuario'], style: const TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['usua_Admin'].toString(), style: const TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text( category['persona'] ?? '', style: const TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
+                              DataCell(Text(category['rol_Descripcion'] ?? '', style: const TextStyle(color: Color(0xFFFFBD59)))), // Estilo del texto de la celda
                               DataCell(Row(
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.edit),
-                                    color: Color(0xFFFFBD59),
+                                    icon: const Icon(Icons.edit),
+                                    color: const Color(0xFFFFBD59),
                                     onPressed: () {},
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.details),
-                                    color: Color(0xFFFFBD59),
+                                    icon: const Icon(Icons.details),
+                                    color: const Color(0xFFFFBD59),
                                     onPressed: () {},
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.delete),
-                                    color: Color(0xFFFFBD59),
+                                    icon: const Icon(Icons.delete),
+                                    color: const Color(0xFFFFBD59),
                                     onPressed: () {},
                                   ),
                                 ],

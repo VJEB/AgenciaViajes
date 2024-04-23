@@ -4,30 +4,35 @@
   lib/screens/simple_login.dart
 */
 
+import 'package:agencia_viajes/models/persona.dart';
+import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegistroUsuario extends StatefulWidget {
-  final Function(String? email, String? password)? onSubmitted;
+  final int persId;
 
-  const RegistroUsuario({this.onSubmitted, super.key});
+  const RegistroUsuario({required this.persId, super.key});
 
   @override
   State<RegistroUsuario> createState() => _RegistroUsuarioState();
 }
 
 class _RegistroUsuarioState extends State<RegistroUsuario> {
-  late String email, password, confirmPassword;
-  String? emailError, passwordError;
-  Function(String? email, String? password)? get onSubmitted =>
-      widget.onSubmitted;
+  late String usuario, persEmail, password, confirmPassword;
+  String? usuarioError, emailError, passwordError;
+  
+  late int? persId;
 
   @override
   void initState() {
     super.initState();
-    email = '';
+    usuario = '';
+    persId = widget.persId;
+    persEmail = '';
     password = '';
     confirmPassword = '';
 
+    usuarioError = null;
     emailError = null;
     passwordError = null;
   }
@@ -45,8 +50,16 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     RegExp emailExp = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-    bool isValid = true;
-    if (email.isEmpty || !emailExp.hasMatch(email)) {
+    bool isValid = true;  
+    
+    if (usuario.isEmpty) {
+      setState(() {
+        usuarioError = 'El correo es inválido';
+      });
+      isValid = false;
+    }
+
+    if (persEmail.isEmpty || !emailExp.hasMatch(persEmail)) {
       setState(() {
         emailError = 'El correo es inválido';
       });
@@ -71,9 +84,6 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
   void submit() {
     if (validate()) {
-      if (onSubmitted != null) {
-        onSubmitted!(email, password);
-      }
     }
   }
 
@@ -82,6 +92,19 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Registro de usuarios", style: TextStyle(color: Color(0xFFFFBD59)),),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Volver',
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const RegistroPersona()));
+          },
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
+      ),
       body: Container(
         color: Colors.black,
         child: Padding(
@@ -118,14 +141,25 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
               TextInput(
                 onChanged: (value) {
                   setState(() {
-                    email = value;
+                    usuario = value;
                   });
                 },
-                labelText: 'Email',
+                labelText: 'Usuario',
+                errorText: usuarioError,
+                textInputAction: TextInputAction.next,
+                autoFocus: true,
+              ),
+              SizedBox(height: screenHeight * .05),
+              TextInput(
+                onChanged: (value) {
+                  setState(() {
+                    persEmail = value;
+                  });
+                },
+                labelText: 'Correo electrónico',
                 errorText: emailError,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                autoFocus: true,
               ),
               SizedBox(height: screenHeight * .025),
               TextInput(

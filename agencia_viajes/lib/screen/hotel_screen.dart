@@ -328,8 +328,8 @@ class _HotelScreenState extends State<HotelScreen> {
             leading: CircularIconButton(
               iconData: Icons.close,
               onPressed: () {
-                                        Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => const Layout()));
+                Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (_) => const Layout()));
               },
               iconColor: Colors.grey[800],
             ),
@@ -362,29 +362,30 @@ class _HotelScreenState extends State<HotelScreen> {
                         children: [
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Número de camas:",
+                                const Text("Habitaciones:",
                                     style: TextStyle(color: Colors.white)),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.remove,
+                                      icon: const Icon(Icons.remove,
                                           color: Colors.white),
                                       onPressed: () {
                                         // Implement decrement logic
                                       },
                                     ),
-                                    SizedBox(width: 10),
-                                    Text("1",
+                                    const SizedBox(width: 10),
+                                    const Text("1",
                                         style: TextStyle(
                                             color: Colors
                                                 .white)), // Display selected value
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     IconButton(
                                       icon:
-                                          Icon(Icons.add, color: Colors.white),
+                                          const Icon(Icons.add, color: Colors.white),
                                       onPressed: () {
                                         // Implement increment logic
                                       },
@@ -394,32 +395,32 @@ class _HotelScreenState extends State<HotelScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(width: 20),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Número de personas:",
+                                const Text("Personas:",
                                     style: TextStyle(color: Colors.white)),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.remove,
+                                      icon: const Icon(Icons.remove,
                                           color: Colors.white),
                                       onPressed: () {
                                         // Implement decrement logic
                                       },
                                     ),
-                                    SizedBox(width: 10),
-                                    Text("1",
+                                    const SizedBox(width: 10),
+                                    const Text("1",
                                         style: TextStyle(
                                             color: Colors
                                                 .white)), // Display selected value
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     IconButton(
                                       icon:
-                                          Icon(Icons.add, color: Colors.white),
+                                          const Icon(Icons.add, color: Colors.white),
                                       onPressed: () {
                                         // Implement increment logic
                                       },
@@ -428,41 +429,6 @@ class _HotelScreenState extends State<HotelScreen> {
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: "Tipo de cama",
-                          labelStyle: TextStyle(color: Colors.white),
-                          border: OutlineInputBorder(),
-                        ),
-                        value:
-                            null, // Selected value, set to null if no value is selected initially
-                        onChanged: (value) {
-                          // Implement dropdown value change logic
-                        },
-                        items: [
-                          DropdownMenuItem(
-                            value: "Single",
-                            child: Text("Single",
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                          DropdownMenuItem(
-                            value: "Double",
-                            child: Text("Double",
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                          DropdownMenuItem(
-                            value: "King",
-                            child: Text("King",
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                          DropdownMenuItem(
-                            value: "Queen",
-                            child: Text("Queen",
-                                style: TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),

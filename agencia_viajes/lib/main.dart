@@ -29,10 +29,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))
             .copyWith(background: Colors.black),
       ),
-      routes: {
-        '/inicio': (context) => const Layout(),
-        '/register': (context) => const RegistroUsuario(),
-      },
+      // routes: {
+      //   '/inicio': (context) => const Layout(),
+      //   '/register': (context) => const RegistroUsuario(),
+      // },
     );
   }
 }
