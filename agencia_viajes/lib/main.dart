@@ -1,3 +1,7 @@
+import 'package:agencia_viajes/models/hotel.dart';
+import 'package:agencia_viajes/models/place.dart';
+import 'package:agencia_viajes/models/profile.dart';
+import 'package:agencia_viajes/screen/hotel_screen.dart';
 import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
 import 'screen/layout.dart';
@@ -25,10 +29,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFFBD59))
             .copyWith(background: Colors.black),
       ),
-      routes: {
-        '/inicio': (context) => const Layout(),
-        '/register': (context) => const RegistroUsuario(),
-      },
+      // routes: {
+      //   '/inicio': (context) => const Layout(),
+      //   '/register': (context) => const RegistroUsuario(),
+      // },
     );
   }
 }

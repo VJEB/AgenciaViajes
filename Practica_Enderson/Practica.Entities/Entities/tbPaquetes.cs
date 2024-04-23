@@ -12,6 +12,8 @@ namespace Agencia.Entities.Entities
         {
             tbDetallePorPaquete = new HashSet<tbDetallePorPaquete>();
             tbFacturasDetalles = new HashSet<tbFacturasDetalles>();
+            tbReservaciones = new HashSet<tbReservaciones>();
+            tbViajes = new HashSet<tbViajes>();
         }
 
         public int Paqu_Id { get; set; }
@@ -24,10 +26,9 @@ namespace Agencia.Entities.Entities
         public int Paqu_Estado { get; set; }
         public decimal Paqu_Precio { get; set; }
 
-        public virtual tbUsuarios Paqu_Usua_CreacionNavigation { get; set; }
-        public virtual tbUsuarios Paqu_Usua_ModificaNavigation { get; set; }
-        public virtual tbPersonas Pers { get; set; }
         public virtual ICollection<tbDetallePorPaquete> tbDetallePorPaquete { get; set; }
         public virtual ICollection<tbFacturasDetalles> tbFacturasDetalles { get; set; }
+        public virtual ICollection<tbReservaciones> tbReservaciones { get; set; }
+        public virtual ICollection<tbViajes> tbViajes { get; set; }
     }
 }

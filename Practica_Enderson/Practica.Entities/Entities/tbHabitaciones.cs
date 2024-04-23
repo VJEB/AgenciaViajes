@@ -14,14 +14,13 @@ namespace Agencia.Entities.Entities
         }
 
         public int Habi_Id { get; set; }
-        public string Habi_Numero { get; set; }
         public int Habi_NumCamas { get; set; }
         public int Habi_NumPersonas { get; set; }
         public int TiCa_Id { get; set; }
         public int Habi_Usua_Creacion { get; set; }
         public DateTime Habi_Fecha_Creacion { get; set; }
-        public int Habi_Usua_Modifica { get; set; }
-        public DateTime Habi_Fecha_Modifica { get; set; }
+        public int? Habi_Usua_Modifica { get; set; }
+        public DateTime? Habi_Fecha_Modifica { get; set; }
         public int Habi_Estado { get; set; }
 
         public virtual tbUsuarios Habi_Usua_CreacionNavigation { get; set; }

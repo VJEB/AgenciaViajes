@@ -11,6 +11,7 @@ namespace Agencia.Entities.Entities
         public tbHabitacionesPorHotel()
         {
             tbFotografiasPorHabitacion = new HashSet<tbFotografiasPorHabitacion>();
+            tbReservaciones = new HashSet<tbReservaciones>();
         }
 
         public int HaHo_Id { get; set; }
@@ -18,9 +19,11 @@ namespace Agencia.Entities.Entities
         public decimal HaHo_CargoExtraPersona { get; set; }
         public int Hote_Id { get; set; }
         public int Habi_Id { get; set; }
+        public string HaHo_Numero { get; set; }
 
         public virtual tbHabitaciones Habi { get; set; }
         public virtual tbHoteles Hote { get; set; }
         public virtual ICollection<tbFotografiasPorHabitacion> tbFotografiasPorHabitacion { get; set; }
+        public virtual ICollection<tbReservaciones> tbReservaciones { get; set; }
     }
 }

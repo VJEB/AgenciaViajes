@@ -25,14 +25,14 @@ namespace Agencia.API.Controllers
         public IActionResult FotoPorHabitacion(int HaHo_Id)
         {
             var list = _agenciaServicio.FotosPorHabitacion(HaHo_Id);
-            return Ok(list);
+            return Ok(list.Data);
         }
 
         [HttpGet("FotoPorHotelList/{Hote_Id}")]
         public IActionResult FotoPorHoteles(int Hote_Id)
         {
             var list = _agenciaServicio.FotosPorHotel(Hote_Id);
-            return Ok(list);
+            return Ok(list.Data);
         }
 
         [HttpGet("HabitacionPorHotelList/{Hote_Id}")]

@@ -12,6 +12,7 @@ namespace Agencia.Entities.Entities
         public tbTransportes()
         {
             tbHorariosTransportes = new HashSet<tbHorariosTransportes>();
+            tbViajes = new HashSet<tbViajes>();
         }
 
         public int Tran_Id { get; set; }
@@ -34,10 +35,9 @@ namespace Agencia.Entities.Entities
         public string TiTr_Descripcion { get; set; }
 
         public virtual tbTiposTransportes TiTr { get; set; }
-        public virtual tbCiudades Tran_PuntoFinalNavigation { get; set; }
-        public virtual tbCiudades Tran_PuntoInicioNavigation { get; set; }
         public virtual tbUsuarios Tran_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Tran_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbHorariosTransportes> tbHorariosTransportes { get; set; }
+        public virtual ICollection<tbViajes> tbViajes { get; set; }
     }
 }

@@ -55,7 +55,7 @@ class _PaquetesState extends State<PaquetesForm> {
 
   String _paqueteNombre = "";
 
-  String url = "https://localhost:44372/API/Paquete/Edit/";
+  String url = "https://etravel.somee.com/API/Paquete/Edit/";
 
   void mostrarDialogNombre(BuildContext context, [bool mounted = true]) async {
     showDialog(

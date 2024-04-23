@@ -38,7 +38,7 @@ class _PaquetesState extends State<Paquetes> {
 
   // String _paqueteSeleccionado = '';
 
-  final List<Paquete> _paquetes = [];
+  // final List<Paquete> _paquetes = [];
   Future<List<Paquete>>? _paquetesFuture;
 
   @override

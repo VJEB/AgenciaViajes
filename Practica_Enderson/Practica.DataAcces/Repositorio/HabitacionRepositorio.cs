@@ -54,23 +54,23 @@ namespace Agencia.DataAcces.Repositorio
             }
         }
 
-        public IEnumerable<tbHabitacionesPorHotel> FotosPorHabitacion(int HaHo_Id)
+        public IEnumerable<tbFotografiasPorHabitacion> FotosPorHabitacion(int HaHo_Id)
         {
-            List<tbHabitacionesPorHotel> result = new List<tbHabitacionesPorHotel>();
+            List<tbFotografiasPorHabitacion> result = new List<tbFotografiasPorHabitacion>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
                 var parameters = new { HaHo_Id = HaHo_Id };
-                result = db.Query<tbHabitacionesPorHotel>(ScriptBaseDatos.FoHa_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
+                result = db.Query<tbFotografiasPorHabitacion>(ScriptBaseDatos.FoHa_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
                 return result;
             }
         }
-        public IEnumerable<tbHabitacionesPorHotel> FotosPorHotel(int Hote_Id)
+        public IEnumerable<tbFotografiasPorHabitacion> FotosPorHotel(int Hote_Id)
         {
-            List<tbHabitacionesPorHotel> result = new List<tbHabitacionesPorHotel>();
+            List<tbFotografiasPorHabitacion> result = new List<tbFotografiasPorHabitacion>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
                 var parameters = new { Hote_Id = Hote_Id };
-                result = db.Query<tbHabitacionesPorHotel>(ScriptBaseDatos.Hote_Fotografias, parameters, commandType: CommandType.StoredProcedure).ToList();
+                result = db.Query<tbFotografiasPorHabitacion>(ScriptBaseDatos.Hote_Fotografias, parameters, commandType: CommandType.StoredProcedure).ToList();
                 return result;
             }
         }

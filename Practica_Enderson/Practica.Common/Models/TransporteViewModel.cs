@@ -27,6 +27,5 @@ namespace Agencia.Common.Models
         public string PuntoFinal { get; set; }
         [NotMapped]
         public string TiTr_Descripcion { get; set; }
-
     }
 }

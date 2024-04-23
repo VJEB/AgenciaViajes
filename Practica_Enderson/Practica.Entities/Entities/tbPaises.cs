@@ -19,7 +19,9 @@ namespace Agencia.Entities.Entities
         public DateTime? Pais_Fecha_Creacion { get; set; }
         public int? Pais_Usua_Modifica { get; set; }
         public DateTime? Pais_Fecha_Modifica { get; set; }
+        public int? Impu_Id { get; set; }
 
+        public virtual tbImpuestos Impu { get; set; }
         public virtual tbUsuarios Pais_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Pais_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbEstados> tbEstados { get; set; }

@@ -6,7 +6,7 @@ class Persona {
   final String persSexo;
   final int persTelefono;
   final int esCiId;
-  final String ciudId;
+  final int ciudId;
   final int persUsuaCreacion;
   final String persFechaCreacion;
   final int? persUsuaModifica;

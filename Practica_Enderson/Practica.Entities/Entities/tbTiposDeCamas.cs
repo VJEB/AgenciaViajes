@@ -17,11 +17,9 @@ namespace Agencia.Entities.Entities
         public string TiCa_Nombre { get; set; }
         public int TiCa_Usua_Creacion { get; set; }
         public DateTime TiCa_Fecha_Creacion { get; set; }
-        public int TiCa_Usua_Modifica { get; set; }
-        public DateTime TiCa_Fecha_Modifica { get; set; }
+        public int? TiCa_Usua_Modifica { get; set; }
+        public DateTime? TiCa_Fecha_Modifica { get; set; }
 
-        public virtual tbUsuarios TiCa_Usua_CreacionNavigation { get; set; }
-        public virtual tbUsuarios TiCa_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbHabitaciones> tbHabitaciones { get; set; }
     }
 }

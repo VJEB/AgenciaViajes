@@ -32,7 +32,7 @@ namespace Agencia.API.Controllers
         public IActionResult TiposTransporteList()
         {
             var list = _agenciaServicio.ListTipoTransporte();
-            return Ok(list);
+            return Ok(list.Data);
         }
     }
 }
