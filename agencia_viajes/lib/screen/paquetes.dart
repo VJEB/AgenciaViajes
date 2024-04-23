@@ -184,7 +184,7 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   Future<(bool, Paquete)> postPaquete() async {
-    const String url = "https://localhost:44372/API/Paquete/Create";
+    const String url = "https://etravel.somee.com/API/Paquete/Create";
     Paquete paquete = Paquete(
         paquId: 0,
         paquNombre: _paquNombre,
