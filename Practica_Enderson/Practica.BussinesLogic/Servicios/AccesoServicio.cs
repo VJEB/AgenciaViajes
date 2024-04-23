@@ -73,15 +73,14 @@ namespace Practica.BussinesLogic.Servicios
             var result = new ServiceResult();
             try
             {
-                var lost = _usuarioRepositorio.Insertar(item);
-                if (lost.CodeStatus > 0)
+                var response = _usuarioRepositorio.Insertar(item);
+                if (response.CodeStatus == 1)
                 {
-                    return result.Ok(lost);
+                    return result.Ok(response);
                 }
                 else
                 {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
+                    return result.Error("Error al guardar el nuevo usuario");
                 }
 
             }
