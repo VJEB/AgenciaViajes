@@ -2,7 +2,8 @@ import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:agencia_viajes/screen/dashboard_screen.dart';
 import 'package:agencia_viajes/screen/hoteles_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:agencia_viajes/screen/usuarios_screen1.dart';
+// import 'package:agencia_viajes/screen/usuarios_screen1.dart';
+import 'package:agencia_viajes/screen/perfil_screen.dart';
 
 class Layout extends StatefulWidget {
   const Layout({super.key});
@@ -17,7 +18,7 @@ class _LayoutState extends State<Layout> {
   final List<Widget> _widgetOptions = <Widget>[
     const Dashboards(),
     const Hoteles(),
-    Usuarios(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

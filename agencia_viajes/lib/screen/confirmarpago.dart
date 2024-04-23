@@ -1,18 +1,17 @@
 import 'dart:convert';
-import 'package:agencia_viajes/screen/confirmarpago.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agencia_viajes/screen/paquetes.dart';
+import 'package:agencia_viajes/screen/carrito.dart';
 import 'package:http/http.dart' as http;
 
-class Carrito extends StatefulWidget {
-  const Carrito({Key? key}) : super(key: key);
+class ConfirmarPago extends StatefulWidget {
+  const ConfirmarPago({Key? key}) : super(key: key);
 
   @override
-  State<Carrito> createState() => _CarritoState();
+  State<ConfirmarPago> createState() => _ConfirmarPagoState();
 }
 
-class _CarritoState extends State<Carrito> {
+class _ConfirmarPagoState extends State<ConfirmarPago> {
   String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
   List<Map<String, dynamic>> carrito = [];
 
@@ -45,81 +44,93 @@ class _CarritoState extends State<Carrito> {
     }
   }
 
-  void _eliminarElementoDelCarrito(Map<String, dynamic> elemento) {
-    setState(() {
-      final index = carrito.indexWhere((item) =>
-          item['paqu_Nombre'] == elemento['paqu_Nombre'] &&
-          item['paqu_Precio'] == elemento['paqu_Precio']);
-      if (index != -1) {
-        if (carrito[index]['cantidad'] != null &&
-            carrito[index]['cantidad'] > 1) {
-          carrito[index]['cantidad']--;
-        } else {
-          carrito.removeAt(index);
-        }
-      }
-    });
-    _guardarCarrito();
-  }
-
   @override
   Widget build(BuildContext context) {
     _cargarCarrito(); // Cargar el carrito cada vez que se construye la pantalla
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        
+        title: Text(
+          'RESUMEN',
+          style: TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => Paquetes()),
+              MaterialPageRoute(builder: (_) => Carrito()),
             );
           },
         ),
       ),
       body: Container(
         color: Colors.black,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: _buildCarritoList(),
-              ),
-            ),
-            SizedBox(height: 20), // Espacio entre la lista y el botón
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ConfirmarPago()), // Reemplaza NuevaPantalla con el nombre de la pantalla de destino
-                );
-                },
-                icon: Icon(Icons.payment),
-                label: Text(
-                  'Proceder con mi pago',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20), // Espacio entre el borde superior y el texto "Detalle de Compra"
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.assignment, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text(
+                    'Detalle de Compra',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xFFFFBD59)),
+                ],
+              ),
+              SizedBox(height: 20), // Espacio entre el texto y la lista de elementos del carrito
+              _buildCarritoList(),
+              SizedBox(height: 20), // Espacio entre la lista y las tarjetas de métodos de pago
+              ListTile(
+                leading: Icon(Icons.payment, color: Colors.white),
+                title: Text(
+                  'Métodos de pago',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-            ),
-            SizedBox(height: 20), // Espacio adicional después del botón
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40), // Agregado el padding horizontal
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildPaymentMethodCard(Icons.credit_card ),
+                    _buildPaymentMethodCard(Icons.attach_money),
+                    _buildPaymentMethodCard(Icons.book),
+                  ],
+                ),
+              ),
+              SizedBox(height: 200), // Espacio adicional después de las tarjetas de métodos de pago
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentMethodCard(IconData icon) {
+    return Card(
+      color: Colors.white10,
+      clipBehavior: Clip.hardEdge,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white, size: 40),
           ],
         ),
       ),
     );
   }
 
-  List<Widget> _buildCarritoList() {
-    List<Widget> lista = [];
+  Widget _buildCarritoList() {
     // Agrupar elementos del carrito por nombre y precio
     final Map<String, dynamic> groupedCarrito = {};
     carrito.forEach((element) {
@@ -127,7 +138,9 @@ class _CarritoState extends State<Carrito> {
       groupedCarrito[key] ??= [];
       groupedCarrito[key].add(element);
     });
+
     // Construir la lista de elementos agrupados
+    List<Widget> lista = [];
     groupedCarrito.forEach((key, value) {
       final cantidad = value.length;
       final element = value.first;
@@ -135,6 +148,7 @@ class _CarritoState extends State<Carrito> {
         Card(
           color: Colors.white10,
           clipBehavior: Clip.hardEdge,
+          margin: EdgeInsets.symmetric(vertical: 10), // Agregado el margen vertical
           child: Stack(
             children: [
               InkWell(
@@ -180,22 +194,12 @@ class _CarritoState extends State<Carrito> {
                   ),
                 ),
               ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  icon: Icon(Icons.close, color: Colors.red),
-                  onPressed: () {
-                    _eliminarElementoDelCarrito(element);
-                  },
-                ),
-              ),
             ],
           ),
         ),
       );
     });
-    return lista;
+    return Column(children: lista);
   }
 
   Widget _buildQuantityCircle(int cantidad) {
