@@ -30,7 +30,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Agen].[tbAirbnbs]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Agen].[tbDetallePorPaquete]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbFotografiasPorAirbnbs]",
          "ObjectType": 0
       },
       {
@@ -38,7 +46,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Agen].[tbFotografiasPorHabitacion2]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Agen].[tbHabitaciones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbHabitacionesCategorias]",
          "ObjectType": 0
       },
       {
@@ -58,7 +74,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Agen].[tbReservaciones]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Agen].[tbTransportes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Agen].[tbViajes]",
          "ObjectType": 0
       },
       {
@@ -75,6 +99,10 @@
       },
       {
          "Name": "[Gral].[tbEstadosCiviles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbImpuestos]",
          "ObjectType": 0
       },
       {

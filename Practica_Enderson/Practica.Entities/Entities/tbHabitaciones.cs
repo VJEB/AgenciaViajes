@@ -10,7 +10,7 @@ namespace Agencia.Entities.Entities
     {
         public tbHabitaciones()
         {
-            tbHabitacionesPorHotel = new HashSet<tbHabitacionesPorHotel>();
+            tbHabitacionesCategorias = new HashSet<tbHabitacionesCategorias>();
         }
 
         public int Habi_Id { get; set; }
@@ -26,6 +26,6 @@ namespace Agencia.Entities.Entities
         public virtual tbUsuarios Habi_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Habi_Usua_ModificaNavigation { get; set; }
         public virtual tbTiposDeCamas TiCa { get; set; }
-        public virtual ICollection<tbHabitacionesPorHotel> tbHabitacionesPorHotel { get; set; }
+        public virtual ICollection<tbHabitacionesCategorias> tbHabitacionesCategorias { get; set; }
     }
 }

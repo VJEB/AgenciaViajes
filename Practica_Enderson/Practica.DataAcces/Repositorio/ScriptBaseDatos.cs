@@ -70,6 +70,7 @@ namespace Practica.DataAcces.Repositorio
         public static string TiCa_Mostrar = "[Gral].[SP_TiposDeCamas_Mostrar]";
         #endregion
 
+        public static string HaCa_Mostrar = "[Agen].[SP_HabitacionesCategorias_Mostrar]";
 
         #region Hoteles
         public static string Hote_Mostrar = "[Agen].[SP_Hoteles_Mostrar]";

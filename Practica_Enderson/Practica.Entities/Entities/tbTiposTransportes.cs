@@ -17,8 +17,8 @@ namespace Agencia.Entities.Entities
         public string TiTr_Descripcion { get; set; }
         public int TiTr_Usua_Creacion { get; set; }
         public DateTime TiTr_Fecha_Creacion { get; set; }
-        public int TiTr_Usua_Modifica { get; set; }
-        public DateTime TiTr_Fecha_Modifica { get; set; }
+        public int? TiTr_Usua_Modifica { get; set; }
+        public DateTime? TiTr_Fecha_Modifica { get; set; }
         public bool? TiTr_Estado { get; set; }
 
         public virtual tbUsuarios TiTr_Usua_CreacionNavigation { get; set; }

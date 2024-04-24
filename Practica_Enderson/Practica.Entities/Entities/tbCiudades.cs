@@ -8,13 +8,23 @@ namespace Agencia.Entities.Entities
 {
     public partial class tbCiudades
     {
+        public tbCiudades()
+        {
+            tbTransportesTran_PuntoFinalNavigation = new HashSet<tbTransportes>();
+            tbTransportesTran_PuntoInicioNavigation = new HashSet<tbTransportes>();
+        }
+
         public int Ciud_Id { get; set; }
         public string Ciud_Codigo { get; set; }
+        public string Ciud_UrlImagen { get; set; }
         public string Ciud_Descripcion { get; set; }
         public int? Esta_Id { get; set; }
         public int? Ciud_Usua_Creacion { get; set; }
         public DateTime? Ciud_Fecha_Creacion { get; set; }
         public int? Ciud_Usua_Modifica { get; set; }
         public DateTime? Ciud_Fecha_Modifica { get; set; }
+
+        public virtual ICollection<tbTransportes> tbTransportesTran_PuntoFinalNavigation { get; set; }
+        public virtual ICollection<tbTransportes> tbTransportesTran_PuntoInicioNavigation { get; set; }
     }
 }

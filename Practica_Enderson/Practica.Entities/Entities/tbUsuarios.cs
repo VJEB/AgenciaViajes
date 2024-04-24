@@ -55,7 +55,7 @@ namespace Agencia.Entities.Entities
             tbViajesViaj_Usua_ModificaNavigation = new HashSet<tbViajes>();
         }
 
-        public int? Usua_Id { get; set; }
+        public int Usua_Id { get; set; }
         public string Usua_Usuario { get; set; }
         public string Usua_Contra { get; set; }
         public bool? Usua_Admin { get; set; }
@@ -69,8 +69,8 @@ namespace Agencia.Entities.Entities
         [NotMapped]
 
         public string? Pers_Email { get; set; }
-        public string? Usua_UrlImagen { get; set; }
-        public string? Usua_CodigoVerificacion { get; set; }
+        public string Usua_UrlImagen { get; set; }
+        public string Usua_CodigoVerificacion { get; set; }
 
         public virtual tbPersonas Pers { get; set; }
         public virtual tbRoles Rol { get; set; }

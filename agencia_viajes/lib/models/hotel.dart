@@ -6,7 +6,7 @@ class Hotel {
   final double hotePrecioTodoIncluido;
   final int hoteEstrellas;
   final String hoteImagen;
-  final String ciudId;
+  final int ciudId;
   final String ciudDescripcion;
   final String estaDescripcion;
   final String paisDescripcion;

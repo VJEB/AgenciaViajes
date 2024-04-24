@@ -15,14 +15,10 @@ namespace Agencia.Entities.Entities
         }
 
         public int HaHo_Id { get; set; }
-        public decimal HaHo_PrecioPorNoche { get; set; }
-        public decimal HaHo_CargoExtraPersona { get; set; }
-        public int Hote_Id { get; set; }
-        public int Habi_Id { get; set; }
+        public int HaCa_Id { get; set; }
         public string HaHo_Numero { get; set; }
 
-        public virtual tbHabitaciones Habi { get; set; }
-        public virtual tbHoteles Hote { get; set; }
+        public virtual tbHabitacionesCategorias HaCa { get; set; }
         public virtual ICollection<tbFotografiasPorHabitacion> tbFotografiasPorHabitacion { get; set; }
         public virtual ICollection<tbReservaciones> tbReservaciones { get; set; }
     }

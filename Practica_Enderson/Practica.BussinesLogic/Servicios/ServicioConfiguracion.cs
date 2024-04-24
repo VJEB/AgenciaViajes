@@ -24,6 +24,7 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<RolRepositorio>();
             service.AddScoped<DetallePorPaqueteRepositorio>();
             service.AddScoped<HabitacionRepositorio>();
+            service.AddScoped<HabitacionesCategoriasRepositorio>();
             service.AddScoped<HotelRepositorio>();
             service.AddScoped<PaqueteRepositorio>();
             service.AddScoped<TransporteRepositorio>();

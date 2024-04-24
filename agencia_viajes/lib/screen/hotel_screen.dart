@@ -20,13 +20,12 @@ class HotelScreen extends StatefulWidget {
 }
 
 class _HotelScreenState extends State<HotelScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
   String persId = 1.toString();
 
   String urlPaquetes = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
-  
+
   DateTime fechaInicio = DateTime.now();
   DateTime fechaFin = DateTime.now();
 
@@ -35,14 +34,11 @@ class _HotelScreenState extends State<HotelScreen> {
   var numeroDeCamas;
 
   var numeroDePersonas;
-  
+
   String _paquNombre = '';
-  
-  
 
   Place get place => widget.place;
   Hotel get hotel => widget.hotel;
-
 
   late Paquete _paqueteSeleccionado;
   final List<Paquete> _paquetes = [];
@@ -55,11 +51,13 @@ class _HotelScreenState extends State<HotelScreen> {
     _paquetesFuture ??= _cargarPaquetes();
     // _habitacionesFuture ??= _habitacionesPaquetes();
   }
+
   void _onPaqueteSelected(Paquete paquete) {
     setState(() {
       _paqueteSeleccionado = paquete;
     });
   }
+
   Future<List<Paquete>> _cargarPaquetes() async {
     List<Paquete> list = [];
     final respuesta = await http.get(Uri.parse(urlPaquetes));
@@ -81,10 +79,12 @@ class _HotelScreenState extends State<HotelScreen> {
   void _selectDate(BuildContext context, bool modificarFechaInicio) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: modificarFechaInicio ? fechaInicio : fechaFin, // Refer step 1
+      initialDate:
+          modificarFechaInicio ? fechaInicio : fechaFin, // Refer step 1
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
-      helpText: 'Seleccione la fecha ${modificarFechaInicio ?  'de inicio.' : 'final.'}' , // Can be used as title
+      helpText:
+          'Seleccione la fecha ${modificarFechaInicio ? 'de inicio.' : 'final.'}', // Can be used as title
       cancelText: 'Cancelar',
       confirmText: 'Ok',
     );
@@ -98,6 +98,7 @@ class _HotelScreenState extends State<HotelScreen> {
       });
     }
   }
+
   void mostrarDialog(BuildContext context, [bool mounted = true]) async {
     showDialog(
       context: context,
@@ -119,7 +120,10 @@ class _HotelScreenState extends State<HotelScreen> {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text(
               "${fechaInicio.toLocal()}".split(' ')[0],
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFFFBD59)),
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFFBD59)),
             ),
             ElevatedButton.icon(
               onPressed: () => _selectDate(context, true), // Refer step 3
@@ -136,7 +140,10 @@ class _HotelScreenState extends State<HotelScreen> {
             ),
             Text(
               "${fechaInicio.toLocal()}".split(' ')[0],
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFFFBD59)),
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFFBD59)),
             ),
             ElevatedButton.icon(
               onPressed: () => _selectDate(context, false), // Refer step 3
@@ -146,33 +153,31 @@ class _HotelScreenState extends State<HotelScreen> {
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               icon: const Icon(Icons.calendar_today),
-               // style: ButtonStyle(backgroundColor: Color(0xFFFFBD59)) ,
+              // style: ButtonStyle(backgroundColor: Color(0xFFFFBD59)) ,
             ),
             const SizedBox(
               height: 10.0,
             ),
             FutureBuilder<List<Paquete>>(
-                      future: _paquetesFuture, // Use the assigned future
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text(
-                            "Cargando...",
-                            style: TextStyle(color: Color(0xFFFFBD59)),
-                          );
-                        } else if (snapshot.hasData) {
-                          _paquetes.addAll(snapshot.data as Iterable<Paquete>);
-                          return PaquetesDdl(
-                              paises: _paquetes, onPaisSelected: _onPaqueteSelected);
-                        } else {
-                          return const Text(
-                            "Error al cargar los países",
-                            style: TextStyle(color: Colors.red),
-                          );
-                        }
-                      },
-                    ),
-            
+              future: _paquetesFuture, // Use the assigned future
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text(
+                    "Cargando...",
+                    style: TextStyle(color: Color(0xFFFFBD59)),
+                  );
+                } else if (snapshot.hasData) {
+                  _paquetes.addAll(snapshot.data as Iterable<Paquete>);
+                  return PaquetesDdl(
+                      paises: _paquetes, onPaisSelected: _onPaqueteSelected);
+                } else {
+                  return const Text(
+                    "Error al cargar los países",
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+              },
+            ),
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -183,7 +188,6 @@ class _HotelScreenState extends State<HotelScreen> {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           await postReservacion();
-                          
                         }
                       },
                       icon: const Icon(Icons.save),
@@ -199,7 +203,7 @@ class _HotelScreenState extends State<HotelScreen> {
 
   Future<void> postReservacion() async {
     String url = "https://etravel.somee.com/API/Reservacion/Create";
-    
+
     // Reservacion reser = Reservacion(
     // );
 
@@ -213,13 +217,11 @@ class _HotelScreenState extends State<HotelScreen> {
     //   setState(() {
     //     //AAAa???
     //   });
-        Navigator.push(
+    Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => PaquetesForm(
-                  paquete: _paqueteSeleccionado
-                  ),
-                ));
+          builder: (_) => PaquetesForm(paquete: _paqueteSeleccionado),
+        ));
     //   ScaffoldMessenger.of(context).showSnackBar(
     //     const SnackBar(
     //         backgroundColor: Color.fromARGB(255, 62, 208, 57),
@@ -329,7 +331,7 @@ class _HotelScreenState extends State<HotelScreen> {
               iconData: Icons.close,
               onPressed: () {
                 Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (_) => const Layout()));
+                    context, MaterialPageRoute(builder: (_) => const Layout()));
               },
               iconColor: Colors.grey[800],
             ),
@@ -384,8 +386,8 @@ class _HotelScreenState extends State<HotelScreen> {
                                                 .white)), // Display selected value
                                     const SizedBox(width: 10),
                                     IconButton(
-                                      icon:
-                                          const Icon(Icons.add, color: Colors.white),
+                                      icon: const Icon(Icons.add,
+                                          color: Colors.white),
                                       onPressed: () {
                                         // Implement increment logic
                                       },
@@ -419,8 +421,8 @@ class _HotelScreenState extends State<HotelScreen> {
                                                 .white)), // Display selected value
                                     const SizedBox(width: 10),
                                     IconButton(
-                                      icon:
-                                          const Icon(Icons.add, color: Colors.white),
+                                      icon: const Icon(Icons.add,
+                                          color: Colors.white),
                                       onPressed: () {
                                         // Implement increment logic
                                       },
@@ -529,6 +531,7 @@ class RatingRow extends StatelessWidget {
     );
   }
 }
+
 class PaquetesDdl extends StatelessWidget {
   final List<Paquete>? paises;
   final Function(Paquete) onPaisSelected;
@@ -555,7 +558,8 @@ class PaquetesDdl extends StatelessWidget {
           onPaisSelected(selection);
         },
         optionsViewBuilder: (BuildContext context,
-            AutocompleteOnSelected<Paquete> onSelected, Iterable<Paquete> options) {
+            AutocompleteOnSelected<Paquete> onSelected,
+            Iterable<Paquete> options) {
           return Material(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
@@ -628,6 +632,7 @@ class PaquetesDdl extends StatelessWidget {
     }
   }
 }
+
 class CircularIconButton extends StatelessWidget {
   const CircularIconButton(
       {this.iconData,

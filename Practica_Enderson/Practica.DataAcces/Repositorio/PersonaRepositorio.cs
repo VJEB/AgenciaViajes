@@ -111,18 +111,19 @@ namespace Practica.DataAcces.Repositorio
         //    }
         //}
 
-        public IEnumerable<tbPersonas> CargarTarjetas(int Pers_Id)
+        public IEnumerable<tbPersonasPorTarjetas> CargarTarjetas(int Pers_Id)
         {
 
 
-            List<tbPersonas> result = new List<tbPersonas>();
+            List<tbPersonasPorTarjetas> result = new List<tbPersonasPorTarjetas>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
                 var parameters = new { Pers_Id = Pers_Id };
-                result = db.Query<tbPersonas>(ScriptBaseDatos.Pers_Tarjetas, parameters, commandType: CommandType.StoredProcedure).ToList();
+                result = db.Query<tbPersonasPorTarjetas>(ScriptBaseDatos.Pers_Tarjetas, parameters, commandType: CommandType.StoredProcedure).ToList();
                 return result;
             }
         }
+
         public IEnumerable<tbPersonas> Detalle(int Pers_Id)
         {
 
