@@ -158,7 +158,7 @@ class _HotelesState extends State<Hoteles> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<dynamic>(
-        future: _getListado(),
+        future: _getListado(), 
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView(
