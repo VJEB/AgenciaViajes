@@ -33,6 +33,8 @@ namespace Agencia.Entities.Entities
         public string PuntoFinal { get; set; }
         [NotMapped]
         public string TiTr_Descripcion { get; set; }
+        [NotMapped]
+        public string Ciud_UrlImagen { get; set; }
 
         public virtual tbTiposTransportes TiTr { get; set; }
         public virtual tbUsuarios Tran_Usua_CreacionNavigation { get; set; }

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:agencia_viajes/screen/carrito.dart';
+import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Paquetes extends StatefulWidget {
@@ -220,7 +221,10 @@ class _PaquetesState extends State<Paquetes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Paquetes",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Paquetes",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.black,
         actions: <Widget>[
           Stack(
@@ -306,8 +310,12 @@ class _PaquetesState extends State<Paquetes> {
                                   const Color.fromARGB(255, 255, 239, 120)
                                       .withAlpha(30),
                               onTap: () {
-                                _mostrarDetalles(
-                                    context, snapshot.data![index]);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => PaquetesForm(
+                                              paquete: snapshot.data![index],
+                                            )));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -347,19 +355,7 @@ class _PaquetesState extends State<Paquetes> {
                                             color: Colors.white,
                                           ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        PaquetesForm(
-                                                          paquete: snapshot
-                                                              .data![index],
-                                                        )));
-                                          },
-                                          child: const Text('Editar'),
-                                        ),
+                                    
                                       ],
                                     ),
                                   ],
@@ -401,34 +397,6 @@ class _PaquetesState extends State<Paquetes> {
   Future<void> _guardarCarrito() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('carrito', jsonEncode(carrito));
-  }
-
-  void _mostrarDetalles(BuildContext context, dynamic hotel) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Detalles del Paquete'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Nombre: ${hotel["paqu_Nombre"]}'),
-                Text('Total: L.${hotel["paqu_Precio"]}'),
-                // Agrega más detalles aquí si es necesario
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cerrar'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _mostrarCarrito(BuildContext context) {

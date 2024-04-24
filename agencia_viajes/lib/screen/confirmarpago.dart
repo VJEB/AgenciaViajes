@@ -12,7 +12,7 @@ class ConfirmarPago extends StatefulWidget {
 }
 
 class _ConfirmarPagoState extends State<ConfirmarPago> {
-  String url = "https://etravel.somee.com/API/Hotel/HotelesList/0501";
+  String url = "https://etravel.somee.com/API/Persona/CargarTarjetas/1";
 
   List<Map<String, dynamic>> carrito = [];
   double subtotal = 0;
@@ -78,7 +78,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
       final data = jsonDecode(response.body);
       final List<String> opciones = [];
       for (var option in data) {
-        opciones.add(option['hote_Nombre']);
+        opciones.add(option['paTa_Descripcion']);
       }
       setState(() {
         opcionesTarjeta = opciones;
@@ -98,7 +98,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
             return AlertDialog(
               title: Text(
                 "Seleccione una Tarjeta",
-                style: TextStyle(color: Colors.white, fontSize: 19),
+                style: TextStyle(color: Color(0xFFFFBD59), fontSize: 19),
               ),
               content: SingleChildScrollView(
                 child: Column(
@@ -106,7 +106,8 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
                   children: [
                     for (var option in opcionesTarjeta)
                       RadioListTile<String>(
-                        title: Text(option),
+                        title: Text(option, style: TextStyle(color: Colors.white),
+                        ),
                         value: option,
                         groupValue: _selectedCard,
                         onChanged: (value) {
@@ -125,7 +126,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
                   },
                   child: Text(
                     "Cerrar",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Color(0xFFFFBD59)),
                   ),
                 ),
                 ElevatedButton(
@@ -133,7 +134,8 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
                     // Aquí puedes agregar la lógica para procesar la selección de la tarjeta
                     Navigator.of(context).pop(); // Cerrar el diálogo después de la selección
                   },
-                  child: Text("Aceptar"),
+                  style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black12)),
+                  child: Text("Aceptar", style: TextStyle(color: Color(0xFFFFBD59)),),
                 ),
               ],
             );
