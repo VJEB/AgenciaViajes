@@ -15,7 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class RegistroPersona extends StatefulWidget {
-  const RegistroPersona({super.key});
+  final Persona? persona;
+  const RegistroPersona({super.key, this.persona});
 
   @override
   State<RegistroPersona> createState() => _RegistroPersonaState();
@@ -23,6 +24,8 @@ class RegistroPersona extends StatefulWidget {
 
 class _RegistroPersonaState extends State<RegistroPersona> {
   final _formKey = GlobalKey<FormState>();
+  late Persona? persona;
+
   // ignore: duplicate_ignore
   // ignore: unused_field
   String _dni = '',
@@ -32,6 +35,16 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       _telefono = '',
       _sexo = 'F',
       _estadoCivil = 'Soltero(a)';
+
+  void _llenarInputs() {
+    _dni = persona!.persDNI;
+    _pasaporte = persona!.persPasaporte;
+    _nombre = persona!.persNombre;
+    _apellido = persona!.persApellido;
+    _telefono = persona!.persTelefono.toString();
+    _sexo = persona!.persSexo;
+    _estadoCivilSeleccionado = persona!.esCiId;
+  }
 
   int _estadoCivilSeleccionado = 0;
   final List<EstadoCivil> _estadosCiviles = [];
@@ -53,6 +66,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   @override
   void initState() {
     super.initState();
+    persona = widget.persona;
+    persona != null ? _llenarInputs() : null;
     _estadosCivilesFuture ??= _cargarEstadosCiviles();
     _paisesFuture ??= _cargarPaises();
     _paisesFuture?.then((_) {
@@ -62,6 +77,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       });
     });
   }
+
 
   Future<List<EstadoCivil>> _cargarEstadosCiviles() async {
     List<EstadoCivil> list = [];
@@ -73,7 +89,12 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       list =
           estadosCivilesJson.map((json) => EstadoCivil.fromJson(json)).toList();
       if (list.isNotEmpty) {
-        _estadoCivilSeleccionado = list.first.esCiId;
+        if (persona == null) {
+          _estadoCivilSeleccionado = list.first.esCiId;        
+        } else {
+          Iterable<EstadoCivil> estadoCivilEncontrado = list.where((esCi) => esCi.esCiId == _estadoCivilSeleccionado);
+          _estadoCivil = estadoCivilEncontrado.first.esCiDescripcion;
+        }
       } else {
         print('Error al cargar los paises');
       }
@@ -196,8 +217,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
             ),
           );
         });
-
-    int persId = await postPersona();
+    int persId = await reqPersona();
     if (persId == 0) {
       if (!mounted) return;
       Navigator.of(context).pop();
@@ -211,11 +231,11 @@ class _RegistroPersonaState extends State<RegistroPersona> {
     }
   }
 
-  Future<int> postPersona() async {
-    const String url = "https://localhost:44372/API/Persona/Create";
-    Persona persona = Persona(
-        cargId: 1,
-        persId: 0,
+  Future<int> reqPersona() async {
+    String url = '"https://etravel.somee.com/API/Persona/"${persona == null ? "Create" : "Edit/${persona!.persId}"}';
+    Persona pers = Persona(
+        cargId: persona == null ? 1 : persona!.cargId,
+        persId: persona == null ? 0 : persona!.persId,
         persDNI: _dni,
         persPasaporte: _pasaporte,
         persHabilitado: true,
@@ -228,17 +248,21 @@ class _RegistroPersonaState extends State<RegistroPersona> {
         persUsuaCreacion: 1,
         persFechaCreacion: DateTime.now().toUtc().toIso8601String());
 
-    var resultado = await http.post(
+    var resultado = persona == null ? await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(persona.toJson()),
+      body: jsonEncode(pers.toJson()),
+    ) : await http.put(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(pers.toJson()),
     );
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
       final responseJson = jsonDecode(resultado.body);
       final response = ServiceResult.fromJson(responseJson);
-      final persId = int.parse(response.message);
-      return persId;
+      final personaId = int.parse(response.message);
+      return personaId;
       // Navigator.pushNamed(context, '/Usuarios/registro',
       //     arguments: {'persId': persId});
     } else {
@@ -283,6 +307,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                 child: Column(
                   children: <Widget>[
                     TextFormField(
+                      initialValue: _dni,
                       style: const TextStyle(color: Color(0xFFFFBD59)),
                       inputFormatters: [
                         TextInputFormatter.withFunction(
@@ -323,6 +348,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      initialValue: _pasaporte,
                       style: const TextStyle(color: Color(0xFFFFBD59)),
                       inputFormatters: [
                         TextInputFormatter.withFunction(
@@ -363,6 +389,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      initialValue: _nombre,
                       style: const TextStyle(color: Color(0xFFFFBD59)),
                       inputFormatters: [
                         TextInputFormatter.withFunction(
@@ -403,6 +430,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      initialValue: _apellido,
                       style: const TextStyle(color: Color(0xFFFFBD59)),
                       inputFormatters: [
                         TextInputFormatter.withFunction(
@@ -443,6 +471,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      initialValue: _telefono,
                       style: const TextStyle(color: Color(0xFFFFBD59)),
                       inputFormatters: [
                         TextInputFormatter.withFunction(
@@ -517,7 +546,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                                     'Femenino',
                                     style: TextStyle(color: Color(0xFFFFBD59)),
                                   ),
-                                  value: 'F',
+                                  value: "F",
+                                  selected: _sexo == "F",
                                   groupValue: _sexo,
                                   onChanged: (value) {
                                     setState(() {
@@ -532,6 +562,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                                     style: TextStyle(color: Color(0xFFFFBD59)),
                                   ),
                                   value: 'M',
+                                  selected: _sexo == "M",
                                   groupValue: _sexo,
                                   onChanged: (value) {
                                     setState(() {
@@ -602,6 +633,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                                               color: Color(0xFFFFBD59)),
                                         ),
                                         value: estadoCivil.esCiId,
+                                        selected: estadoCivil.esCiId == _estadoCivilSeleccionado,
                                         groupValue: _estadoCivilSeleccionado,
                                         onChanged: (value) {
                                           setState(() {

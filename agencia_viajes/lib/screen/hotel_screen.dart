@@ -276,7 +276,7 @@ class _HotelScreenState extends State<HotelScreen> {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
                       Text(
-                        '\$${hotel.haHoPrecioPorNoche.toStringAsFixed(0)}',
+                        '+ \$${hotel.hotePrecioTodoIncluido.toStringAsFixed(0)}',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),

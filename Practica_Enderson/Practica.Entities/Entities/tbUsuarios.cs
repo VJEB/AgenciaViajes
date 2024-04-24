@@ -67,6 +67,10 @@ namespace Agencia.Entities.Entities
         public bool? Usua_Estado { get; set; }
         public int? Pers_Id { get; set; }
         [NotMapped]
+        public string Persona { get; set; }
+        [NotMapped]
+        public string Rol_Descripcion { get; set; }
+        [NotMapped]
 
         public string? Pers_Email { get; set; }
         public string Usua_UrlImagen { get; set; }

@@ -28,6 +28,9 @@ namespace Agencia.Entities.Entities
         [NotMapped]
 
         public int TiCa_Id { get; set; }
+        [NotMapped]
+        public string FoHa_UrlImagen { get; set; }
+
 
         public virtual tbHabitaciones Habi { get; set; }
         public virtual tbHoteles Hote { get; set; }

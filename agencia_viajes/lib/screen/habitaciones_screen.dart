@@ -1,16 +1,13 @@
 import 'dart:convert';
 
-import 'package:agencia_viajes/models/ciudad.dart';
-import 'package:agencia_viajes/models/estado.dart';
 import 'package:agencia_viajes/models/hotel.dart';
-import 'package:agencia_viajes/models/pais.dart';
 import 'package:agencia_viajes/models/place.dart';
 import 'package:agencia_viajes/models/profile.dart';
 import 'package:agencia_viajes/screen/hotel_screen.dart';
 import 'package:agencia_viajes/screen/layout.dart';
-import 'package:agencia_viajes/screen/transportes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Habitaciones extends StatefulWidget {
@@ -22,14 +19,14 @@ class Habitaciones extends StatefulWidget {
 }
 
 class _HabitacionesState extends State<Habitaciones> {
-  String url = "https://etravel.somee.com/API/Hotel/HotelesList/1";
+  String urlHabitaciones = "http://etravel.somee.com/API/HabitacionesCategorias/HabitacionPorHotelList/";
 
   late Hotel hotel;
 
   Map<int, bool> expansionState = {};
 
   Future<dynamic> _getListado() async {
-    final result = await http.get(Uri.parse(url));
+    final result = await http.get(Uri.parse(urlHabitaciones));
     if (result.statusCode >= 200) {
       return jsonDecode(result.body);
     } else {
@@ -52,110 +49,11 @@ class _HabitacionesState extends State<Habitaciones> {
     }
   }
 
-  int _paisSeleccionado = 0;
-  final List<Pais> _paises = [];
-
-  int _estadoSeleccionado = 0;
-  final List<Estado> _estados = [];
-
-  int _ciudadSeleccionada = 0;
-  final List<Ciudad> _ciudades = [];
-
-  Future<List<Pais>>? _paisesFuture;
-  Future<List<Estado>>? _estadosFuture;
-  Future<List<Ciudad>>? _ciudadesFuture;
-
   @override
   void initState() {
     super.initState();
     hotel = widget.hotel;
-    _paisesFuture ??= _cargarPaises();
-    _paisesFuture?.then((_) {
-      _estadosFuture ??= _cargarEstados();
-      _estadosFuture?.then((_) {
-        _ciudadesFuture ??= _cargarCiudades();
-      });
-    });
-  }
-
-  Future<List<Pais>> _cargarPaises() async {
-    List<Pais> list = [];
-    const url = "https://etravel.somee.com/API/Pais/List";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      final List<dynamic> paisesJson = jsonDecode(respuesta.body);
-      list = paisesJson.map((json) => Pais.fromJson(json)).toList();
-      if (list.isNotEmpty) {
-        _paisSeleccionado = list.first.paisId;
-      } else {
-        print('Error al cargar los paises');
-      }
-      // setState(() {
-      // });
-    }
-    return list;
-  }
-
-  void _onPaisSelected(Pais selectedPais) {
-    setState(() {
-      _paisSeleccionado = selectedPais.paisId;
-      _estados.clear();
-    });
-    _estadosFuture = _cargarEstados();
-  }
-
-  Future<List<Estado>> _cargarEstados() async {
-    List<Estado> list = [];
-    String url = "https://etravel.somee.com/API/Estado/List/$_paisSeleccionado";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> estadosJson = jsonDecode(respuesta.body);
-        list = estadosJson.map((json) => Estado.fromJson(json)).toList();
-        if (list.isNotEmpty) {
-          _estadoSeleccionado = list.first.estaId;
-        } else {
-          print('Error al cargar los estados');
-        }
-      });
-    }
-    return list;
-  }
-
-  void _onEstadoSelected(Estado selectedEstado) {
-    setState(() {
-      _estadoSeleccionado = selectedEstado.estaId;
-      _ciudades.clear();
-    });
-    _ciudadesFuture = _cargarCiudades();
-  }
-
-  Future<List<Ciudad>> _cargarCiudades() async {
-    List<Ciudad> list = [];
-    String url =
-        "https://etravel.somee.com/API/Ciudad/List/$_estadoSeleccionado";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> estadosJson = jsonDecode(respuesta.body);
-        list = estadosJson.map((json) => Ciudad.fromJson(json)).toList();
-        if (list.isNotEmpty) {
-          _estadoSeleccionado = list.first.estaId;
-        } else {
-          print('Error al cargar las ciudades');
-        }
-      });
-    }
-    return list;
-  }
-
-  void _onCiudadSelected(Ciudad selectedCiudad) {
-    setState(() {
-      _ciudadSeleccionada = selectedCiudad.ciudId;
-    });
+    urlHabitaciones += hotel.hoteId.toString(); 
   }
 
   @override
@@ -183,7 +81,7 @@ class _HabitacionesState extends State<Habitaciones> {
           if (snapshot.hasData) {
             return ListView(
               children: [
-                ...listadoHotelesConCollapse(snapshot.data),
+                ...listadoHotelesConCollapse(snapshot.data, hotel),
               ],
             );
           } else {
@@ -196,6 +94,7 @@ class _HabitacionesState extends State<Habitaciones> {
 
   List<Widget> listadoHotelesConCollapse(
     List<dynamic>? info,
+    Hotel hotel,
   ) {
     List<Widget> lista = [];
     if (info != null) {
@@ -203,7 +102,8 @@ class _HabitacionesState extends State<Habitaciones> {
         final element = info[index];
         lista.add(
           HotelExpansionTile(
-            hotelData: element,
+            hotel: hotel,
+            habitacionesData: element,
             getFotosPorHotel: _getFotosPorHotel,
             // isExpanded: expansionState[index] ?? false,
             // onExpansionChanged: (bool isExpanded) {
@@ -220,11 +120,13 @@ class _HabitacionesState extends State<Habitaciones> {
 }
 
 class HotelExpansionTile extends StatefulWidget {
-  final Map<String, dynamic> hotelData;
+  final Hotel hotel;
+  final Map<String, dynamic> habitacionesData;
   final Future<List<dynamic>> Function(int) getFotosPorHotel;
 
   const HotelExpansionTile({
-    required this.hotelData,
+    required this.hotel,
+    required this.habitacionesData,
     required this.getFotosPorHotel,
     super.key,
   });
@@ -235,13 +137,20 @@ class HotelExpansionTile extends StatefulWidget {
 
 class _HotelExpansionTileState extends State<HotelExpansionTile> {
   bool isExpanded = false;
+  late Hotel hotel;
   Future<List<dynamic>> getFotosPorHotel(int hotelId) {
     return widget.getFotosPorHotel(hotelId);
   }
 
   @override
+  void initState() {
+    super.initState();
+    hotel = widget.hotel;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final hotelData = widget.hotelData;
+    final habitacionesData = widget.habitacionesData;
     return GestureDetector(
       onTap: () {
         // Handle navigation to another route if necessary
@@ -266,7 +175,7 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                 Expanded(
                   flex: 1,
                   child: CachedNetworkImage(
-                    imageUrl: hotelData["hote_Imagen"],
+                    imageUrl: habitacionesData["foHa_UrlImagen"] ?? "aaa",
                     fit: BoxFit.cover,
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator(),
@@ -288,21 +197,13 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                           children: [
                             Flexible(
                               child: Text(
-                                '${hotelData["hote_Nombre"]}',
+                                '${habitacionesData["haCa_Nombre"]}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: Color(0xFFFFBD59),
                                 ),
                               ),
                             ),
-                            // Text(
-                            //   'Noche: L.${hotelData["haHo_PrecioPorNoche"]}',
-                            //   style: const TextStyle(
-                            //     fontSize: 20,
-                            //     color: Color.fromARGB(255, 44, 214, 50),
-                            //     fontWeight: FontWeight.bold,
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -311,14 +212,14 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                         padding: const EdgeInsets.only(right: 4.0),
                         child: Row(
                           children: [
-                            const Icon(
-                              Icons.bed,
+                            const FaIcon(
+                              FontAwesomeIcons.bed,
                               color: Colors.yellow,
                               size: 15,
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${hotelData["hote_Estrellas"]}',
+                              '${habitacionesData["habi_NumCamas"]}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -336,7 +237,7 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                             Expanded(
                               // Wrap the first Text widget with Expanded
                               child: Text(
-                                'Noche: L.${hotelData["haHo_PrecioPorNoche"]}',
+                                'Noche: L.${habitacionesData["haCa_PrecioPorNoche"]}',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   color: Color.fromARGB(255, 44, 214, 50),
@@ -344,34 +245,7 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                                 ),
                                 softWrap: true,
                               ),
-                              // Text(hotelData["hote_DireccionExacta"],
-                              // style: const TextStyle(
-                              //   fontSize: 12,
-                              //   color: Colors.white,
-                              // softWrap: true,
-                              // ),
                             ),
-                            // ),
-                            // Column(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   children: [
-                            //     Text(
-                            //       hotelData["ciud_Descripcion"],
-                            //       style: const TextStyle(
-                            //         fontSize: 12,
-                            //         color: Colors.white,
-                            //       ),
-                            //     ),
-                            //     Text(
-                            //       hotelData["pais_Descripcion"],
-                            //       style: const TextStyle(
-                            //         fontSize: 10,
-                            //         color: Colors.white,
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                           ],
                         ),
                       ),
@@ -396,24 +270,9 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => HotelScreen(
-                      hotel: Hotel(
-                          hoteId: 1,
-                          hoteNombre: "Hotel",
-                          hoteDireccionExacta: "Direccion",
-                          hotePrecioTodoIncluido: 200,
-                          haHoPrecioPorNoche: 500,
-                          hoteEstrellas: 5,
-                          ciudId: 1,
-                          ciudDescripcion: "DescripcionCiud",
-                          estaDescripcion: "DescripcionEsta",
-                          hoteEstado: 1,
-                          hoteFechaCreacion: "FechaCreacion",
-                          hoteHoraSalida: "HoraSalida",
-                          hoteImagen:
-                              "https://cdn2.thecatapi.com/images/b9r.jpg",
-                          hoteUsuaCreacion: 1,
-                          paisDescripcion: "pais"),
+                    builder: (_) => 
+                    HotelScreen(
+                      hotel: hotel,
                       place: const Place(
                           address: "adress",
                           bathCount: 5,
@@ -446,7 +305,7 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
           ),
           children: [
             FutureBuilder<List<dynamic>>(
-              future: getFotosPorHotel(hotelData["hote_Id"]),
+              future: getFotosPorHotel(habitacionesData["hote_Id"]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return SizedBox(

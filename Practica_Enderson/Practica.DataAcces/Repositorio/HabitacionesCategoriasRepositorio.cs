@@ -38,13 +38,13 @@ namespace Agencia.DataAcces.Repositorio
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<tbHabitacionesPorHotel> HabitacionesCategoriasPorHotel(int Hote_Id)
+        public IEnumerable<tbHabitacionesCategorias> HabitacionesCategoriasPorHotel(int Hote_Id)
         {
-            List<tbHabitacionesPorHotel> result = new List<tbHabitacionesPorHotel>();
+            List<tbHabitacionesCategorias> result = new List<tbHabitacionesCategorias>();
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
                 var parameters = new { Hote_Id = Hote_Id };
-                result = db.Query<tbHabitacionesPorHotel>(ScriptBaseDatos.HaCa_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
+                result = db.Query<tbHabitacionesCategorias>(ScriptBaseDatos.HaCa_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
                 return result;
             }
         }
