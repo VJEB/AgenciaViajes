@@ -59,8 +59,14 @@ namespace Practica.API.Controllers
         public IActionResult Login(string usuario, string contraseña)
         {
             var estado = _accesoServicio.Login(usuario, contraseña);
-            return Ok(estado);
-
+            if (estado.Code == 200)
+            {
+                return Ok(estado);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
 

@@ -95,5 +95,28 @@ namespace Agencia.API.Controllers
                 return BadRequest();
             }
         }
+        [HttpPost("Reservaciones/Create")]
+        public IActionResult Create(ReservacionesViewModel item)
+        {
+
+            //var model = _mapper.Map<tbPlanes>(item);
+            var modelo = new tbReservaciones()
+            {
+                HaCa_Id = item.HaCa_Id,
+                Rese_FechaEntrada = item.Rese_FechaEntrada,
+                Rese_FechaSalida = item.Rese_FechaSalida,
+                HabitacionesNecesarias = item.HabitacionesNecesarias,
+                Rese_PrecioTodoIncluido = item.Rese_PrecioTodoIncluido,
+                Rese_NumPersonas = item.Rese_NumPersonas,
+                Habi_NumPersonas = item.Habi_NumPersonas,
+                Rese_Observacion = item.Rese_Observacion,
+                Paqu_Id = item.Paqu_Id,
+                Rese_Usua_Creacion = item.Rese_Usua_Creacion,
+                Rese_Fecha_Creacion = item.Rese_Fecha_Creacion
+            };
+
+            var response = _agenciaServicio.InsertarReservaciones(modelo);
+            return Ok(response);
+        }
     }
 }

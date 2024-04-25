@@ -189,13 +189,22 @@ namespace Practica.BussinesLogic.Servicios
             try
             {
                 var lost = _usuarioRepositorio.Login(usuario, contra);
-                return result.Ok(lost);
+
+                if (lost.Count() == 1)
+                {
+                    return result.Ok(lost);
+                }
+                else
+                {
+                    return result.BadRequest();
+                }
+
+
             }
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
             }
-
         }
         public IEnumerable<tbUsuarios> DetallesUsua(int id)
         {

@@ -29,7 +29,8 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<PaqueteRepositorio>();
             service.AddScoped<TransporteRepositorio>();
             service.AddScoped<PersonaRepositorio>();
-            
+            service.AddScoped<FacturaRepositorio>(); service.AddScoped<VentaServicio>();
+
             AgenciaContext.BuildConnectionString(conn);
         }
         public static void BussinesLogic(this IServiceCollection service)

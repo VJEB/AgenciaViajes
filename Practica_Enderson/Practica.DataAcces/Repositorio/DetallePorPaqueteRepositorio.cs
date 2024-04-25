@@ -98,6 +98,42 @@ namespace Agencia.DataAcces.Repositorio
                 return result;
             }
         }
+
+        public RequestStatus InsertarReservaciones(tbReservaciones item)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+                parametro.Add("HaCa_Id", item.HaCa_Id);
+                parametro.Add("Rese_FechaEntrada", item.Rese_FechaEntrada);
+                parametro.Add("Rese_FechaSalida", item.Rese_FechaSalida);
+                parametro.Add("HabitacionesNecesarias", item.HabitacionesNecesarias);
+                parametro.Add("Rese_PrecioTodoIncluido", item.Rese_PrecioTodoIncluido);
+                parametro.Add("Rese_NumPersonas", item.Rese_NumPersonas);
+                parametro.Add("Habi_NumPersonas", item.Habi_NumPersonas);
+                parametro.Add("Rese_Observacion", item.Rese_Observacion);
+                parametro.Add("Paqu_Id", item.Paqu_Id);
+                parametro.Add("Rese_Usua_Creacion", item.Rese_Usua_Creacion);
+                parametro.Add("Rese_Fecha_Creacion", item.Rese_Fecha_Creacion);
+                var result = db.QueryFirst(ScriptBaseDatos.Rese_Insertar,
+                    parametro,
+                    commandType: CommandType.StoredProcedure
+                    );
+                string mensaje = "";
+                if (result.HabitacionesDisponibles != null)
+                {
+                    if (result.HabitacionesDisponibles == 0)
+                    {
+                        mensaje = "No hay habitaciones disponibles";
+                    }
+                    else
+                    {
+                        mensaje = $"Habitaciones disponibles: {result.HabitacionesDisponibles}";
+                    }
+                }
+                return new RequestStatus { CodeStatus = result.Resultado, MessageStatus = mensaje };
+            }
+        }
         //public IEnumerable<tbDetallePorPaquete> List()
         //{
         //    List<tbDetallePorPaquete> result = new List<tbDetallePorPaquete>();

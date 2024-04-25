@@ -16,6 +16,12 @@ class Hotel {
   final int? hoteUsuaModifica;
   final String? hoteFechaModifica;
   final int hoteEstado;
+  final int hoteTelefono;
+  final String hoteCorreo;
+  final String hoteResena;
+  final double paisPorcentajeImpuesto;
+  final String impuDescripcion;
+  final int impuId;
 
   Hotel({
     required this.hoteId,
@@ -35,6 +41,12 @@ class Hotel {
     this.hoteUsuaModifica,
     this.hoteFechaModifica,
     required this.hoteEstado,
+    required this.hoteTelefono,
+    required this.hoteCorreo,
+    required this.hoteResena,
+    required this.paisPorcentajeImpuesto,
+    required this.impuDescripcion,
+    required this.impuId,
   });
 
   factory Hotel.fromJson(Map<String, dynamic> json) {
@@ -56,6 +68,12 @@ class Hotel {
       hoteUsuaModifica: json['hote_Usua_Modifica'],
       hoteFechaModifica: json['hote_Fecha_Modifica'],
       hoteEstado: json['hote_Estado'],
+      hoteTelefono: json['hote_Telefono'],
+      hoteCorreo: json['hote_Correo'],
+      hoteResena: json['hote_Reseña'],
+      paisPorcentajeImpuesto: json['pais_PorcentajeImpuesto'].toDouble(),
+      impuDescripcion: json['impu_Descripcion'],
+      impuId: json['impu_Id'],
     );
   }
 
@@ -78,6 +96,12 @@ class Hotel {
       'hote_Usua_Modifica': hoteUsuaModifica,
       'hote_Fecha_Modifica': hoteFechaModifica,
       'hote_Estado': hoteEstado,
+      'hote_Telefono': hoteTelefono,
+      'hote_Correo': hoteCorreo,
+      'hote_Reseña': hoteResena,
+      'pais_PorcentajeImpuesto': paisPorcentajeImpuesto,
+      'impu_Descripcion': impuDescripcion,
+      'impu_Id': impuId,
     };
   }
 

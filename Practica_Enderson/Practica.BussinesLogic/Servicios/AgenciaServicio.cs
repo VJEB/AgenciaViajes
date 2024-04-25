@@ -153,6 +153,28 @@ namespace Agencia.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult InsertarReservaciones(tbReservaciones item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _detallexpaqueteRepositorio.InsertarReservaciones(item);
+                if (response.CodeStatus == 1)
+                {
+                    return result.Ok(response);
+                }
+                else
+                {
+                    return result.Error(response.MessageStatus);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult ActualizarDetallePaquete(int id, tbDetallePorPaquete item)
         {
             var result = new ServiceResult();

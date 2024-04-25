@@ -76,6 +76,36 @@ namespace Agencia.Entities.Entities
         public string Usua_UrlImagen { get; set; }
         public string Usua_CodigoVerificacion { get; set; }
 
+        [NotMapped]
+        public string Pers_DNI { get; set; }
+        [NotMapped]
+        public string Pers_Sexo { get; set; }
+        [NotMapped]
+        public int Pers_Telefono { get; set; }
+        [NotMapped]
+        public string Pers_Pasaporte { get; set; }
+        [NotMapped]
+        public int Ciud_Id { get; set; }
+        [NotMapped]
+        public string Ciud_Descripcion { get; set; }
+        [NotMapped]
+        public int EsCi_Id { get; set; }
+        [NotMapped]
+        public string EsCi_Descripcion { get; set; }
+        [NotMapped]
+        public int Carg_Id { get; set; }
+        [NotMapped]
+        public string Carg_Descripcion { get; set; }
+        [NotMapped]
+        public int Esta_Id { get; set; }
+
+        [NotMapped]
+        public string Esta_Descripcion { get; set; }
+        [NotMapped]
+        public int Pais_Id { get; set; }
+        [NotMapped]
+        public string Pais_Descripcion { get; set; }
+
         public virtual tbPersonas Pers { get; set; }
         public virtual tbRoles Rol { get; set; }
         public virtual tbUsuarios Usua_Usua_CreacionNavigation { get; set; }

@@ -20,7 +20,49 @@ namespace Agencia.API.Controllers
             _ventaServicio = ventaServicio;
             _mapper = mapper;
         }
+        [HttpPost("Create")]
+        public IActionResult Create(FacturaViewModel item)
+        {
+            var modelo = new tbFacturas()
+            {
+                Pers_Id = item.Pers_Id,
+                Meto_Id = item.Meto_Id,
+                Pago_Id = item.Pago_Id,
+                Fact_Usua_Creacion = item.Fact_Usua_Creacion,
+                Fact_Fecha_Creacion = item.Fact_Fecha_Creacion
+            };
+            //var listado = _ventaServicio.ListFact();
+            int factId;
+            var result = _ventaServicio.InsertarFactu(modelo, out factId);
+            if (factId > 0)
+            {
+                result.Message = factId.ToString();
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
 
+        [HttpPost("CreateDetalle")]
+        public IActionResult CreateDetalle(FacturaDetalleViewModel item)
+        {
+            //var model = _mapper.Map<tbFacturas>(item);
+            var modelo = new tbFacturasDetalles()
+            {
+                Fact_Id = item.Fact_Id,
+                Paqu_Id = item.Paqu_Id,
+                Fact_CantidadPaqu = item.Fact_CantidadPaqu,
+                Fdet_SubTotal = item.Fdet_SubTotal,
+                Fdet_Total = item.Fdet_Total,
+                Fdet_Impuesto = item.Fdet_Impuesto,
+            };
+
+            var result = _ventaServicio.InsertarFactuDetalle(modelo);
+            return Ok(result);
+
+        }
         [HttpGet("List/{Pers_Id}")]
         public IActionResult List(int Pers_Id)
         {
@@ -36,24 +78,24 @@ namespace Agencia.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("Create")]
-        public IActionResult Create(FacturaViewModel item)
-        {
-            //var model = _mapper.Map<tbFacturas>(item);
-            var modelo = new tbFacturas()
-            {
-                Fact_Fecha = item.Fact_Fecha,
-                Pers_Id = item.Pers_Id,
-                Meto_Id = item.Meto_Id,
-                Pago_Id = item.Pago_Id,
-                Fact_Usua_Creacion = item.Fact_Usua_Creacion,
-                Fact_Fecha_Creacion = item.Fact_Fecha_Creacion
-            };
-            //var listado = _ventaServicio.ListFact();
+        //[HttpPost("Create")]
+        //public IActionResult Create(FacturaViewModel item)
+        //{
+        //    //var model = _mapper.Map<tbFacturas>(item);
+        //    var modelo = new tbFacturas()
+        //    {
+        //        Fact_Fecha = item.Fact_Fecha,
+        //        Pers_Id = item.Pers_Id,
+        //        Meto_Id = item.Meto_Id,
+        //        Pago_Id = item.Pago_Id,
+        //        Fact_Usua_Creacion = item.Fact_Usua_Creacion,
+        //        Fact_Fecha_Creacion = item.Fact_Fecha_Creacion
+        //    };
+        //    //var listado = _ventaServicio.ListFact();
 
-            var result = _ventaServicio.InsertarFact(modelo);
-            return Ok(result);
-        }
+        //    var result = _ventaServicio.InsertarFact(modelo);
+        //    return Ok(result);
+        //}
 
         [HttpPut("Edit")]
         public IActionResult Edit(FacturaViewModel item)

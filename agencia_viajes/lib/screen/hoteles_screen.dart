@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:agencia_viajes/models/ciudad.dart';
 import 'package:agencia_viajes/models/estado.dart';
 import 'package:agencia_viajes/models/hotel.dart';
@@ -517,6 +516,9 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                                   hotelData["haHo_PrecioPorNoche"] ?? 0,
                               hoteEstado: hotelData["hote_Estado"] ?? 0,
                               hoteEstrellas: hotelData["hote_Estrellas"],
+                              hoteTelefono: hotelData["hote_Telefono"],
+                              hoteCorreo: hotelData["hote_Correo"],
+                              hoteResena: hotelData["hote_Reseña"],
                               hoteFechaCreacion:
                                   hotelData["hote_Fecha_Creacion"],
                               hoteHoraSalida: "12:00:00",
@@ -525,8 +527,11 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                               hotePrecioTodoIncluido:
                                   hotelData["hote_PrecioTodoIncluido"] ?? 0,
                               hoteUsuaCreacion: hotelData["hote_Usua_Creacion"],
-                              paisDescripcion:
-                                  hotelData["pais_Descripcion"]))));
+                              paisDescripcion: hotelData["pais_Descripcion"],
+                              impuId: hotelData["impu_Id"],
+                              impuDescripcion: hotelData["impu_Descripcion"],
+                              paisPorcentajeImpuesto:
+                                  hotelData["pais_PorcentajeImpuesto"]))));
             },
           ),
           children: [

@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:agencia_viajes/models/habitaciones_categorias.dart';
 import 'package:agencia_viajes/models/hotel.dart';
 import 'package:agencia_viajes/models/paquete.dart';
-import 'package:agencia_viajes/models/place.dart';
-import 'package:agencia_viajes/screen/layout.dart';
+import 'package:agencia_viajes/models/reservacion.dart';
+import 'package:agencia_viajes/models/service_result.dart';
 import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,9 +12,14 @@ import 'package:http/http.dart' as http;
 // import 'dart:collection';
 
 class HotelScreen extends StatefulWidget {
-  final Place place;
   final Hotel hotel;
-  const HotelScreen({required this.hotel, required this.place, super.key});
+  final List<String> imageUrls;
+  final HabitacionCategoria? habitacionCategoria;
+  const HotelScreen(
+      {required this.hotel,
+      this.habitacionCategoria,
+      super.key,
+      required this.imageUrls});
 
   @override
   State<HotelScreen> createState() => _HotelScreenState();
@@ -26,8 +32,8 @@ class _HotelScreenState extends State<HotelScreen> {
 
   String urlPaquetes = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
 
-  DateTime fechaInicio = DateTime.now();
-  DateTime fechaFin = DateTime.now();
+  // DateTime fechaInicio = DateTime.now();
+  // DateTime fechaFin = DateTime.now().add(const Duration(days: 1));
 
   var tipoDeCama;
 
@@ -37,8 +43,9 @@ class _HotelScreenState extends State<HotelScreen> {
 
   String _paquNombre = '';
 
-  Place get place => widget.place;
   Hotel get hotel => widget.hotel;
+  List<String> get imageUrls => widget.imageUrls;
+  late HabitacionCategoria? habitacionCategoria;
 
   late Paquete _paqueteSeleccionado;
   final List<Paquete> _paquetes = [];
@@ -47,9 +54,62 @@ class _HotelScreenState extends State<HotelScreen> {
   @override
   void initState() {
     super.initState();
+    habitacionCategoria = widget.habitacionCategoria;
+    _numPersonasHabitacion =
+        habitacionCategoria != null ? habitacionCategoria!.habiNumPersonas : 1;
+    _numPersonas =
+        habitacionCategoria != null ? habitacionCategoria!.habiNumPersonas : 1;
     urlPaquetes += persId;
     _paquetesFuture ??= _cargarPaquetes();
-    // _habitacionesFuture ??= _habitacionesPaquetes();
+  }
+
+  late int _numPersonasHabitacion;
+
+  int _numHabitaciones = 1;
+  late int _numPersonas;
+
+  void _updateHabitaciones() {
+    setState(() {
+      _numHabitaciones = (_numPersonas / _numPersonasHabitacion).ceil();
+    });
+  }
+
+  void _updatePersonas() {
+    setState(() {
+      _numPersonas = _numHabitaciones * _numPersonasHabitacion;
+    });
+  }
+
+  void _incrementarHabitaciones() {
+    setState(() {
+      _numHabitaciones++;
+      _updatePersonas();
+    });
+  }
+
+  void _disminuirHabitaciones() {
+    setState(() {
+      if (_numHabitaciones > 1) {
+        _numHabitaciones--;
+      }
+      _updatePersonas();
+    });
+  }
+
+  void _incrementarPersonas() {
+    setState(() {
+      _numPersonas++;
+      _updateHabitaciones();
+    });
+  }
+
+  void _disminuirPersonas() {
+    setState(() {
+      if (_numPersonas > 1) {
+        _numPersonas--;
+        _updateHabitaciones();
+      }
+    });
   }
 
   void _onPaqueteSelected(Paquete paquete) {
@@ -76,173 +136,388 @@ class _HotelScreenState extends State<HotelScreen> {
     return list;
   }
 
-  void _selectDate(BuildContext context, bool modificarFechaInicio) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate:
-          modificarFechaInicio ? fechaInicio : fechaFin, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-      helpText:
-          'Seleccione la fecha ${modificarFechaInicio ? 'de inicio.' : 'final.'}', // Can be used as title
-      cancelText: 'Cancelar',
-      confirmText: 'Ok',
-    );
-    if (picked != null && picked != fechaInicio) {
-      setState(() {
-        if (modificarFechaInicio) {
-          fechaInicio = picked;
-        } else {
-          fechaFin = picked;
-        }
-      });
-    }
-  }
+  void mostrarDialog(BuildContext context) async {
+    DateTime fechaInicio = DateTime.now();
+    DateTime fechaFin = DateTime.now().add(const Duration(days: 1));
+    int _numNoches =
+        fechaFin.difference(fechaInicio).inDays; // Move _numNoches here
+    Paquete paqu;
 
-  void mostrarDialog(BuildContext context, [bool mounted = true]) async {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: const BorderSide(
-            color: Color(0xC6FFFFFF), // You can adjust the color here
-            width: 0.5, // You can  adjust the width here
-          ),
-        ),
-        backgroundColor: const Color(0xC9040000),
-        title: const Text(
-          'Reservacion',
-          style: TextStyle(color: Color(0xFFFFBD59)),
-        ),
-        content: Form(
-          key: _formKey,
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(
-              "${fechaInicio.toLocal()}".split(' ')[0],
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFBD59)),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => _selectDate(context, true), // Refer step 3
-              label: const Text(
-                'Fecha inicio',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              icon: const Icon(Icons.calendar_today),
-              // style: ButtonStyle(backgroundColor: Color(0xFFFFBD59)) ,
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              "${fechaInicio.toLocal()}".split(' ')[0],
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFBD59)),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => _selectDate(context, false), // Refer step 3
-              label: const Text(
-                'Fecha fin',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              icon: const Icon(Icons.calendar_today),
-              // style: ButtonStyle(backgroundColor: Color(0xFFFFBD59)) ,
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            FutureBuilder<List<Paquete>>(
-              future: _paquetesFuture, // Use the assigned future
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text(
-                    "Cargando...",
-                    style: TextStyle(color: Color(0xFFFFBD59)),
-                  );
-                } else if (snapshot.hasData) {
-                  _paquetes.addAll(snapshot.data as Iterable<Paquete>);
-                  return PaquetesDdl(
-                      paises: _paquetes, onPaisSelected: _onPaqueteSelected);
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            Future<void> postReservacion(BuildContext context) async {
+              String url =
+                  "https://etravel.somee.com/API/DetallePorPaquete/Reservaciones/Create";
+
+              Reservacion reser = Reservacion(
+                reseId: 0,
+                resePrecio: 0,
+                reseCantidad: 0,
+                resePrecioTodoIncluido: 0,
+                reseFechaEntrada: fechaInicio.toUtc().toIso8601String(),
+                reseFechaSalida: fechaFin.toUtc().toIso8601String(),
+                reseNumPersonas: _numPersonas,
+                reseObservacion: "Observaciones...",
+                paquId: _paqueteSeleccionado.paquId,
+                haHoId: 0,
+                haCaId: habitacionCategoria!.haCaId,
+                habitacionesNecesarias: _numHabitaciones,
+                habiNumPersonas: habitacionCategoria!.habiNumPersonas,
+                reseUsuaCreacion: 1,
+                reseFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+              );
+
+              var resultado = await http.post(
+                Uri.parse(url),
+                headers: {'Content-Type': 'application/json'},
+                body: jsonEncode(reser.toJson()),
+              );
+
+              if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+                final responseJson = jsonDecode(resultado.body);
+                final response = ServiceResult.fromJson(responseJson);
+                final mensaje = response.message;
+                if (response.code >= 200 && response.code < 300) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            PaquetesForm(paquete: _paqueteSeleccionado),
+                      ));
                 } else {
-                  return const Text(
-                    "Error al cargar los países",
-                    style: TextStyle(color: Colors.red),
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        backgroundColor: Colors.red[400],
+                        content: Text(mensaje)),
                   );
                 }
-              },
-            ),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  SizedBox(
-                    width: 150, // max width of the button
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          await postReservacion();
-                        }
-                      },
-                      icon: const Icon(Icons.save),
-                      label: const Text('Guardar'),
+                setState(() {
+                  //AAAa???
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      backgroundColor: Colors.red[400],
+                      content: const Text('Error al agregar la reservación.')),
+                );
+              }
+            }
+
+            Future<void> _selectDate(
+                BuildContext context, bool modificarFechaInicio) async {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: modificarFechaInicio ? fechaInicio : fechaFin,
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2025),
+                helpText:
+                    'Seleccione la fecha ${modificarFechaInicio ? 'de inicio.' : 'final.'}',
+                cancelText: 'Cancelar',
+                confirmText: 'Ok',
+              );
+              if (picked != null &&
+                  picked != (modificarFechaInicio ? fechaInicio : fechaFin) &&
+                  (!modificarFechaInicio
+                      ? picked.isAfter(fechaInicio)
+                      : picked.isBefore(fechaFin))) {
+                setState(() {
+                  if (modificarFechaInicio) {
+                    fechaInicio = picked;
+                  } else {
+                    fechaFin = picked;
+                  }
+                  // Update _numNoches
+                  _numNoches = (fechaFin.difference(fechaInicio).inDays) + 1;
+                });
+              } else if (picked != null) {
+                // Show error message if fechaFin is before fechaInicio
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'La fecha final debe ser después de la fecha de inicio.',
+                      style: TextStyle(color: Colors.white),
                     ),
-                  )
-                ]))
-          ]),
-        ),
-      ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            }
+
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                side: const BorderSide(
+                  color: Color(0xC6FFFFFF),
+                  width: 0.5,
+                ),
+              ),
+              backgroundColor: const Color(0xC9040000),
+              title: const Text(
+                'Reservacion',
+                style: TextStyle(color: Color(0xFFFFBD59)),
+              ),
+              content: Form(
+                key: _formKey,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  DateDisplayWidget(
+                      dateTime: fechaInicio,
+                      keyProp: ValueKey(fechaInicio)), // Display fechaInicio
+                  ElevatedButton.icon(
+                    onPressed: () => _selectDate(context, true),
+                    label: const Text(
+                      'Fecha inicio',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    icon: const Icon(Icons.calendar_today),
+                  ),
+                  const SizedBox(height: 10.0),
+                  DateDisplayWidget(
+                      dateTime: fechaFin,
+                      keyProp: ValueKey(fechaFin)), // Display fechaFin
+                  ElevatedButton.icon(
+                    onPressed: () => _selectDate(context, false),
+                    label: const Text(
+                      'Fecha fin',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    icon: const Icon(Icons.calendar_today),
+                  ),
+                  const SizedBox(height: 10.0),
+                  FutureBuilder<List<Paquete>>(
+                    future: _paquetesFuture, // Use the assigned future
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text(
+                          "Cargando...",
+                          style: TextStyle(color: Color(0xFFFFBD59)),
+                        );
+                      } else if (snapshot.hasData) {
+                        _paquetes.addAll(snapshot.data as Iterable<Paquete>);
+                        return PaquetesDdl(
+                            paises: _paquetes,
+                            onPaisSelected: _onPaqueteSelected);
+                      } else {
+                        return const Text(
+                          "Error al cargar los paquetes del usuario",
+                          style: TextStyle(color: Colors.red),
+                        );
+                      }
+                    },
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Número de Habitaciones:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$_numHabitaciones',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Número de noches:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$_numNoches',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Precio por Noche:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${habitacionCategoria!.haCaPrecioPorNoche}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Subtotal:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${hotel.impuDescripcion} (${hotel.paisPorcentajeImpuesto * 100}%):',
+                          style: const TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) * hotel.paisPorcentajeImpuesto)}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Total:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) + ((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) * hotel.paisPorcentajeImpuesto))}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              width: 150, // max width of the button
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    await postReservacion(context);
+                                  }
+                                },
+                                icon: const Icon(Icons.check),
+                                label: const Text('Guardar reservación'),
+                              ),
+                            )
+                          ]))
+                ]),
+              ),
+            );
+          },
+        );
+      },
     );
-  }
-
-  Future<void> postReservacion() async {
-    String url = "https://etravel.somee.com/API/Reservacion/Create";
-
-    // Reservacion reser = Reservacion(
-    // );
-
-    // var resultado = await http.post(
-    //   Uri.parse(url),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode(reser.toJson()),
-    // );
-
-    // if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
-    //   setState(() {
-    //     //AAAa???
-    //   });
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PaquetesForm(paquete: _paqueteSeleccionado),
-        ));
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //         backgroundColor: Color.fromARGB(255, 62, 208, 57),
-    //         content: const Text('Reservacion agregada al paquete con exito!')),
-    //   );
-    //   Navigator.pushReplacement(
-    //     context, MaterialPageRoute(builder: (_) => const PaquetesForm(paquete: paqu,)));
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //         backgroundColor: Colors.red[400],
-    //         content: const Text('Error al agregar la reservación.')),
-    //   );
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     const double kHorizontalPadding = 24;
-    const String loremIpsumText =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla dolor, fermentum nec rhoncus vitae, vehicula quis ipsum. Mauris dapibus velit in quam scelerisque gravida. Etiam luctus augue ut lacus iaculis vehicula. In vel pretium arcu. Fusce fringilla volutpat hendrerit. Morbi nec accumsan nunc. Integer at iaculis justo. Ut dignissim scelerisque mi vitae consectetur. Mauris tincidunt erat at mi feugiat, id gravida justo suscipit. Vestibulum non ipsum varius, sagittis est vitae, ultrices est. Donec semper ligula vel urna ultricies varius. Aenean lacinia risus ut aliquam bibendum. Nullam justo ex, auctor ultricies eros a, commodo dapibus massa. Etiam tristique semper tempus. Vivamus elementum nisl neque, eu eleifend metus lobortis sed.';
 
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
@@ -260,7 +535,7 @@ class _HotelScreenState extends State<HotelScreen> {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
                       Text(
-                        '\$${hotel.haHoPrecioPorNoche.toStringAsFixed(0)}',
+                        'L. ${habitacionCategoria!.haCaPrecioPorNoche.toStringAsFixed(0)}',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
@@ -276,9 +551,9 @@ class _HotelScreenState extends State<HotelScreen> {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
                       Text(
-                        '+ \$${hotel.hotePrecioTodoIncluido.toStringAsFixed(0)}',
+                        '+ L. ${hotel.hotePrecioTodoIncluido.toStringAsFixed(0)}',
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                       const SizedBox(
                           width: 4), // Add some spacing between the texts
@@ -294,7 +569,7 @@ class _HotelScreenState extends State<HotelScreen> {
               const Spacer(),
               SizedBox(
                 width:
-                    140, // Set width to maximum to make it fill available space
+                    130, // Set width to maximum to make it fill available space
                 height: 50, // Set the desired height
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
@@ -303,6 +578,8 @@ class _HotelScreenState extends State<HotelScreen> {
                       borderRadius:
                           BorderRadius.circular(5), // Set border radius
                     ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   ),
                   label: const Text("Reservar",
                       style: TextStyle(
@@ -330,15 +607,14 @@ class _HotelScreenState extends State<HotelScreen> {
             leading: CircularIconButton(
               iconData: Icons.close,
               onPressed: () {
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) => const Layout()));
+                Navigator.of(context).pop();
               },
               iconColor: Colors.grey[800],
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: PageViewWithIndicators(
                 type: IndicatorType.numbered,
-                children: place.imageUrls
+                children: imageUrls
                     .map((e) => Hero(
                           tag: e,
                           child: Image.network(
@@ -366,8 +642,10 @@ class _HotelScreenState extends State<HotelScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Text("Habitaciones:",
-                                    style: TextStyle(color: Colors.white)),
+                                const Text(
+                                  "Habitaciones:",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 const SizedBox(height: 5),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -375,22 +653,19 @@ class _HotelScreenState extends State<HotelScreen> {
                                     IconButton(
                                       icon: const Icon(Icons.remove,
                                           color: Colors.white),
-                                      onPressed: () {
-                                        // Implement decrement logic
-                                      },
+                                      onPressed: _disminuirHabitaciones,
                                     ),
                                     const SizedBox(width: 10),
-                                    const Text("1",
-                                        style: TextStyle(
-                                            color: Colors
-                                                .white)), // Display selected value
+                                    Text(
+                                      "$_numHabitaciones",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
                                     const SizedBox(width: 10),
                                     IconButton(
                                       icon: const Icon(Icons.add,
                                           color: Colors.white),
-                                      onPressed: () {
-                                        // Implement increment logic
-                                      },
+                                      onPressed: _incrementarHabitaciones,
                                     ),
                                   ],
                                 ),
@@ -401,8 +676,10 @@ class _HotelScreenState extends State<HotelScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Text("Personas:",
-                                    style: TextStyle(color: Colors.white)),
+                                const Text(
+                                  "Personas:",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 const SizedBox(height: 5),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -410,22 +687,19 @@ class _HotelScreenState extends State<HotelScreen> {
                                     IconButton(
                                       icon: const Icon(Icons.remove,
                                           color: Colors.white),
-                                      onPressed: () {
-                                        // Implement decrement logic
-                                      },
+                                      onPressed: _disminuirPersonas,
                                     ),
                                     const SizedBox(width: 10),
-                                    const Text("1",
-                                        style: TextStyle(
-                                            color: Colors
-                                                .white)), // Display selected value
+                                    Text(
+                                      "$_numPersonas",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
                                     const SizedBox(width: 10),
                                     IconButton(
                                       icon: const Icon(Icons.add,
                                           color: Colors.white),
-                                      onPressed: () {
-                                        // Implement increment logic
-                                      },
+                                      onPressed: _incrementarPersonas,
                                     ),
                                   ],
                                 ),
@@ -435,6 +709,14 @@ class _HotelScreenState extends State<HotelScreen> {
                         ],
                       ),
                       const MyDivider(),
+                      Text(
+                        habitacionCategoria!.hoCaNombre,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: intersperse(
@@ -443,40 +725,38 @@ class _HotelScreenState extends State<HotelScreen> {
                             Text(
                               hotel.hoteNombre,
                               style: const TextStyle(
-                                fontSize: 24,
+                                fontSize: 18,
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             RatingRow(
-                              rating: place.rating,
+                              rating: hotel.hoteEstrellas as double,
                             ),
                           ],
                         ).toList(),
                       ),
-                      const SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.phone,
+                          const Icon(Icons.phone,
                               color:
                                   Color(0xFFFFBD59)), // Icon for phone number
-                          SizedBox(
+                          const SizedBox(
                               width:
                                   5), // Add some spacing between the icon and text
                           Text(
-                            '31466774',
+                            hotel.hoteTelefono.toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
-                          SizedBox(
+                          const SizedBox(
                               width:
                                   20), // Add some spacing between phone number and email
-                          Icon(Icons.email,
+                          const Icon(Icons.email,
                               color: Color(0xFFFFBD59)), // Icon for email
-                          SizedBox(
+                          const SizedBox(
                               width:
                                   5), // Add some spacing between the icon and text
                           Text(
-                            'correo@gmail.com',
+                            hotel.hoteCorreo,
                             style: const TextStyle(color: Colors.white),
                           ),
                         ],
@@ -488,7 +768,7 @@ class _HotelScreenState extends State<HotelScreen> {
                       const SizedBox(height: 12),
                       const MyDivider(),
                       Text(
-                        /*place.description ?? */ loremIpsumText,
+                        hotel.hoteResena,
                         maxLines: 5,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -630,6 +910,34 @@ class PaquetesDdl extends StatelessWidget {
     } else {
       return const Text("Cargando...");
     }
+  }
+}
+
+class DateDisplayWidget extends StatefulWidget {
+  final DateTime dateTime;
+  final ValueKey keyProp;
+
+  const DateDisplayWidget({
+    Key? key,
+    required this.dateTime,
+    required this.keyProp,
+  }) : super(key: key);
+
+  @override
+  _DateDisplayWidgetState createState() => _DateDisplayWidgetState();
+}
+
+class _DateDisplayWidgetState extends State<DateDisplayWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "${widget.dateTime.toLocal()}".split(' ')[0],
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Color(0xFFFFBD59),
+      ),
+    );
   }
 }
 

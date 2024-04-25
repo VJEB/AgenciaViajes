@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:agencia_viajes/models/habitaciones_categorias.dart';
 import 'package:agencia_viajes/models/hotel.dart';
 import 'package:agencia_viajes/models/place.dart';
 import 'package:agencia_viajes/models/profile.dart';
@@ -19,7 +20,8 @@ class Habitaciones extends StatefulWidget {
 }
 
 class _HabitacionesState extends State<Habitaciones> {
-  String urlHabitaciones = "http://etravel.somee.com/API/HabitacionesCategorias/HabitacionPorHotelList/";
+  String urlHabitaciones =
+      "http://etravel.somee.com/API/HabitacionesCategorias/HabitacionPorHotelList/";
 
   late Hotel hotel;
 
@@ -53,7 +55,7 @@ class _HabitacionesState extends State<Habitaciones> {
   void initState() {
     super.initState();
     hotel = widget.hotel;
-    urlHabitaciones += hotel.hoteId.toString(); 
+    urlHabitaciones += hotel.hoteId.toString();
   }
 
   @override
@@ -261,48 +263,44 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
               isExpanded = expanded;
             });
           },
-          trailing: IconButton(
-            icon: Icon(
-              isExpanded ? Icons.arrow_right : Icons.arrow_right,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => 
-                    HotelScreen(
-                      hotel: hotel,
-                      place: const Place(
-                          address: "adress",
-                          bathCount: 5,
-                          bedCount: 5,
-                          bedroomCount: 5,
-                          city: "city",
-                          costPerNight: 500,
-                          country: "country",
-                          guestCount: 50,
-                          imageUrls: [
-                            "https://cdn2.thecatapi.com/images/3ql.jpg",
-                            "https://cdn2.thecatapi.com/images/9p2.jpg",
-                            "https://cdn2.thecatapi.com/images/b9r.jpg"
-                          ],
-                          numberOfRatings: 500,
-                          owner: Profile(
-                            isSuperhost: true,
-                            name: "owner",
-                            profileImageUrl: "profileImageUrl",
+          trailing: FutureBuilder<List<dynamic>>(
+            future: getFotosPorHotel(habitacionesData["hote_Id"]),
+            builder: (context, snapshot) {
+              return IconButton(
+                icon: Icon(
+                  isExpanded ? Icons.arrow_right : Icons.arrow_right,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  if (snapshot.hasData) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => HotelScreen(
+                          habitacionCategoria: HabitacionCategoria(
+                            haCaId: habitacionesData['haCa_Id'],
+                            hoCaNombre: habitacionesData['haCa_Nombre'],
+                            haCaPrecioPorNoche:
+                                habitacionesData['haCa_PrecioPorNoche'],
+                            habiNumCamas: habitacionesData['habi_NumCamas'],
+                            habiNumPersonas:
+                                habitacionesData['habi_NumPersonas'],
                           ),
-                          rating: 5,
-                          state: "state",
-                          title: "title",
-                          type: PlaceType.apartment,
-                          zipcode: "zipcode",
-                          description: "description"),
-                    ),
-                  ));
+                          hotel: hotel,
+                          imageUrls: snapshot.data!
+                              .take(3)
+                              .map<String>((photo) => photo["foHa_UrlImagen"]
+                                  as String) // Cast to String
+                              .toList(),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
             },
           ),
+
           children: [
             FutureBuilder<List<dynamic>>(
               future: getFotosPorHotel(habitacionesData["hote_Id"]),
