@@ -16,7 +16,7 @@ class ConfirmarPago extends StatefulWidget {
 
 
 class _ConfirmarPagoState extends State<ConfirmarPago> {
-  String url = "https://localhost:44372/API/Persona/CargarTarjetas/1";
+  String url = "https://etravel.somee.com/API/Persona/CargarTarjetas/1";
 
   List<Map<String, dynamic>> carrito = [];
   double subtotal = 0;
@@ -148,7 +148,7 @@ Future<void> _insertarDetalleFactura(int facturaId) async {
       fdetId: 0, 
       factId: facturaId, 
       paquId: element['paqu_Id'],
-      factCantidadPaqu: carrito.length, 
+      factCantidadPaqu: 1, 
       fdetSubTotal: subtotal, 
       fdetTotal: totalPagar, 
       fdetImpuesto: impuesto, 

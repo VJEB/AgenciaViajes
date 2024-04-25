@@ -1,11 +1,18 @@
+import 'package:flutter/material.dart';
+
 class UsuarioModel {
   int? usuaId;
   String? usuaUsuario;
   String? usuaContra;
   bool? usuaAdmin;
   int? rolId;
+  int? persId;
+  String? persEmail;
   String? rolDescripcion;
   int? usuaUsuaCreacion;
+  final String? usuaFechaCreacion;
+  int? usuaUsuaModifica;
+  final String? usuaFechaModifica;
   String? persona;
   String? usuaUrlImagen;
   String? persDNI;
@@ -29,8 +36,13 @@ class UsuarioModel {
     this.usuaContra,
     this.usuaAdmin,
     this.rolId,
+    this.persId,
     this.rolDescripcion,
+    this.persEmail,
     this.usuaUsuaCreacion,
+    this.usuaFechaCreacion,
+    this.usuaUsuaModifica,
+    this.usuaFechaModifica,
     this.persona,
     this.usuaUrlImagen,
     this.persDNI,
@@ -56,6 +68,8 @@ class UsuarioModel {
       usuaContra: json['usua_Contra'],
       usuaAdmin: json['usua_Admin'],
       rolId: json['rol_Id'],
+      persId: json['pers_Id'],
+      persEmail: json['pers_Email'],
       rolDescripcion: json['rol_Descripcion'],
       usuaUsuaCreacion: json['usua_Usua_Creacion'],
       persona: json['persona'],
@@ -84,6 +98,8 @@ class UsuarioModel {
       'usua_Contra': usuaContra,
       'usua_Admin': usuaAdmin,
       'rol_Id': rolId,
+      'pers_Id': persId,
+      'pers_Email': persEmail,
       'rol_Descripcion': rolId,
       'usua_Usua_Creacion': usuaUsuaCreacion,
       'persona': persona,
