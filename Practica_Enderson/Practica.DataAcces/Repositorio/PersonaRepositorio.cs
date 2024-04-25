@@ -123,6 +123,7 @@ namespace Practica.DataAcces.Repositorio
                 return result;
             }
         }
+
         public IEnumerable<tbPersonas> Detalle(int Pers_Id)
         {
 

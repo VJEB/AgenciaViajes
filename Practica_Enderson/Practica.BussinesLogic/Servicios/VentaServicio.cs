@@ -18,48 +18,6 @@ namespace Practica.BussinesLogic.Servicios
             _facturaRepositorio = facturaRepositorio;
         }
 
-
-        #region Usuario
-
-        public ServiceResult ListFact(int Pers_Id)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var list = _facturaRepositorio.List(Pers_Id);
-                return result.Ok(list);
-            }
-            catch (Exception ex)
-            {
-                return result.Error("Error al cargar las facturas");
-            }
-        }
-        public ServiceResult FindFact(int Fact_Id)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var list = _facturaRepositorio.Find(Fact_Id);
-                return result.Ok(list);
-            }
-            catch (Exception ex)
-            {
-                return result.Error("Error al cargar las facturas");
-            }
-        }
-        public ServiceResult ListMetodosPagos()
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var list = _facturaRepositorio.ListMetodosPagos();
-                return result.Ok(list);
-            }
-            catch (Exception ex)
-            {
-                return result.Error("Error al cargar los metodos de pago");
-            }
-        }
         public ServiceResult InsertarFactu(tbFacturas item, out int factId)
         {
             var result = new ServiceResult();
@@ -107,7 +65,68 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+        #region Usuario
 
+        public ServiceResult ListFact(int Pers_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturaRepositorio.List(Pers_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error("Error al cargar las facturas");
+            }
+        }
+        public ServiceResult FindFact(int Fact_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturaRepositorio.Find(Fact_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error("Error al cargar las facturas");
+            }
+        }
+        public ServiceResult ListMetodosPagos()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturaRepositorio.ListMetodosPagos();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error("Error al cargar los metodos de pago");
+            }
+        }
+        //public ServiceResult InsertarFact(tbFacturas item)
+        //{
+        //    var result = new ServiceResult();
+        //    try
+        //    {
+        //        var response = _facturaRepositorio.Insertar(item);
+        //        if (response.CodeStatus == 1)
+        //        {
+        //            return result.Ok(response.MessageStatus); //response.MessageStatus = Fact_Id
+        //        }
+        //        else
+        //        {
+        //            return result.Error("Error al crear la factura");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return result.Error("Error al crear la factura");
+        //    }
+        //}
         public ServiceResult ActualizarFact(tbFacturas item)
         {
             var result = new ServiceResult();

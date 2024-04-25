@@ -2,13 +2,13 @@ class ServiceResult {
   final int code;
   final bool success;
   final String message;
-  final DataModel data;
+  final DataModel? data;
 
   ServiceResult({
     required this.code,
     required this.success,
     required this.message,
-    required this.data,
+    this.data,
   });
 
   factory ServiceResult.fromJson(Map<String, dynamic> json) {
@@ -16,7 +16,7 @@ class ServiceResult {
       code: json['code'],
       success: json['success'],
       message: json['message'],
-      data: DataModel.fromJson(json['data']),
+      data: json['data'] != null ? DataModel.fromJson(json['data']) : null,
     );
   }
 }

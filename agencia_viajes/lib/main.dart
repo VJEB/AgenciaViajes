@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       ),
       // routes: {
       //   '/inicio': (context) => const Layout(),
-      //   '/register': (context) => const RegistroUsuario(),
+      //   '/Usuarios/registro': (context) => const RegistroUsuario(),
       // },
     );
   }

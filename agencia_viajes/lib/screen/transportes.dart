@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'package:agencia_viajes/models/paquete.dart';
+import 'package:agencia_viajes/models/service_result.dart';
+import 'package:agencia_viajes/screen/hotel_screen.dart';
+import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +19,13 @@ class Transportes extends StatefulWidget {
 }
 
 class _TransportesState extends State<Transportes> {
+  final _formKey = GlobalKey<FormState>();
+
   String url = "https://etravel.somee.com/API/Transporte/TransporteList/2";
+
+  String persId = 1.toString();
+
+  String urlPaquetes = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
 
   Map<int, bool> expansionState = {};
 
@@ -99,10 +109,272 @@ class _TransportesState extends State<Transportes> {
     }
   }
 
+  late Paquete _paqueteSeleccionado;
+  final List<Paquete> _paquetes = [];
+
+  Future<List<Paquete>>? _paquetesFuture;
+
+  void _onPaqueteSelected(Paquete paquete) {
+    setState(() {
+      _paqueteSeleccionado = paquete;
+    });
+  }
+
+  Future<List<Paquete>> _cargarPaquetes() async {
+    List<Paquete> list = [];
+    final respuesta = await http.get(Uri.parse(urlPaquetes));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> paquetesJson = jsonDecode(respuesta.body);
+        list = paquetesJson.map((json) => Paquete.fromJson(json)).toList();
+        if (list.isNotEmpty) {
+          // _estadoSeleccionado = list.first.estaId;
+        } else {
+          print('Error al cargar los paquetes');
+        }
+      });
+    }
+    return list;
+  }
+
   @override
   void initState() {
     super.initState();
     _cargarPaises();
+    urlPaquetes += persId;
+    _paquetesFuture ??= _cargarPaquetes();
+  }
+
+  void mostrarDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            Future<void> postReservacion(BuildContext context) async {
+              String url =
+                  "https://etravel.somee.com/API/DetallePorPaquete/Viajes/Create";
+
+              // Viaje viaje = Viaje();
+
+              var resultado = await http.post(
+                Uri.parse(url),
+                headers: {'Content-Type': 'application/json'},
+                body: jsonEncode(viaje.toJson()),
+              );
+
+              if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+                final responseJson = jsonDecode(resultado.body);
+                final response = ServiceResult.fromJson(responseJson);
+                final mensaje = response.message;
+                if (response.code >= 200 && response.code < 300) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            PaquetesForm(paquete: _paqueteSeleccionado),
+                      ));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        backgroundColor: Colors.red[400],
+                        content: Text(mensaje)),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      backgroundColor: Colors.red[400],
+                      content: const Text('Error al agregar la reservación.')),
+                );
+              }
+            }
+
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                side: const BorderSide(
+                  color: Color(0xC6FFFFFF),
+                  width: 0.5,
+                ),
+              ),
+              backgroundColor: const Color(0xC9040000),
+              title: const Text(
+                'Boletos',
+                style: TextStyle(color: Color(0xFFFFBD59)),
+              ),
+              content: Form(
+                key: _formKey,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  const SizedBox(height: 10.0),
+                  FutureBuilder<List<Paquete>>(
+                    future: _paquetesFuture, // Use the assigned future
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text(
+                          "Cargando...",
+                          style: TextStyle(color: Color(0xFFFFBD59)),
+                        );
+                      } else if (snapshot.hasData) {
+                        _paquetes.addAll(snapshot.data as Iterable<Paquete>);
+                        return PaquetesDdl(
+                            paises: _paquetes,
+                            onPaisSelected: _onPaqueteSelected);
+                      } else {
+                        return const Text(
+                          "Error al cargar los paquetes del usuario",
+                          style: TextStyle(color: Colors.red),
+                        );
+                      }
+                    },
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Precio por Boleto:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${""}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Subtotal:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${hotel.impuDescripcion} (${hotel.paisPorcentajeImpuesto * 100}%):',
+                          style: const TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) * hotel.paisPorcentajeImpuesto)}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Total:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'L. ${((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) + ((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) * hotel.paisPorcentajeImpuesto))}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              width: 150, // max width of the button
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    await postReservacion(context);
+                                  }
+                                },
+                                icon: const Icon(Icons.check),
+                                label: const Text('Guardar reservación'),
+                              ),
+                            )
+                          ]))
+                ]),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -126,12 +398,12 @@ class _TransportesState extends State<Transportes> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _buildFiltroButton(), 
+              child: _buildFiltroButton(),
             ),
             Card(
               elevation: 4,
               margin: EdgeInsets.only(bottom: 20),
-              color: Colors.white10, 
+              color: Colors.white10,
               child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(
@@ -207,6 +479,7 @@ class _TransportesState extends State<Transportes> {
                     color: Colors.white10,
                     clipBehavior: Clip.hardEdge,
                     child: InkWell(
+                      onTap: () {},
                       splashColor: const Color.fromARGB(255, 255, 239, 120)
                           .withAlpha(30),
                       child: SizedBox(
@@ -217,7 +490,8 @@ class _TransportesState extends State<Transportes> {
                             Expanded(
                                 flex: 1,
                                 child: CachedNetworkImage(
-                                  imageUrl: _transportes[index]["ciud_UrlImagen"],
+                                  imageUrl: _transportes[index]
+                                      ["ciud_UrlImagen"],
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => const Center(
                                     child: CircularProgressIndicator(),
@@ -240,7 +514,9 @@ class _TransportesState extends State<Transportes> {
                                       children: [
                                         Flexible(
                                           child: Text(
-                                            _transportes[index]["horT_FechaYhora"].toString(),
+                                            _transportes[index]
+                                                    ["horT_FechaYhora"]
+                                                .toString(),
                                             style: const TextStyle(
                                               fontSize: 14,
                                               color: Color(0xFFFFBD59),
@@ -250,7 +526,7 @@ class _TransportesState extends State<Transportes> {
                                         Text(
                                           // 'Desde: L.${element["haHo_PrecioPorNoche"]}',
                                           'L.${_transportes[index]["tran_Precio"].toString()}',
-                                           style: const TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             color: Color.fromARGB(
                                                 255, 44, 214, 50),
@@ -261,7 +537,6 @@ class _TransportesState extends State<Transportes> {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-                             
                                   Padding(
                                     padding: const EdgeInsets.only(right: 4.0),
                                     child: Row(
@@ -270,14 +545,13 @@ class _TransportesState extends State<Transportes> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                      
                                         Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                              Text(
+                                            Text(
                                               'Inicio: ${_transportes[index]["puntoInicio"]}',
                                               style: const TextStyle(
                                                 fontSize: 12,
@@ -287,13 +561,12 @@ class _TransportesState extends State<Transportes> {
                                             Text(
                                               'Destino: ${_transportes[index]["puntoFinal"]}',
                                               style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xFFFFBD59),
-                                                fontWeight: FontWeight.bold
-                                              ),
+                                                  fontSize: 14,
+                                                  color: Color(0xFFFFBD59),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                               'Transporte: ${_transportes[index]["tiTr_Descripcion"]}',
+                                              'Transporte: ${_transportes[index]["tiTr_Descripcion"]}',
                                               style: const TextStyle(
                                                 fontSize: 13,
                                                 color: Colors.white,

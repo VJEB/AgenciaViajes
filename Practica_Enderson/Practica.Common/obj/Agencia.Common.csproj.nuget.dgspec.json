@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {}
+    "C:\\Users\\HP GAMING JAFET\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {}
   },
   "projects": {
-    "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
+    "C:\\Users\\HP GAMING JAFET\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
+        "projectUniqueName": "C:\\Users\\HP GAMING JAFET\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
         "projectName": "Agencia.Common",
-        "projectPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
-        "packagesPath": "C:\\Users\\LAB1\\.nuget\\packages\\",
-        "outputPath": "C:\\repositorio\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\obj\\",
+        "projectPath": "C:\\Users\\HP GAMING JAFET\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\Agencia.Common.csproj",
+        "packagesPath": "C:\\Users\\HP GAMING JAFET\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP GAMING JAFET\\Documents\\GitHub\\AgenciaViajes\\Practica_Enderson\\Practica.Common\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\LAB1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP GAMING JAFET\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

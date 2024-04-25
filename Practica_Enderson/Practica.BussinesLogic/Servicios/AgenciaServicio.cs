@@ -14,16 +14,21 @@ namespace Agencia.BussinesLogic.Servicios
     {
         private readonly DetallePorPaqueteRepositorio _detallexpaqueteRepositorio;
         private readonly HabitacionRepositorio _habitacionRepositorio;
+        private readonly HabitacionesCategoriasRepositorio _habitacionesCategoriasRepositorio;
         private readonly HotelRepositorio _hotelRepositorio;
         private readonly PaqueteRepositorio _paqueteRepositorio;
         private readonly TransporteRepositorio _transporteRepositorio;
 
-        public AgenciaServicio(DetallePorPaqueteRepositorio detallexpaqueteRepositorio, HabitacionRepositorio habitacionRepositorio,
-            HotelRepositorio hotelRepositorio
-              , PaqueteRepositorio paqueteRepositorio, TransporteRepositorio transporteRepositorio)
+        public AgenciaServicio(DetallePorPaqueteRepositorio detallexpaqueteRepositorio, 
+            HabitacionRepositorio habitacionRepositorio,
+            HabitacionesCategoriasRepositorio habitacionesCategoriasRepositorio,
+            HotelRepositorio hotelRepositorio, 
+            PaqueteRepositorio paqueteRepositorio, 
+            TransporteRepositorio transporteRepositorio)
         {
             _detallexpaqueteRepositorio = detallexpaqueteRepositorio;
             _habitacionRepositorio = habitacionRepositorio;
+            _habitacionesCategoriasRepositorio = habitacionesCategoriasRepositorio;
             _hotelRepositorio = hotelRepositorio;
 
             _paqueteRepositorio = paqueteRepositorio;
@@ -161,6 +166,28 @@ namespace Agencia.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult InsertarReservaciones(tbReservaciones item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var response = _detallexpaqueteRepositorio.InsertarReservaciones(item);
+                if (response.CodeStatus == 1)
+                {
+                    return result.Ok(response);
+                }
+                else
+                {
+                    return result.Error(response.MessageStatus);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult ActualizarDetallePaquete(int id, tbDetallePorPaquete item)
         {
             var result = new ServiceResult();
@@ -213,6 +240,23 @@ namespace Agencia.BussinesLogic.Servicios
             return _detallexpaqueteRepositorio.Detalle(id);
         }
 
+        #endregion
+
+        #region HabitacionesCategorias
+        public ServiceResult ListHabitacionesCategoriasXHotel(int Hote_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _habitacionesCategoriasRepositorio.HabitacionesCategoriasPorHotel(Hote_Id);
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Habitaciones

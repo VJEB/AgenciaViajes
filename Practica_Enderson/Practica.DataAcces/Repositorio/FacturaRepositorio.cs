@@ -12,6 +12,50 @@ namespace Practica.DataAcces.Repositorio
 {
     public class FacturaRepositorio : IRepository<tbFacturas>
     {
+        public (RequestStatus, int) Insertar(tbFacturas item)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+
+                parametro.Add("Fact_Fecha", DateTime.Now);
+                parametro.Add("Meto_Id", item.Meto_Id);
+                parametro.Add("Pago_Id", item.Pago_Id);
+                parametro.Add("Pers_Id", item.Pers_Id);
+                parametro.Add("Fact_Usua_Creacion", item.Fact_Usua_Creacion);
+                parametro.Add("Fact_Fecha_Creacion", item.Fact_Fecha_Creacion);
+                parametro.Add("Fact_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                var result = db.QueryFirst(ScriptBaseDatos.Fact_Insertar, parametro, commandType: CommandType.StoredProcedure);
+
+                int fact = 0;
+                if (result.Resultado == 1)
+                {
+                    fact = parametro.Get<int>("Fact_Id");
+                }
+
+                return (new RequestStatus { CodeStatus = result.Resultado }, fact);
+            }
+        }
+
+        public RequestStatus InsertarDetalle(tbFacturasDetalles item)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+
+                parametro.Add("Fact_Id", item.Fact_Id);
+                parametro.Add("Paqu_Id", item.Paqu_Id);
+                parametro.Add("Fact_CantidadPaqu", item.Fact_CantidadPaqu);
+                parametro.Add("Fdet_SubTotal", item.Fdet_SubTotal);
+                parametro.Add("Fdet_Total", item.Fdet_Total);
+                parametro.Add("Fdet_Impuesto", item.Fdet_Impuesto);
+
+                var result = db.QueryFirst(ScriptBaseDatos.Fact_InsertarDetalle, parametro, commandType: CommandType.StoredProcedure);
+
+                return (new RequestStatus { CodeStatus = result.Resultado });
+            }
+        }
         public RequestStatus Actualizar(tbFacturas item)
         {
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
@@ -58,51 +102,28 @@ namespace Practica.DataAcces.Repositorio
             }
         }
 
-        public (RequestStatus, int) Insertar(tbFacturas item)
-        {
-            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-            {
-                var parametro = new DynamicParameters();
+        //public RequestStatus Insertar(tbFacturas item)
+        //{
+        //    using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+        //    {
+        //        var parametro = new DynamicParameters();
 
-                parametro.Add("Fact_Fecha", item.Fact_Fecha);
-                parametro.Add("Meto_Id", item.Meto_Id);
-                parametro.Add("Pago_Id", item.Pago_Id);
-                parametro.Add("Pers_Id", item.Pers_Id);
-                parametro.Add("Fact_Usua_Creacion", item.Fact_Usua_Creacion);
-                parametro.Add("Fact_Fecha_Creacion", item.Fact_Fecha_Creacion);
-                parametro.Add("Fact_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        //        parametro.Add("Fact_Fecha", item.Fact_Fecha);
+        //        parametro.Add("Meto_Id", item.Meto_Id);
+        //        parametro.Add("Pago_Id", item.Pago_Id);
+        //        parametro.Add("Pers_Id", item.Pers_Id);
+        //        parametro.Add("Fact_Usua_Creacion", item.Fact_Usua_Creacion);
+        //        parametro.Add("Fact_Fecha_Creacion", item.Fact_Fecha_Creacion);
 
-                var result = db.QueryFirst(ScriptBaseDatos.Fact_Insertar, parametro, commandType: CommandType.StoredProcedure);
+        //        parametro.Add("Fact_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                int fact = 0;
-                if (result.Resultado == 1)
-                {
-                    fact = parametro.Get<int>("Fact_Id");
-                }
+        //        var result = db.QueryFirst(ScriptBaseDatos.Fact_Insertar, parametro, commandType: CommandType.StoredProcedure);
 
-                return (new RequestStatus { CodeStatus = result.Resultado }, fact);
-            }
-        }
+        //        int factId = parametro.Get<int>("Fact_Id");
 
-        public RequestStatus InsertarDetalle(tbFacturasDetalles item)
-        {
-            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
-            {
-                var parametro = new DynamicParameters();
-
-                parametro.Add("Fact_Id", item.Fact_Id);
-                parametro.Add("Paqu_Id", item.Paqu_Id);
-                parametro.Add("Fact_CantidadPaqu", item.Fact_CantidadPaqu);
-                parametro.Add("Fdet_SubTotal", item.Fdet_SubTotal);
-                parametro.Add("Fdet_Total", item.Fdet_Total);
-                parametro.Add("Fdet_Impuesto", item.Fdet_Impuesto);
- 
-                var result = db.QueryFirst(ScriptBaseDatos.Fact_InsertarDetalle, parametro, commandType: CommandType.StoredProcedure);
-
-                return (new RequestStatus { CodeStatus = result.Resultado });
-            }
-        }
-
+        //        return new RequestStatus { CodeStatus = result.Resultado, MessageStatus = factId.ToString() };
+        //    }
+        //}
         public IEnumerable<tbFacturas> List(int Pers_Id)
         {
             List<tbFacturas> result = new List<tbFacturas>();

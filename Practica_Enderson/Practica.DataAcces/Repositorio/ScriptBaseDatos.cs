@@ -59,6 +59,7 @@ namespace Practica.DataAcces.Repositorio
 
         #region Detalles Paquetes
         public static string DePa_Insertar = "[Agen].[SP_DetallePorPaquete_Insertar]";
+        public static string Rese_Insertar = "[Agen].[SP_Reservaciones_Insertar]";
         public static string DePa_Actualizar = "[Agen].[SP_DetallePorPaquete_Actualizar]";
         public static string DePa_Eliminar = "[Agen].[SP_DetallePorPaquete_Eliminar]";
         public static string DePa_Llenar = "[Agen].[SP_DetallePorPaquete_Llenar]";
@@ -71,6 +72,7 @@ namespace Practica.DataAcces.Repositorio
         public static string TiCa_Mostrar = "[Gral].[SP_TiposDeCamas_Mostrar]";
         #endregion
 
+        public static string HaCa_Mostrar = "[Agen].[SP_HabitacionesCategorias_Mostrar]";
 
         #region Hoteles
         public static string Hote_Mostrar = "[Agen].[SP_Hoteles_Mostrar]";
@@ -96,6 +98,7 @@ namespace Practica.DataAcces.Repositorio
         public static string Fact_Actualizar = "Vent.SP_Facturas_Actualizar";
         #endregion
         public static string Meto_Mostrar = "[Gral].[SP_MetodosPagos_Mostrar]";
+        public static string Fact_InsertarDetalle = "[Vent].[SP_FacturasDetalle_Insertar]";
     }
 
 }

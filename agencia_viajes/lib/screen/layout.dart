@@ -21,6 +21,12 @@ class _LayoutState extends State<Layout> {
     ProfileScreen(),
   ];
 
+  final List<String> _appBarTitles = [
+    'Dashboards',
+    'Hoteles',
+    'Perfil',
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -32,6 +38,10 @@ class _LayoutState extends State<Layout> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        title: Text(
+          _appBarTitles[_selectedIndex],
+          style: TextStyle(color: Color(0xFFFFBD59)),
+        ),
         actions: <Widget>[],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),

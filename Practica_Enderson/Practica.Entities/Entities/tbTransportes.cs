@@ -18,12 +18,12 @@ namespace Agencia.Entities.Entities
         public int Tran_Id { get; set; }
         public decimal? Tran_Precio { get; set; }
         public int? TiTr_Id { get; set; }
-        public string Tran_PuntoInicio { get; set; }
-        public string Tran_PuntoFinal { get; set; }
+        public int? Tran_PuntoInicio { get; set; }
+        public int? Tran_PuntoFinal { get; set; }
         public int Tran_Usua_Creacion { get; set; }
         public DateTime Tran_Fecha_Creacion { get; set; }
-        public int Tran_Usua_Modifica { get; set; }
-        public DateTime Tran_Fecha_Modifica { get; set; }
+        public int? Tran_Usua_Modifica { get; set; }
+        public DateTime? Tran_Fecha_Modifica { get; set; }
         public bool? Tran_Estado { get; set; }
         [NotMapped]
         public string PuntoInicio { get; set; }
@@ -33,10 +33,13 @@ namespace Agencia.Entities.Entities
         public string PuntoFinal { get; set; }
         [NotMapped]
         public string TiTr_Descripcion { get; set; }
+        
         [NotMapped]
         public string Ciud_UrlImagen { get; set; }
 
         public virtual tbTiposTransportes TiTr { get; set; }
+        public virtual tbCiudades Tran_PuntoFinalNavigation { get; set; }
+        public virtual tbCiudades Tran_PuntoInicioNavigation { get; set; }
         public virtual tbUsuarios Tran_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Tran_Usua_ModificaNavigation { get; set; }
         public virtual ICollection<tbHorariosTransportes> tbHorariosTransportes { get; set; }

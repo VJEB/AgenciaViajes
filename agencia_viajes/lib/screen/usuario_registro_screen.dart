@@ -4,9 +4,13 @@
   lib/screens/simple_login.dart
 */
 
-import 'package:agencia_viajes/models/persona.dart';
+import 'dart:convert';
+
+import 'package:agencia_viajes/models/usuario.dart';
+import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
 import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class RegistroUsuario extends StatefulWidget {
   final int persId;
@@ -20,7 +24,7 @@ class RegistroUsuario extends StatefulWidget {
 class _RegistroUsuarioState extends State<RegistroUsuario> {
   late String usuario, persEmail, password, confirmPassword;
   String? usuarioError, emailError, passwordError;
-  
+
   late int? persId;
 
   @override
@@ -31,7 +35,6 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     persEmail = '';
     password = '';
     confirmPassword = '';
-
     usuarioError = null;
     emailError = null;
     passwordError = null;
@@ -50,11 +53,11 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     RegExp emailExp = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-    bool isValid = true;  
-    
+    bool isValid = true;
+
     if (usuario.isEmpty) {
       setState(() {
-        usuarioError = 'El correo es inválido';
+        usuarioError = 'El usuario es inválido';
       });
       isValid = false;
     }
@@ -82,8 +85,43 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     return isValid;
   }
 
-  void submit() {
+  Future<void> postUsuario() async {
+    const String url = "https://etravel.somee.com/API/Usuario/Create";
+    Usuario usua = Usuario(
+        emplId: persId,
+        usuaUsuario: usuario,
+        usuaContrasena: password,
+        persEmail: persEmail,
+        usuaCreacion: 1,
+        usuaFechaCreacion: DateTime.now().toUtc().toIso8601String());
+
+    var resultado = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(usua.toJson()),
+    );
+
+    if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            backgroundColor: Color.fromARGB(255, 80, 239, 136),
+            content:
+                Text('Usuario registrado con exito! Por favor inicie sesión.')),
+      );
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const InicioSesion()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red[400],
+            content: const Text('Ya existe este usuario')),
+      );
+    }
+  }
+
+  Future<void> submit() async {
     if (validate()) {
+      await postUsuario();
     }
   }
 
@@ -93,17 +131,20 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Registro de usuarios", style: TextStyle(color: Color(0xFFFFBD59)),),
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          tooltip: 'Volver',
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const RegistroPersona()));
-          },
+        title: const Text(
+          "Registro de usuarios",
+          style: TextStyle(color: Color(0xFFFFBD59)),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
+        backgroundColor: Colors.black,
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back),
+        //   tooltip: 'Volver',
+        //   onPressed: () {
+        //     Navigator.push(context,
+        //         MaterialPageRoute(builder: (_) => const RegistroPersona()));
+        //   },
+        // ),
+        // iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       body: Container(
         color: Colors.black,

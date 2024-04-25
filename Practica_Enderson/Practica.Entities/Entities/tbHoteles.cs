@@ -11,7 +11,7 @@ namespace Agencia.Entities.Entities
     {
         public tbHoteles()
         {
-            tbHabitacionesPorHotel = new HashSet<tbHabitacionesPorHotel>();
+            tbHabitacionesCategorias = new HashSet<tbHabitacionesCategorias>();
         }
 
         public int Hote_Id { get; set; }
@@ -27,18 +27,26 @@ namespace Agencia.Entities.Entities
         public int? Hote_Usua_Modifica { get; set; }
         public DateTime? Hote_Fecha_Modifica { get; set; }
         public int Hote_Estado { get; set; }
-        public int? Hote_Telefono { get; set; }
-        public int? Hote_Correo { get; set; }
+        public int Hote_Telefono { get; set; }
+        public string Hote_Correo { get; set; }
         public string Hote_Reseña { get; set; }
         [NotMapped]
         public string Ciud_Descripcion { get; set; }
         [NotMapped]
+        public string Esta_Descripcion { get; set; }
+        [NotMapped]
         public string Pais_Descripcion { get; set; }
         [NotMapped]
         public double HaHo_PrecioPorNoche { get; set; }
+        [NotMapped]
+        public double Pais_PorcentajeImpuesto { get; set; }
+        [NotMapped]
+        public string Impu_Descripcion { get; set; }
+        [NotMapped]
+        public int Impu_Id { get; set; }
 
         public virtual tbUsuarios Hote_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Hote_Usua_ModificaNavigation { get; set; }
-        public virtual ICollection<tbHabitacionesPorHotel> tbHabitacionesPorHotel { get; set; }
+        public virtual ICollection<tbHabitacionesCategorias> tbHabitacionesCategorias { get; set; }
     }
 }

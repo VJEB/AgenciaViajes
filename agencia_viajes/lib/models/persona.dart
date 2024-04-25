@@ -11,7 +11,7 @@ class Persona {
   final String persFechaCreacion;
   final int? persUsuaModifica;
   final String? persFechaModifica;
-  final String? persHabilitado;
+  final bool persHabilitado;
   final String persPasaporte;
   final String? persEmail;
   final int? cargId;
@@ -29,10 +29,10 @@ class Persona {
     required this.persFechaCreacion,
     this.persUsuaModifica,
     this.persFechaModifica,
-    this.persHabilitado,
+    required this.persHabilitado,
     required this.persPasaporte,
     this.persEmail,
-    this.cargId,
+    required this.cargId,
   });
 
   factory Persona.fromJson(Map<String, dynamic> json) {

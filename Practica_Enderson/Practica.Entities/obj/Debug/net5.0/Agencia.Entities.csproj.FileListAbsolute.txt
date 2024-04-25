@@ -22,3 +22,26 @@ C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.
 C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.dll
 C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\ref\Agencia.Entities.dll
 C:\repositorio\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.deps.json
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\ref\Agencia.Entities.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.AssemblyInfoInputs.cache
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.AssemblyInfo.cs
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.csproj.CoreCompileInputs.cache
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\ref\Agencia.Entities.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.deps.json
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\ref\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\bin\Debug\net5.0\Agencia.Entities.pdb
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.csproj.AssemblyReference.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.AssemblyInfoInputs.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.AssemblyInfo.cs
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.csproj.CoreCompileInputs.cache
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\ref\Agencia.Entities.dll
+C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.Entities\obj\Debug\net5.0\Agencia.Entities.pdb
