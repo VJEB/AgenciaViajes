@@ -32,17 +32,6 @@ class _HotelScreenState extends State<HotelScreen> {
 
   String urlPaquetes = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
 
-  // DateTime fechaInicio = DateTime.now();
-  // DateTime fechaFin = DateTime.now().add(const Duration(days: 1));
-
-  var tipoDeCama;
-
-  var numeroDeCamas;
-
-  var numeroDePersonas;
-
-  String _paquNombre = '';
-
   Hotel get hotel => widget.hotel;
   List<String> get imageUrls => widget.imageUrls;
   late HabitacionCategoria? habitacionCategoria;
@@ -141,7 +130,6 @@ class _HotelScreenState extends State<HotelScreen> {
     DateTime fechaFin = DateTime.now().add(const Duration(days: 1));
     int _numNoches =
         fechaFin.difference(fechaInicio).inDays; // Move _numNoches here
-    Paquete paqu;
 
     showDialog(
       context: context,
@@ -194,9 +182,6 @@ class _HotelScreenState extends State<HotelScreen> {
                         content: Text(mensaje)),
                   );
                 }
-                setState(() {
-                  //AAAa???
-                });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
