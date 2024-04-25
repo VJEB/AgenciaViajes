@@ -134,6 +134,35 @@ namespace Agencia.DataAcces.Repositorio
                 return new RequestStatus { CodeStatus = result.Resultado, MessageStatus = mensaje };
             }
         }
+        public RequestStatus InsertarViajes(tbViajes item)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+                parametro.Add("HorT_Id", item.HorT_Id);
+                parametro.Add("Paqu_Id", item.Paqu_Id);
+                parametro.Add("Viaj_Cantidad", item.Viaj_Cantidad);
+                parametro.Add("Viaj_Usua_Creacion", item.Viaj_Usua_Creacion);
+                parametro.Add("Viaj_Fecha_Creacion", item.Viaj_Fecha_Creacion);
+                var result = db.QueryFirst(ScriptBaseDatos.Viaj_Insertar,
+                    parametro,
+                    commandType: CommandType.StoredProcedure
+                    );
+                string mensaje = "";
+                if (result.BoletosDisponibles != null)
+                {
+                    if (result.BoletosDisponibles == 0)
+                    {
+                        mensaje = "No hay boletos disponibles";
+                    }
+                    else
+                    {
+                        mensaje = $"Boletos disponibles: {result.BoletosDisponibles}";
+                    }
+                }
+                return new RequestStatus { CodeStatus = result.Resultado, MessageStatus = mensaje };
+            }
+        }
         //public IEnumerable<tbDetallePorPaquete> List()
         //{
         //    List<tbDetallePorPaquete> result = new List<tbDetallePorPaquete>();

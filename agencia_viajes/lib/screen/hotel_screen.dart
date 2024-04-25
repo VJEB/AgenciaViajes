@@ -138,7 +138,7 @@ class _HotelScreenState extends State<HotelScreen> {
           builder: (context, setState) {
             Future<void> postReservacion(BuildContext context) async {
               String url =
-                  "https://etravel.somee.com/API/DetallePorPaquete/Reservaciones/Create";
+                  "https://etravel.somee.com/API/DetallePorPaquete/ReservacionesCreate";
 
               Reservacion reser = Reservacion(
                 reseId: 0,

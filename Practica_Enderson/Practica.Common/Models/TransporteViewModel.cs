@@ -29,5 +29,14 @@ namespace Agencia.Common.Models
         public string TiTr_Descripcion { get; set; }
         [NotMapped]
         public string Ciud_UrlImagen { get; set; }
+        [NotMapped]
+        public double Pais_PorcentajeImpuesto { get; set; }
+        [NotMapped]
+        public string Impu_Descripcion { get; set; }
+        [NotMapped]
+        public int Impu_Id { get; set; }
+        [NotMapped]
+        public int? HorT_Id { get; set; }
+
     }
 }
