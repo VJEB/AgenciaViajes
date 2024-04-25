@@ -39,7 +39,6 @@ namespace Agencia.API.Controllers
         [HttpPost("Create")]
         public IActionResult Create(FacturaViewModel item)
         {
-            //var model = _mapper.Map<tbFacturas>(item);
             var modelo = new tbFacturas()
             {
                 Fact_Fecha = item.Fact_Fecha,
@@ -50,9 +49,36 @@ namespace Agencia.API.Controllers
                 Fact_Fecha_Creacion = item.Fact_Fecha_Creacion
             };
             //var listado = _ventaServicio.ListFact();
+            int factId;
+            var result = _ventaServicio.InsertarFactu(modelo, out factId);
+            if (factId > 0)
+            {
+                result.Message = factId.ToString();
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
 
-            var result = _ventaServicio.InsertarFact(modelo);
+        [HttpPost("CreateDetalle")]
+        public IActionResult CreateDetalle(FacturaDetalleViewModel item)
+        {
+            //var model = _mapper.Map<tbFacturas>(item);
+            var modelo = new tbFacturasDetalles()
+            {
+                Fact_Id = item.Fact_Id,
+                Paqu_Id = item.Paqu_Id,
+                Fact_CantidadPaqu = item.Fact_CantidadPaqu,
+                Fdet_SubTotal = item.Fdet_SubTotal,
+                Fdet_Total = item.Fdet_Total,
+                Fdet_Impuesto = item.Fdet_Impuesto,
+            };
+            
+            var result = _ventaServicio.InsertarFactuDetalle(modelo);
             return Ok(result);
+            
         }
 
         [HttpPut("Edit")]

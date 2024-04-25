@@ -26,6 +26,8 @@ namespace Practica.API.Extensiones
             CreateMap<RolViewModel, tbRoles>().ReverseMap();
             CreateMap<CiudadesViewModel, tbCiudades>().ReverseMap();
             CreateMap<EstadoCivilViewModel, tbEstadosCiviles>().ReverseMap();
+            CreateMap<FacturaViewModel, tbFacturas>().ReverseMap();
+            CreateMap<FacturaDetalleViewModel, tbFacturas>().ReverseMap();
         }
     }
 }

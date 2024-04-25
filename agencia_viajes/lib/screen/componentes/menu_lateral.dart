@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:agencia_viajes/screen/transportes.dart';
 import 'package:agencia_viajes/screen/usuarios_screen1.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agencia_viajes/models/usuario.dart';
+
 
 class MenuLateral extends StatelessWidget {
   final BuildContext context;
@@ -19,10 +22,21 @@ class MenuLateral extends StatelessWidget {
         context, MaterialPageRoute(builder: (_) => const Layout()));
   }
 
-  void _cerrarSesion() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => const InicioSesion()));
-  }
+  void _cerrarSesion() async {
+  // Obtiene una instancia de SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+
+  // Limpia los valores de SharedPreferences
+  await prefs.remove('usua_Id');
+  await prefs.remove('usua_Usuario');
+  await prefs.remove('usua_Contra');
+
+  // Redirige al usuario al Layout
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (_) => const Layout()),
+  );
+}
 
   void _paquetes() {
     Navigator.pushReplacement(

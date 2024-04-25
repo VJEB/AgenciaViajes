@@ -60,27 +60,54 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error("Error al cargar los metodos de pago");
             }
         }
-        public ServiceResult InsertarFact(tbFacturas item)
+        public ServiceResult InsertarFactu(tbFacturas item, out int factId)
         {
             var result = new ServiceResult();
+            factId = 0;
             try
             {
-                var response = _facturaRepositorio.Insertar(item);
-                if (response.CodeStatus == 1)
+                var (list, idGenerado) = _facturaRepositorio.Insertar(item);
+                if (list.CodeStatus > 0)
                 {
-                    return result.Ok(response.MessageStatus); //response.MessageStatus = Fact_Id
+                    factId = idGenerado;
+                    return result.Ok(list);
                 }
                 else
                 {
-                    return result.Error("Error al crear la factura");
+                    return result.Error("Ya hay una persona con esa informacion");
                 }
+
             }
             catch (Exception ex)
             {
 
-                return result.Error("Error al crear la factura");
+                return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult InsertarFactuDetalle(tbFacturasDetalles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturaRepositorio.InsertarDetalle(item);
+                if (list.CodeStatus > 0)
+                {
+                    return result.Ok(list);
+                }
+                else
+                {
+                    return result.Error("Ya hay una persona con esa informacion");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult ActualizarFact(tbFacturas item)
         {
             var result = new ServiceResult();

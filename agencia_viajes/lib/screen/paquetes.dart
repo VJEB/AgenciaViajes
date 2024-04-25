@@ -10,6 +10,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:agencia_viajes/screen/carrito.dart';
 import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:agencia_viajes/models/usuario.dart';
 
 class Paquetes extends StatefulWidget {
   const Paquetes({super.key});
@@ -20,12 +23,34 @@ class Paquetes extends StatefulWidget {
 
 class _PaquetesState extends State<Paquetes> {
   final _formKey = GlobalKey<FormState>();
-
+  late UsuarioModel _usuario = UsuarioModel(usuaId: -1);
   String persId = 1.toString();
 
   String url = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
   List<dynamic> carrito = [];
   String _paquNombre = "";
+
+  
+  Future<void> _loadUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? usuaId = prefs.getInt('usua_Id');
+    final String? usuaUsuario = prefs.getString('usua_Usuario');
+    final String? usuaContra = prefs.getString('usua_Contra');
+
+   
+    if (usuaId != null && usuaUsuario != null && usuaContra != null) {
+      setState(() {
+        _usuario = UsuarioModel(
+          usuaId: usuaId,
+          usuaUsuario: usuaUsuario,
+          usuaContra: usuaContra,
+          
+        );
+      });
+    } else {
+   
+    }
+  }
 
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
@@ -48,6 +73,7 @@ class _PaquetesState extends State<Paquetes> {
     url += persId;
     _paquetesFuture ??= _cargarPaquetes();
     _cargarCarrito();
+    _loadUsuario();
   }
 
   Future<List<Paquete>> _cargarPaquetes() async {
@@ -142,7 +168,7 @@ class _PaquetesState extends State<Paquetes> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: 150, // max width of the button
+                      width: 150,
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -279,19 +305,6 @@ class _PaquetesState extends State<Paquetes> {
                 }
               },
             ),
-
-            // FutureBuilder<dynamic>(
-            //   future: _getListado(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasData) {
-            //       return CarouselWithHoteles(
-            //           listadoHoteles: snapshot.data,
-            //           agregarAlCarrito: _agregarAlCarrito);
-            //     } else {
-            //       return const Center(child: CircularProgressIndicator());
-            //     }
-            //   },
-            // ),
             Expanded(
               child: FutureBuilder<List<Paquete>>(
                 future: _paquetesFuture,
@@ -388,11 +401,19 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   void _agregarAlCarrito(dynamic item) async {
+  if (_usuario.usuaId == null || _usuario.usuaId == -1) {
+    // Redirigir a otra página si el usua_Id es nulo o 0
+   Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (_) => const InicioSesion()),
+  );
+  } else {
     setState(() {
       carrito.add(item);
     });
     await _guardarCarrito();
   }
+}
 
   Future<void> _guardarCarrito() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

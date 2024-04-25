@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'carrito.dart';
+import 'package:agencia_viajes/models/facutra.dart';
+import 'package:agencia_viajes/models/facturaDetalle.dart';
 
 class ConfirmarPago extends StatefulWidget {
   const ConfirmarPago({Key? key}) : super(key: key);
@@ -11,15 +13,17 @@ class ConfirmarPago extends StatefulWidget {
   State<ConfirmarPago> createState() => _ConfirmarPagoState();
 }
 
+
+
 class _ConfirmarPagoState extends State<ConfirmarPago> {
-  String url = "https://etravel.somee.com/API/Persona/CargarTarjetas/1";
+  String url = "https://localhost:44372/API/Persona/CargarTarjetas/1";
 
   List<Map<String, dynamic>> carrito = [];
   double subtotal = 0;
   double impuesto = 0;
   double totalPagar = 0;
-  final double impuestoPorcentaje = 0.15; // 15% de impuesto
-  String? _selectedCard; // Variable para almacenar la opción seleccionada de la tarjeta
+  final double impuestoPorcentaje = 0.15; 
+  String? _selectedCard; 
 
   List<String> opcionesTarjeta = [];
 
@@ -87,6 +91,98 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
       throw Exception('Failed to load card options');
     }
   }
+
+Future<void> _confirmarCompra() async {
+  // Construir los datos de la factura
+  final factura = Factura(
+    factId: 0, // El ID será generado por el servidor
+    factFecha: DateTime.now().toUtc().toIso8601String(), // Fecha actual
+    metoId: 1 , // Determinar el ID del método de pago
+    pagoId: 1, // Determinar el ID del pago
+    persId: 1, // ID del usuario (podría obtenerse de la sesión)
+    factUsuaCreacion: 1,
+    factFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+  );
+
+  // Convertir la factura a JSON
+  final facturaJson = factura.toJson();
+
+  // Enviar los datos al servidor
+  final response = await http.post(
+    Uri.parse('https://localhost:44372/API/Factura/Create'), // Reemplazar con la URL correcta
+    headers:{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(facturaJson),
+  );
+
+   
+
+  if (response.statusCode == 200) {
+    // Si la solicitud fue exitosa, obtener el ID de la factura creado
+    final facturaId = int.parse(jsonDecode(response.body)['message']);
+    // Aquí puedes manejar el ID de la factura como desees (por ejemplo, mostrar un mensaje de éxito)
+    _insertarDetalleFactura(facturaId);
+  } else {
+    // Si la solicitud falló, mostrar un mensaje de error
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Error al confirmar la compra. Por favor, inténtalo de nuevo.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+Future<void> _insertarDetalleFactura(int facturaId) async {
+  // Construir los detalles de la factura
+  final detalles = carrito.map((element) {
+    // final cantidad = element['cantidad']; // Obtener la cantidad del elemento del carrito
+    return FacturaDetalle(
+      fdetId: 0, // El ID será generado por el servidor
+      factId: facturaId, // ID de la factura principal
+      paquId: element['paqu_Id'], // ID del paquete
+      factCantidadPaqu: carrito.length, // Cantidad de paquetes
+      fdetSubTotal: element['paqu_Precio'] * carrito.length, // Subtotal
+      fdetTotal: (element['paqu_Precio'] * carrito.length) * 1.15, // Total
+      fdetImpuesto: (element['paqu_Precio'] * carrito.length) * 0.15, // Impuesto
+    );
+  }).toList();
+
+  // Convertir los detalles de la factura a JSON
+  final detallesJson = detalles.map((detalle) => detalle.toJson()).toList();
+
+  // Enviar los detalles de la factura al servidor
+  final response = await http.post(
+    Uri.parse('https://localhost:44372/API/Factura/CreateDetalle'), // Reemplazar con la URL correcta
+    headers: {
+      'Content-Type': 'application/json;',
+    },
+    body: jsonEncode(detallesJson),
+  );
+
+  if (response.statusCode == 200) {
+    // Si la inserción de los detalles de la factura fue exitosa, puedes manejarlo aquí
+    // Por ejemplo, mostrar un mensaje de éxito
+    print('Detalles de factura insertados con éxito');
+  } else {
+    // Si la inserción de los detalles de la factura falló, puedes manejarlo aquí
+    // Por ejemplo, mostrar un mensaje de error
+    print('Error al insertar detalles de factura');
+  }
+}
+
 
   void _mostrarOpcionesTarjeta() {
     showDialog(
@@ -216,6 +312,24 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
           ),
         ),
       ),
+      bottomNavigationBar: Container(
+  color: Colors.black12, // Fondo gris
+  child: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ElevatedButton.icon(
+      onPressed: () {
+        _confirmarCompra();
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Color(0xFFFFBD59)),
+        iconColor: MaterialStateProperty.all(Colors.black),
+      ),
+      icon: Icon(Icons.arrow_forward), 
+      label: Text("Confirmar Pago", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+    ),
+  ),
+),
+
     );
   }
 

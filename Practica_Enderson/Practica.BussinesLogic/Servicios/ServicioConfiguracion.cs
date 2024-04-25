@@ -28,6 +28,7 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<PaqueteRepositorio>();
             service.AddScoped<TransporteRepositorio>();
             service.AddScoped<PersonaRepositorio>();
+            service.AddScoped<FacturaRepositorio>();
             
             AgenciaContext.BuildConnectionString(conn);
         }
@@ -36,6 +37,7 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<GeneralServicio>();
             service.AddScoped<AccesoServicio>();
             service.AddScoped<AgenciaServicio>();
+            service.AddScoped<VentaServicio>();
         }
 
     }

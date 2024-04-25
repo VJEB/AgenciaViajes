@@ -91,7 +91,15 @@ namespace Agencia.DataAcces.Repositorio
                 return result;
             }
         }
-
+        public IEnumerable<tbPaquetes> MostrarPaquetesDefault()
+        {
+            List<tbPaquetes> result = new List<tbPaquetes>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {   
+                result = db.Query<tbPaquetes>(ScriptBaseDatos.Paque_MostrarDefault, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
         public IEnumerable<tbPaquetes> Detalle(int Paqu_Id)
         {
             List<tbPaquetes> result = new List<tbPaquetes>();

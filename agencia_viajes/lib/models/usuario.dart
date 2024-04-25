@@ -1,53 +1,107 @@
 class UsuarioModel {
-  int? usua_Id;
-  String? role_Id;
-  String? empl_Id;
-  int? Usua_Creacion;
-  int? Usua_Modificador;
-  String? Usua_Contrasena;
-  String? Usua_Usuario;
-  String? Admin;
-  String? Empleado;
-  bool? Usua_Administrador;
+  int? usuaId;
+  String? usuaUsuario;
+  String? usuaContra;
+  bool? usuaAdmin;
+  int? rolId;
+  String? rolDescripcion;
+  int? usuaUsuaCreacion;
+  String? persona;
+  String? usuaUrlImagen;
+  String? persDNI;
+  String? persSexo;
+  int? persTelefono;
+  String? persPasaporte;
+  int? ciudId;
+  String? ciudDescripcion;
+  int? esCiId;
+  String? esCiDescripcion;
+  int? cargId;
+  String? cargDescripcion;
+  int? estaId;
+  String? estaDescripcion;
+  int? paisId;
+  String? paisDescripcion;
 
   UsuarioModel({
-    this.usua_Id,
-    this.role_Id,
-    this.empl_Id,
-    this.Usua_Creacion,
-    this.Usua_Contrasena,
-    this.Usua_Modificador,
-    this.Usua_Usuario,
-    this.Admin,
-    this.Usua_Administrador,
-    this.Empleado,
+    this.usuaId,
+    this.usuaUsuario,
+    this.usuaContra,
+    this.usuaAdmin,
+    this.rolId,
+    this.rolDescripcion,
+    this.usuaUsuaCreacion,
+    this.persona,
+    this.usuaUrlImagen,
+    this.persDNI,
+    this.persSexo,
+    this.persTelefono,
+    this.persPasaporte,
+    this.ciudId,
+    this.ciudDescripcion,
+    this.esCiId,
+    this.esCiDescripcion,
+    this.cargId,
+    this.cargDescripcion,
+    this.estaId,
+    this.estaDescripcion,
+    this.paisId,
+    this.paisDescripcion,
   });
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) {
     return UsuarioModel(
-      Usua_Administrador : json['Usua_Administrador'] as bool?,
-      usua_Id: json['usua_Id'] as int?,
-      Usua_Creacion: json['usua_Creacion'] as int?,
-      Usua_Modificador: json['usua_Modificador'] as int?,
-      Usua_Contrasena: json['usua_Contraseña'] as String?,
-      Usua_Usuario: json['usua_Usuario'] as String?,
-      Admin: json['admin'] as String?,
-      Empleado: json['empl_Nombre'] as String?,
+      usuaId: json['usua_Id'],
+      usuaUsuario: json['usua_Usuario'],
+      usuaContra: json['usua_Contra'],
+      usuaAdmin: json['usua_Admin'],
+      rolId: json['rol_Id'],
+      rolDescripcion: json['rol_Descripcion'],
+      usuaUsuaCreacion: json['usua_Usua_Creacion'],
+      persona: json['persona'],
+      usuaUrlImagen: json['usua_UrlImagen'],
+      persDNI: json['pers_DNI'],
+      persSexo: json['pers_Sexo'],
+      persTelefono: json['pers_Telefono'],
+      persPasaporte: json['pers_Pasaporte'],
+      ciudId: json['ciud_Id'],
+      ciudDescripcion: json['ciud_Descripcion'],
+      esCiId: json['esCi_Id'],
+      esCiDescripcion: json['esCi_Descripcion'],
+      cargId: json['carg_Id'],
+      cargDescripcion: json['carg_Descripcion'],
+      estaId: json['esta_Id'],
+      estaDescripcion: json['esta_Descripcion'],
+      paisId: json['pais_Id'],
+      paisDescripcion: json['pais_Descripcion'],
     );
   }
 
-  
   Map<String, dynamic> toJson() {
     return {
-      
-      'Usua_Creacion': Usua_Creacion,
-      'Usua_Modificador': Usua_Modificador,
-      'Usua_Usuario': Usua_Usuario,
-      'Usua_Contraseña': Usua_Contrasena,
-      'Usua_Administrador': Usua_Administrador,
-      'Role_Id': role_Id,
-      'Empl_Id': empl_Id,
-
+      'usua_Id': usuaId,
+      'usua_Usuario': usuaUsuario,
+      'usua_Contra': usuaContra,
+      'usua_Admin': usuaAdmin,
+      'rol_Id': rolId,
+      'rol_Descripcion': rolId,
+      'usua_Usua_Creacion': usuaUsuaCreacion,
+      'persona': persona,
+      'usua_UrlImagen': usuaUrlImagen,
+      'pers_DNI': persDNI,
+      'pers_Sexo': persSexo,
+      'pers_Telefono': persTelefono,
+      'pers_Pasaporte': persPasaporte,
+      'ciud_Id': ciudId,
+      'ciud_Descripcion': ciudDescripcion,
+      'esCi_Id': esCiId,
+      'esCi_Descripcion': esCiDescripcion,
+      'carg_Id': cargId,
+      'carg_Descripcion': cargDescripcion,
+      'esta_Id': estaId,
+      'esta_Descripcion': estaDescripcion,
+      'pais_Id': paisId,
+      'pais_Descripcion': paisDescripcion,
     };
   }
 }

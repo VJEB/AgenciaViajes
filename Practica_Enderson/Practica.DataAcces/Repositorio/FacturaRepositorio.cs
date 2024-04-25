@@ -58,7 +58,7 @@ namespace Practica.DataAcces.Repositorio
             }
         }
 
-        public RequestStatus Insertar(tbFacturas item)
+        public (RequestStatus, int) Insertar(tbFacturas item)
         {
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
@@ -70,16 +70,39 @@ namespace Practica.DataAcces.Repositorio
                 parametro.Add("Pers_Id", item.Pers_Id);
                 parametro.Add("Fact_Usua_Creacion", item.Fact_Usua_Creacion);
                 parametro.Add("Fact_Fecha_Creacion", item.Fact_Fecha_Creacion);
-
                 parametro.Add("Fact_Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 var result = db.QueryFirst(ScriptBaseDatos.Fact_Insertar, parametro, commandType: CommandType.StoredProcedure);
 
-                int factId = parametro.Get<int>("Fact_Id");
+                int fact = 0;
+                if (result.Resultado == 1)
+                {
+                    fact = parametro.Get<int>("Fact_Id");
+                }
 
-                return new RequestStatus { CodeStatus = result.Resultado, MessageStatus = factId.ToString() };
+                return (new RequestStatus { CodeStatus = result.Resultado }, fact);
             }
         }
+
+        public RequestStatus InsertarDetalle(tbFacturasDetalles item)
+        {
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parametro = new DynamicParameters();
+
+                parametro.Add("Fact_Id", item.Fact_Id);
+                parametro.Add("Paqu_Id", item.Paqu_Id);
+                parametro.Add("Fact_CantidadPaqu", item.Fact_CantidadPaqu);
+                parametro.Add("Fdet_SubTotal", item.Fdet_SubTotal);
+                parametro.Add("Fdet_Total", item.Fdet_Total);
+                parametro.Add("Fdet_Impuesto", item.Fdet_Impuesto);
+ 
+                var result = db.QueryFirst(ScriptBaseDatos.Fact_InsertarDetalle, parametro, commandType: CommandType.StoredProcedure);
+
+                return (new RequestStatus { CodeStatus = result.Resultado });
+            }
+        }
+
         public IEnumerable<tbFacturas> List(int Pers_Id)
         {
             List<tbFacturas> result = new List<tbFacturas>();
@@ -107,6 +130,11 @@ namespace Practica.DataAcces.Repositorio
         }
 
         public IEnumerable<tbFacturas> List()
+        {
+            throw new NotImplementedException();
+        }
+
+        RequestStatus IRepository<tbFacturas>.Insertar(tbFacturas item)
         {
             throw new NotImplementedException();
         }
