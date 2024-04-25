@@ -50,6 +50,7 @@ namespace Practica.DataAcces.Repositorio
 
         #region Paquetes
         public static string Paque_Mostrar = "[Agen].[SP_Paquetes_Mostrar]";
+        public static string Paque_MostrarDefault = "[Agen].[SP_Paquetes_MostrarDefault]";
         public static string Paque_Insertar = "[Agen].[SP_Paquetes_Insertar]";
         public static string Paque_Actualizar = "[Agen].[SP_Paquetes_Actualizar]";
         public static string Paque_Eliminar = "[Agen].[SP_Paquetes_Eliminar]";
@@ -93,7 +94,10 @@ namespace Practica.DataAcces.Repositorio
 
         #region Facturas
         public static string Fact_Insertar = "Vent.SP_Facturas_Insertar";
+        public static string Fact_InsertarDetalle = "[Vent].[SP_FacturasDetalle_Insertar]";
+
         public static string Fact_Mostrar = "Vent.SP_Facturas_Mostrar";
+
         public static string Fact_Actualizar = "Vent.SP_Facturas_Actualizar";
         #endregion
         public static string Meto_Mostrar = "[Gral].[SP_MetodosPagos_Mostrar]";

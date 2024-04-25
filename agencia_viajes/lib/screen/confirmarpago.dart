@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'carrito.dart';
+import 'package:agencia_viajes/models/facutra.dart';
+import 'package:agencia_viajes/models/facturaDetalle.dart';
 
 class ConfirmarPago extends StatefulWidget {
   const ConfirmarPago({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class ConfirmarPago extends StatefulWidget {
   State<ConfirmarPago> createState() => _ConfirmarPagoState();
 }
 
+
+
 class _ConfirmarPagoState extends State<ConfirmarPago> {
   String url = "https://etravel.somee.com/API/Persona/CargarTarjetas/1";
 
@@ -18,8 +22,8 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   double subtotal = 0;
   double impuesto = 0;
   double totalPagar = 0;
-  final double impuestoPorcentaje = 0.15; // 15% de impuesto
-  String? _selectedCard; // Variable para almacenar la opción seleccionada de la tarjeta
+  final double impuestoPorcentaje = 0.15; 
+  String? _selectedCard; 
 
   List<String> opcionesTarjeta = [];
 
@@ -45,7 +49,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
   Future<void> _getListado() async {
-    // Obtener la lista de hoteles del servidor
+ 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -55,7 +59,6 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
   void _calcularTotales() {
-    // Reiniciar los totales
     subtotal = 0;
     impuesto = 0;
     totalPagar = 0;
@@ -64,11 +67,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
     carrito.forEach((element) {
       subtotal += element["paqu_Precio"];
     });
-
-    // Calcular impuesto
     impuesto = subtotal * impuestoPorcentaje;
-
-    // Calcular total a pagar
     totalPagar = subtotal + impuesto;
   }
 
@@ -87,6 +86,95 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
       throw Exception('Failed to load card options');
     }
   }
+
+Future<void> _confirmarCompra() async {
+ 
+  final factura = Factura(
+    factId: 0, 
+    factFecha: DateTime.now().toUtc().toIso8601String(), 
+    metoId: 1 , 
+    pagoId: 1, 
+    persId: 1, 
+    factUsuaCreacion: 1,
+    factFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+  );
+
+
+  final facturaJson = factura.toJson();
+
+
+  final response = await http.post(
+    Uri.parse('https://localhost:44372/API/Factura/Create'), 
+    headers:{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(facturaJson),
+  );
+
+   
+
+  if (response.statusCode == 200) {
+
+    final facturaId = int.parse(jsonDecode(response.body)['message']);
+   
+    _insertarDetalleFactura(facturaId);
+  } else {
+  
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Error al confirmar la compra. Por favor, inténtalo de nuevo.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+Future<void> _insertarDetalleFactura(int facturaId) async {
+  
+  final detalles = carrito.map((element) {
+
+    return FacturaDetalle(
+      fdetId: 0, 
+      factId: facturaId, 
+      paquId: element['paqu_Id'],
+      factCantidadPaqu: 1, 
+      fdetSubTotal: subtotal, 
+      fdetTotal: totalPagar, 
+      fdetImpuesto: impuesto, 
+    );
+  }).toList();
+
+
+  final detallesJson = detalles.map((detalle) => detalle.toJson()).toList();
+
+  final response = await http.post(
+    Uri.parse('https://localhost:44372/API/Factura/CreateDetalle'), 
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(detallesJson),
+  );
+
+  if (response.statusCode == 200) {
+  
+    print('Detalles de factura insertados con éxito');
+  } else {
+  
+    print('Error al insertar detalles de factura');
+  }
+}
+
 
   void _mostrarOpcionesTarjeta() {
     showDialog(
@@ -147,7 +235,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
 
   @override
   Widget build(BuildContext context) {
-    _cargarCarrito(); // Cargar el carrito cada vez que se construye la pantalla
+    _cargarCarrito(); 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -177,16 +265,16 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 20), // Espacio entre el texto y la lista de elementos del carrito
+              SizedBox(height: 20), 
               _buildCarritoList(),
-              SizedBox(height: 20), // Espacio entre la lista y las tarjetas de métodos de pago
-              _buildTotals(), // Subtotal, impuesto y total a pagar
-              SizedBox(height: 20), // Espacio entre los totales y las opciones de pago
+              SizedBox(height: 20), 
+              _buildTotals(), 
+              SizedBox(height: 20), 
               Card(
                 color: Colors.white10,
-                margin: EdgeInsets.symmetric(horizontal: 20), // Agregado margen horizontal
+                margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16), // Agregado margen vertical
+                  padding: const EdgeInsets.symmetric(vertical: 16), 
                   child: Column(
                     children: [
                       Text(
@@ -216,6 +304,24 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
           ),
         ),
       ),
+      bottomNavigationBar: Container(
+  color: Colors.black12, // Fondo gris
+  child: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ElevatedButton.icon(
+      onPressed: () {
+        _confirmarCompra();
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Color(0xFFFFBD59)),
+        iconColor: MaterialStateProperty.all(Colors.black),
+      ),
+      icon: Icon(Icons.arrow_forward), 
+      label: Text("Confirmar Pago", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+    ),
+  ),
+),
+
     );
   }
 

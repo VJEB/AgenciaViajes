@@ -51,7 +51,20 @@ namespace Agencia.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult ListPaquetesDefault()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _paqueteRepositorio.MostrarPaquetesDefault();
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
 
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult InsertarPaquete(tbPaquetes item, out int paqueteId)
         {
             var result = new ServiceResult();

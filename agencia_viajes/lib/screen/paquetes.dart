@@ -10,6 +10,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:agencia_viajes/screen/carrito.dart';
 import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:agencia_viajes/models/usuario.dart';
 
 class Paquetes extends StatefulWidget {
   const Paquetes({super.key});
@@ -20,12 +23,29 @@ class Paquetes extends StatefulWidget {
 
 class _PaquetesState extends State<Paquetes> {
   final _formKey = GlobalKey<FormState>();
-
+  late UsuarioModel _usuario = UsuarioModel(usuaId: -1);
   String persId = 1.toString();
 
   String url = "https://etravel.somee.com/API/Paquete/ListPaquetes/";
   List<dynamic> carrito = [];
   String _paquNombre = "";
+
+  Future<void> _loadUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? usuaId = prefs.getInt('usua_Id');
+    final String? usuaUsuario = prefs.getString('usua_Usuario');
+    final String? usuaContra = prefs.getString('usua_Contra');
+
+    if (usuaId != null && usuaUsuario != null && usuaContra != null) {
+      setState(() {
+        _usuario = UsuarioModel(
+          usuaId: usuaId,
+          usuaUsuario: usuaUsuario,
+          usuaContra: usuaContra,
+        );
+      });
+    } else {}
+  }
 
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
@@ -48,6 +68,7 @@ class _PaquetesState extends State<Paquetes> {
     url += persId;
     _paquetesFuture ??= _cargarPaquetes();
     _cargarCarrito();
+    _loadUsuario();
   }
 
   Future<List<Paquete>> _cargarPaquetes() async {
@@ -79,109 +100,118 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   void crearPaquete(BuildContext context, [bool mounted = true]) async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: const BorderSide(
-            color: Color(0xC6FFFFFF),
-            width: 0.5,
+    if (_usuario.usuaId == null || _usuario.usuaId == -1) {
+      // Redirigir a otra página si el usua_Id es nulo o 0
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const InicioSesion()),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            side: const BorderSide(
+              color: Color(0xC6FFFFFF),
+              width: 0.5,
+            ),
           ),
-        ),
-        backgroundColor: const Color(0xC9040000),
-        title: const Text(
-          'Nuevo paquete',
-          style: TextStyle(color: Color(0xFFFFBD59)),
-        ),
-        content: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                style: const TextStyle(color: Color(0xFFFFBD59)),
-                inputFormatters: [
-                  TextInputFormatter.withFunction(
-                    (TextEditingValue oldValue, TextEditingValue newValue) {
-                      return RegExp(r'^[a-zA-Z0-9\s]*$').hasMatch(newValue.text)
-                          ? newValue
-                          : oldValue;
-                    },
-                  ),
-                ],
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Por favor ingrese el nombre del paquete';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _paquNombre = value ?? '',
-                decoration: const InputDecoration(
-                  labelText: 'Nombre del paquete',
-                  labelStyle: TextStyle(color: Color(0xFFFFBD59)),
-                  hintText: 'Vacaciones en Nueva Zelanda',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFC28427)),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFFFBD59)),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 150, // max width of the button
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            bool response;
-                            Paquete paqu;
-                            (response, paqu) = await postPaquete();
-                            if (response) {
-                              if (!mounted) return;
-                              Navigator.of(context).pop();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => PaquetesForm(
-                                          paquete: paqu,
-                                        )),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    backgroundColor: Colors.red[400],
-                                    content: const Text(
-                                        'Ya existe un paquete con ese nombre')),
-                              );
-                            }
-                          }
-                        },
-                        icon: const Icon(Icons.save),
-                        label: const Text('Guardar'),
-                      ),
+          backgroundColor: const Color(0xC9040000),
+          title: const Text(
+            'Nuevo paquete',
+            style: TextStyle(color: Color(0xFFFFBD59)),
+          ),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  style: const TextStyle(color: Color(0xFFFFBD59)),
+                  inputFormatters: [
+                    TextInputFormatter.withFunction(
+                      (TextEditingValue oldValue, TextEditingValue newValue) {
+                        return RegExp(r'^[a-zA-Z0-9\s]*$')
+                                .hasMatch(newValue.text)
+                            ? newValue
+                            : oldValue;
+                      },
                     ),
                   ],
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'Por favor ingrese el nombre del paquete';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _paquNombre = value ?? '',
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre del paquete',
+                    labelStyle: TextStyle(color: Color(0xFFFFBD59)),
+                    hintText: 'Vacaciones en Nueva Zelanda',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFC28427)),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFFFBD59)),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              bool response;
+                              Paquete paqu;
+                              (response, paqu) = await postPaquete();
+                              if (response) {
+                                if (!mounted) return;
+                                Navigator.of(context).pop();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => PaquetesForm(
+                                            paquete: paqu,
+                                          )),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.red[400],
+                                      content: const Text(
+                                          'Ya existe un paquete con ese nombre')),
+                                );
+                              }
+                            }
+                          },
+                          icon: const Icon(Icons.save),
+                          label: const Text('Guardar'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Future<(bool, Paquete)> postPaquete() async {
@@ -231,7 +261,6 @@ class _PaquetesState extends State<Paquetes> {
             children: [
               IconButton(
                 icon: const Icon(Icons.shopping_cart),
-                tooltip: 'Iniciar sesión',
                 onPressed: () {
                   _mostrarCarrito(context);
                 },
@@ -279,19 +308,6 @@ class _PaquetesState extends State<Paquetes> {
                 }
               },
             ),
-
-            // FutureBuilder<dynamic>(
-            //   future: _getListado(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasData) {
-            //       return CarouselWithHoteles(
-            //           listadoHoteles: snapshot.data,
-            //           agregarAlCarrito: _agregarAlCarrito);
-            //     } else {
-            //       return const Center(child: CircularProgressIndicator());
-            //     }
-            //   },
-            // ),
             Expanded(
               child: FutureBuilder<List<Paquete>>(
                 future: _paquetesFuture,
@@ -355,7 +371,6 @@ class _PaquetesState extends State<Paquetes> {
                                             color: Colors.white,
                                           ),
                                         ),
-                                    
                                       ],
                                     ),
                                   ],
@@ -388,10 +403,18 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   void _agregarAlCarrito(dynamic item) async {
-    setState(() {
-      carrito.add(item);
-    });
-    await _guardarCarrito();
+    if (_usuario.usuaId == null || _usuario.usuaId == -1) {
+      // Redirigir a otra página si el usua_Id es nulo o 0
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const InicioSesion()),
+      );
+    } else {
+      setState(() {
+        carrito.add(item);
+      });
+      await _guardarCarrito();
+    }
   }
 
   Future<void> _guardarCarrito() async {
@@ -400,7 +423,16 @@ class _PaquetesState extends State<Paquetes> {
   }
 
   void _mostrarCarrito(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const Carrito()));
+      if (_usuario.usuaId == null || _usuario.usuaId == -1) {
+      // Redirigir a otra página si el usua_Id es nulo o 0
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const InicioSesion()),
+      );
+    } else {
+       Navigator.push(context, MaterialPageRoute(builder: (_) => const Carrito()));
+    }
+   
   }
 }
 

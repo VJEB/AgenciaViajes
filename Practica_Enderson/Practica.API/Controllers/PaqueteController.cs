@@ -31,6 +31,13 @@ namespace Agencia.API.Controllers
             return Ok(list.Data);
         }
 
+        [HttpGet("ListPaquetes2")]
+        public IActionResult PaquetesDefault()
+        {
+            var list = _agenciaServicio.ListPaquetesDefault();
+            return Ok(list.Data);
+        }
+
         [HttpGet("LlenarPaquete/{Paqu_Id}")]
         public IActionResult LlenarDetalles(int Paqu_Id)
         {

@@ -14,7 +14,7 @@ namespace Agencia.BussinesLogic.Servicios
 {
     public static class ServicioConfiguracion
     {
-        public static void DataAcces(this IServiceCollection service ,string conn )
+        public static void DataAcces(this IServiceCollection service, string conn)
         {
             service.AddScoped<PaisRepositorio>();
             service.AddScoped<EstadoRepositorio>();
@@ -29,7 +29,7 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<PaqueteRepositorio>();
             service.AddScoped<TransporteRepositorio>();
             service.AddScoped<PersonaRepositorio>();
-            service.AddScoped<FacturaRepositorio>(); 
+            service.AddScoped<FacturaRepositorio>();
 
             AgenciaContext.BuildConnectionString(conn);
         }
@@ -39,6 +39,7 @@ namespace Agencia.BussinesLogic.Servicios
             service.AddScoped<AccesoServicio>();
             service.AddScoped<AgenciaServicio>();
             service.AddScoped<VentaServicio>();
+
         }
 
     }

@@ -54,6 +54,7 @@ namespace Practica.BussinesLogic.Servicios
             }
         }
 
+   
         public ServiceResult ObtenerUsuaID(int Usua_Id)
         {
             var result = new ServiceResult();
@@ -73,14 +74,15 @@ namespace Practica.BussinesLogic.Servicios
             var result = new ServiceResult();
             try
             {
-                var response = _usuarioRepositorio.Insertar(item);
-                if (response.CodeStatus == 1)
+                var lost = _usuarioRepositorio.Insertar(item);
+                if (lost.CodeStatus > 0)
                 {
-                    return result.Ok(response);
+                    return result.Ok(lost);
                 }
                 else
                 {
-                    return result.Error("Error al guardar el nuevo usuario");
+                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
+                    return result.Error(lost);
                 }
 
             }
@@ -189,8 +191,8 @@ namespace Practica.BussinesLogic.Servicios
             try
             {
                 var lost = _usuarioRepositorio.Login(usuario, contra);
-
-                if (lost.Count() == 1)
+                
+                if(lost.Count() == 1)
                 {
                     return result.Ok(lost);
                 }
@@ -198,13 +200,14 @@ namespace Practica.BussinesLogic.Servicios
                 {
                     return result.BadRequest();
                 }
-
-
+                
+               
             }
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
             }
+
         }
         public IEnumerable<tbUsuarios> DetallesUsua(int id)
         {
