@@ -9,9 +9,9 @@ class Reservacion {
   final String reseObservacion;
   final int paquId;
   final int haHoId;
-  final int haCaId;
-  final int habitacionesNecesarias;
-  final int habiNumPersonas;
+  final int? haCaId;
+  final int? habitacionesNecesarias;
+  final int? habiNumPersonas;
   final int reseUsuaCreacion;
   final String reseFechaCreacion;
   final int? reseUsuaModifica;
@@ -28,9 +28,9 @@ class Reservacion {
     required this.reseObservacion,
     required this.paquId,
     required this.haHoId,
-    required this.haCaId,
-    required this.habitacionesNecesarias,
-    required this.habiNumPersonas,
+    this.haCaId,
+    this.habitacionesNecesarias,
+    this.habiNumPersonas,
     required this.reseUsuaCreacion,
     required this.reseFechaCreacion,
     this.reseUsuaModifica,

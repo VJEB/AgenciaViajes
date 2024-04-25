@@ -34,6 +34,20 @@ namespace Agencia.API.Controllers
             return Ok(prueba);
         }
 
+        [HttpGet("Reservaciones/{Paqu_Id}")]
+        public IActionResult Reservaciones(int Paqu_Id)
+        {
+            var list = _agenciaServicio.ListReservaciones(Paqu_Id);
+            return Ok(list.Data);
+        }
+
+        [HttpGet("Viajes/{Paqu_Id}")]
+        public IActionResult Viajes(int Paqu_Id)
+        {
+            var list = _agenciaServicio.ListViajes(Paqu_Id);
+            return Ok(list.Data);
+        }
+
         [HttpPost("Create")]
         public IActionResult Create(DetallePorPaqueteViewModel item)
         {

@@ -331,6 +331,35 @@ namespace Agencia.BussinesLogic.Servicios
         }
         #endregion
 
+        public ServiceResult ListReservaciones(int Paqu_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _detallexpaqueteRepositorio.ListReservaciones(Paqu_Id);
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult ListViajes(int Paqu_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _detallexpaqueteRepositorio.ListViajes(Paqu_Id);
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
+
         #region Hoteles
         public ServiceResult ListHoteles(string Ciud_Id)
         {
