@@ -49,7 +49,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
   Future<void> _getListado() async {
-    // Obtener la lista de hoteles del servidor
+ 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -59,7 +59,6 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
   void _calcularTotales() {
-    // Reiniciar los totales
     subtotal = 0;
     impuesto = 0;
     totalPagar = 0;
@@ -68,11 +67,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
     carrito.forEach((element) {
       subtotal += element["paqu_Precio"];
     });
-
-    // Calcular impuesto
     impuesto = subtotal * impuestoPorcentaje;
-
-    // Calcular total a pagar
     totalPagar = subtotal + impuesto;
   }
 
@@ -93,23 +88,23 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
 Future<void> _confirmarCompra() async {
-  // Construir los datos de la factura
+ 
   final factura = Factura(
-    factId: 0, // El ID será generado por el servidor
-    factFecha: DateTime.now().toUtc().toIso8601String(), // Fecha actual
-    metoId: 1 , // Determinar el ID del método de pago
-    pagoId: 1, // Determinar el ID del pago
-    persId: 1, // ID del usuario (podría obtenerse de la sesión)
+    factId: 0, 
+    factFecha: DateTime.now().toUtc().toIso8601String(), 
+    metoId: 1 , 
+    pagoId: 1, 
+    persId: 1, 
     factUsuaCreacion: 1,
     factFechaCreacion: DateTime.now().toUtc().toIso8601String(),
   );
 
-  // Convertir la factura a JSON
+
   final facturaJson = factura.toJson();
 
-  // Enviar los datos al servidor
+
   final response = await http.post(
-    Uri.parse('https://localhost:44372/API/Factura/Create'), // Reemplazar con la URL correcta
+    Uri.parse('https://localhost:44372/API/Factura/Create'), 
     headers:{
       'Content-Type': 'application/json',
     },
@@ -119,12 +114,12 @@ Future<void> _confirmarCompra() async {
    
 
   if (response.statusCode == 200) {
-    // Si la solicitud fue exitosa, obtener el ID de la factura creado
+
     final facturaId = int.parse(jsonDecode(response.body)['message']);
-    // Aquí puedes manejar el ID de la factura como desees (por ejemplo, mostrar un mensaje de éxito)
+   
     _insertarDetalleFactura(facturaId);
   } else {
-    // Si la solicitud falló, mostrar un mensaje de error
+  
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -146,39 +141,36 @@ Future<void> _confirmarCompra() async {
 }
 
 Future<void> _insertarDetalleFactura(int facturaId) async {
-  // Construir los detalles de la factura
+  
   final detalles = carrito.map((element) {
-    // final cantidad = element['cantidad']; // Obtener la cantidad del elemento del carrito
+
     return FacturaDetalle(
-      fdetId: 0, // El ID será generado por el servidor
-      factId: facturaId, // ID de la factura principal
-      paquId: element['paqu_Id'], // ID del paquete
-      factCantidadPaqu: carrito.length, // Cantidad de paquetes
-      fdetSubTotal: element['paqu_Precio'] * carrito.length, // Subtotal
-      fdetTotal: (element['paqu_Precio'] * carrito.length) * 1.15, // Total
-      fdetImpuesto: (element['paqu_Precio'] * carrito.length) * 0.15, // Impuesto
+      fdetId: 0, 
+      factId: facturaId, 
+      paquId: element['paqu_Id'],
+      factCantidadPaqu: carrito.length, 
+      fdetSubTotal: subtotal, 
+      fdetTotal: totalPagar, 
+      fdetImpuesto: impuesto, 
     );
   }).toList();
 
-  // Convertir los detalles de la factura a JSON
+
   final detallesJson = detalles.map((detalle) => detalle.toJson()).toList();
 
-  // Enviar los detalles de la factura al servidor
   final response = await http.post(
-    Uri.parse('https://localhost:44372/API/Factura/CreateDetalle'), // Reemplazar con la URL correcta
+    Uri.parse('https://localhost:44372/API/Factura/CreateDetalle'), 
     headers: {
-      'Content-Type': 'application/json;',
+      'Content-Type': 'application/json',
     },
     body: jsonEncode(detallesJson),
   );
 
   if (response.statusCode == 200) {
-    // Si la inserción de los detalles de la factura fue exitosa, puedes manejarlo aquí
-    // Por ejemplo, mostrar un mensaje de éxito
+  
     print('Detalles de factura insertados con éxito');
   } else {
-    // Si la inserción de los detalles de la factura falló, puedes manejarlo aquí
-    // Por ejemplo, mostrar un mensaje de error
+  
     print('Error al insertar detalles de factura');
   }
 }
@@ -243,7 +235,7 @@ Future<void> _insertarDetalleFactura(int facturaId) async {
 
   @override
   Widget build(BuildContext context) {
-    _cargarCarrito(); // Cargar el carrito cada vez que se construye la pantalla
+    _cargarCarrito(); 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -273,16 +265,16 @@ Future<void> _insertarDetalleFactura(int facturaId) async {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 20), // Espacio entre el texto y la lista de elementos del carrito
+              SizedBox(height: 20), 
               _buildCarritoList(),
-              SizedBox(height: 20), // Espacio entre la lista y las tarjetas de métodos de pago
-              _buildTotals(), // Subtotal, impuesto y total a pagar
-              SizedBox(height: 20), // Espacio entre los totales y las opciones de pago
+              SizedBox(height: 20), 
+              _buildTotals(), 
+              SizedBox(height: 20), 
               Card(
                 color: Colors.white10,
-                margin: EdgeInsets.symmetric(horizontal: 20), // Agregado margen horizontal
+                margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16), // Agregado margen vertical
+                  padding: const EdgeInsets.symmetric(vertical: 16), 
                   child: Column(
                     children: [
                       Text(

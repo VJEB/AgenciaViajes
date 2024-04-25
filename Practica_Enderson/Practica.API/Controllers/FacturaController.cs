@@ -4,6 +4,7 @@ using Agencia.Entities.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Practica.BussinesLogic.Servicios;
+using System.Collections.Generic;
 //using Practica.Common.Models;
 
 namespace Agencia.API.Controllers
@@ -63,22 +64,31 @@ namespace Agencia.API.Controllers
         }
 
         [HttpPost("CreateDetalle")]
-        public IActionResult CreateDetalle(FacturaDetalleViewModel item)
+        public IActionResult CreateDetalle(List<FacturaDetalleViewModel> detalles)
         {
             //var model = _mapper.Map<tbFacturas>(item);
-            var modelo = new tbFacturasDetalles()
+
+            bool flag = true;
+            foreach (var detalle in detalles)
             {
-                Fact_Id = item.Fact_Id,
-                Paqu_Id = item.Paqu_Id,
-                Fact_CantidadPaqu = item.Fact_CantidadPaqu,
-                Fdet_SubTotal = item.Fdet_SubTotal,
-                Fdet_Total = item.Fdet_Total,
-                Fdet_Impuesto = item.Fdet_Impuesto,
-            };
+                var modelo = new tbFacturasDetalles()
+                {
+                    Fact_Id = detalle.Fact_Id,
+                    Paqu_Id = detalle.Paqu_Id,
+                    Fact_CantidadPaqu = detalle.Fact_CantidadPaqu,
+                    Fdet_SubTotal = detalle.Fdet_SubTotal,
+                    Fdet_Total = detalle.Fdet_Total,
+                    Fdet_Impuesto = detalle.Fdet_Impuesto,
+                };
             
-            var result = _ventaServicio.InsertarFactuDetalle(modelo);
-            return Ok(result);
+                var result = _ventaServicio.InsertarFactuDetalle(modelo);
+                if (!result.Success)
+                {
+                    flag = false;
+                }
+            }
             
+            return flag ? Ok("Detalles insertados") : BadRequest("Error al insertar los detalles de la factura");
         }
 
         [HttpPut("Edit")]

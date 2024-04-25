@@ -12,8 +12,8 @@ namespace Agencia.Common.Models
         public int? Fact_Id { get; set; }
         public int? Paqu_Id { get; set; }
         public int Fact_CantidadPaqu { get; set; }
-        public int Fdet_SubTotal { get; set; }
-        public int Fdet_Total { get; set; }
+        public double Fdet_SubTotal { get; set; }
+        public double Fdet_Total { get; set; }
         public double? Fdet_Impuesto { get; set; }
 
     }
