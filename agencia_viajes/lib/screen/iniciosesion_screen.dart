@@ -120,7 +120,7 @@ class _InicioSesionState extends State<InicioSesion> {
                     email = value;
                   });
                 },
-                labelText: 'Correo electrónico',
+                labelText: 'Usuario',
                 errorText: emailError,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,

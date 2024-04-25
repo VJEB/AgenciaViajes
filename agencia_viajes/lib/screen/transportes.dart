@@ -170,7 +170,7 @@ class _TransportesState extends State<Transportes> {
   }
             Future<void> postViaje(BuildContext context, dynamic transporte) async {
               String url =
-                  "https://etravel.somee.com/API/DetallePorPaquete/ViajesCreate";
+                  "https://localhost:44372/API/DetallePorPaquete/ViajesCreate";
 
               Viaje viaje = Viaje(
                 viaj_Id: 0,
@@ -179,7 +179,9 @@ class _TransportesState extends State<Transportes> {
                 paqu_Id: _paqueteSeleccionado.paquId,
                 viaj_Precio: 0, 
                 viaj_Usua_Creacion: 1,
-                viaj_Fecha_Creacion: DateTime.now().toUtc().toIso8601String()
+                viaj_Fecha_Creacion: DateTime.now().toUtc().toIso8601String(),
+                // viaj_Usua_Modifica: 1,
+                // viaj_Fecha_Modifica: DateTime.now().toUtc().toIso8601String()
               );
 
               var resultado = await http.post(

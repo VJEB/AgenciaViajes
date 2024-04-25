@@ -3,11 +3,16 @@ import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
 
+
+
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    
     const double kHorizontalPadding = 24;
     return Scaffold(
       body: CustomScrollView(
