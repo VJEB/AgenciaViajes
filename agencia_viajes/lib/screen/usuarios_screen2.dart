@@ -12,6 +12,7 @@ class _CatCategoriesDataTableState extends State<CatCategoriesDataTable> {
   late String _sortColumn;
   bool _sortAscending = true;
 
+
   @override
   void initState() {
     super.initState();

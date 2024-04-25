@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:agencia_viajes/models/pais.dart';
 import 'package:agencia_viajes/models/estado.dart';
 import 'package:agencia_viajes/models/ciudad.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Transportes extends StatefulWidget {
   const Transportes({Key? key});
@@ -15,7 +16,19 @@ class Transportes extends StatefulWidget {
 
 class _TransportesState extends State<Transportes> {
   String url = "https://etravel.somee.com/API/Transporte/TransporteList/2";
-  
+
+  Map<int, bool> expansionState = {};
+
+  Future<dynamic> _getListado() async {
+    final result = await http.get(Uri.parse(url));
+    if (result.statusCode >= 200) {
+      return jsonDecode(result.body);
+    } else {
+      print("Error en el endPoint");
+      // return const Center(child: Text("Error en el endPoint"));
+    }
+  }
+
   // Variables para almacenar las selecciones de los filtros
   int? _paisSeleccionado;
   int? _estadoSeleccionado;
@@ -58,7 +71,8 @@ class _TransportesState extends State<Transportes> {
 
   // Función para cargar la lista de transportes
   Future<void> _cargarTransportes(int ciudadId) async {
-    String url = "https://etravel.somee.com/API/Transporte/TransporteList/$ciudadId";
+    String url =
+        "https://etravel.somee.com/API/Transporte/TransporteList/$ciudadId";
     final respuesta = await http.get(Uri.parse(url));
 
     if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
@@ -106,21 +120,18 @@ class _TransportesState extends State<Transportes> {
         context: context,
       ),
       body: Padding(
-        
         padding: const EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-            
-            padding: const EdgeInsets.all(8.0),
-            child: _buildFiltroButton(), // Agregar el botón de filtro
-          ),
-
+              padding: const EdgeInsets.all(8.0),
+              child: _buildFiltroButton(), 
+            ),
             Card(
               elevation: 4,
               margin: EdgeInsets.only(bottom: 20),
-              color: Colors.white10, // Cambio de color de la tarjeta
+              color: Colors.white10, 
               child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(
@@ -131,7 +142,8 @@ class _TransportesState extends State<Transportes> {
                       items: _paises.map((pais) {
                         return DropdownMenuItem<int>(
                           value: pais.paisId,
-                          child: Text(pais.paisDescripcion, style: TextStyle(color: Colors.white)),
+                          child: Text(pais.paisDescripcion,
+                              style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (newValue) {
@@ -152,7 +164,8 @@ class _TransportesState extends State<Transportes> {
                       items: _estados.map((estado) {
                         return DropdownMenuItem<int>(
                           value: estado.estaId,
-                          child: Text(estado.estaDescripcion, style: TextStyle(color: Colors.white)),
+                          child: Text(estado.estaDescripcion,
+                              style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (newValue) {
@@ -171,7 +184,8 @@ class _TransportesState extends State<Transportes> {
                       items: _ciudades.map((ciudad) {
                         return DropdownMenuItem<int>(
                           value: ciudad.ciudId,
-                          child: Text(ciudad.ciudDescripcion, style: TextStyle(color: Colors.white)),
+                          child: Text(ciudad.ciudDescripcion,
+                              style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (newValue) {
@@ -188,23 +202,114 @@ class _TransportesState extends State<Transportes> {
             Expanded(
               child: ListView.builder(
                 itemCount: _transportes.length,
-                itemBuilder: (context, index) { 
+                itemBuilder: (context, index) {
                   return Card(
                     color: Colors.white10,
                     clipBehavior: Clip.hardEdge,
-                    child: ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildField('Precio:', _transportes[index]["tran_Precio"]),
-                          _buildField('Horario:', _transportes[index]["horT_FechaYhora"]),
-                          _buildField('Descripción:', _transportes[index]["tiTr_Descripcion"]),
-                          _buildField('Destino:', _transportes[index]["puntoFinal"]),
-                        ],
+                    child: InkWell(
+                      splashColor: const Color.fromARGB(255, 255, 239, 120)
+                          .withAlpha(30),
+                      child: SizedBox(
+                        height: 100,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: CachedNetworkImage(
+                                  imageUrl: _transportes[index]["ciud_UrlImagen"],
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            _transportes[index]["horT_FechaYhora"].toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Color(0xFFFFBD59),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          // 'Desde: L.${element["haHo_PrecioPorNoche"]}',
+                                          'L.${_transportes[index]["tran_Precio"].toString()}',
+                                           style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color.fromARGB(
+                                                255, 44, 214, 50),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                             
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                      
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                              Text(
+                                              'Inicio: ${_transportes[index]["puntoInicio"]}',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Destino: ${_transportes[index]["puntoFinal"]}',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFFFFBD59),
+                                                fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            Text(
+                                               'Transporte: ${_transportes[index]["tiTr_Descripcion"]}',
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      onTap: () {
-                        // Agregar acción para cuando se presione en un transporte
-                      },
                     ),
                   );
                 },
@@ -215,11 +320,10 @@ class _TransportesState extends State<Transportes> {
       ),
     );
   }
+
   Widget _buildFiltroButton() {
     return ElevatedButton(
-      onPressed: (){
-        
-      },
+      onPressed: () {},
       child: Text('Filtros', style: TextStyle(color: Colors.black)),
     );
   }
