@@ -95,8 +95,8 @@ namespace Agencia.API.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost("Reservaciones/Create")]
-        public IActionResult Create(ReservacionesViewModel item)
+        [HttpPost("ReservacionesCreate")]
+        public IActionResult ReservacionesCreate(ReservacionesViewModel item)
         {
 
             //var model = _mapper.Map<tbPlanes>(item);
@@ -116,6 +116,23 @@ namespace Agencia.API.Controllers
             };
 
             var response = _agenciaServicio.InsertarReservaciones(modelo);
+            return Ok(response);
+        }
+        [HttpPost("ViajesCreate")]
+        public IActionResult ViajesCreate(ViajesViewModel item)
+        {
+
+            //var model = _mapper.Map<tbPlanes>(item);
+            var modelo = new tbViajes()
+            {
+                Viaj_Cantidad = item.Viaj_Cantidad,
+                HorT_Id = item.HorT_Id,
+                Paqu_Id = item.Paqu_Id,
+                Viaj_Usua_Creacion = item.Viaj_Usua_Creacion,
+                Viaj_Fecha_Creacion = item.Viaj_Fecha_Creacion
+            };
+
+            var response = _agenciaServicio.InsertarViajes(modelo);
             return Ok(response);
         }
     }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:agencia_viajes/models/paquete.dart';
+import 'package:agencia_viajes/models/viaje.dart';
 import 'package:agencia_viajes/models/service_result.dart';
 import 'package:agencia_viajes/screen/hotel_screen.dart';
 import 'package:agencia_viajes/screen/paquetes_form_screen.dart';
@@ -82,7 +83,7 @@ class _TransportesState extends State<Transportes> {
   // Función para cargar la lista de transportes
   Future<void> _cargarTransportes(int ciudadId) async {
     String url =
-        "https://etravel.somee.com/API/Transporte/TransporteList/$ciudadId";
+        "https://localhost:44372/API/Transporte/TransporteList/$ciudadId";
     final respuesta = await http.get(Uri.parse(url));
 
     if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
@@ -146,17 +147,40 @@ class _TransportesState extends State<Transportes> {
     _paquetesFuture ??= _cargarPaquetes();
   }
 
-  void mostrarDialog(BuildContext context) async {
+  void mostrarDialog(BuildContext context, dynamic transporte) async {
+    int _numBoletos = 1;
+
     showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            Future<void> postReservacion(BuildContext context) async {
-              String url =
-                  "https://etravel.somee.com/API/DetallePorPaquete/Viajes/Create";
+              void _incrementarPersonas() {
+    setState(() {
+      _numBoletos++;
+    });
+  }
 
-              // Viaje viaje = Viaje();
+  void _disminuirPersonas() {
+    setState(() {
+      if (_numBoletos > 1) {
+        _numBoletos--;
+      }
+    });
+  }
+            Future<void> postViaje(BuildContext context, dynamic transporte) async {
+              String url =
+                  "https://etravel.somee.com/API/DetallePorPaquete/ViajesCreate";
+
+              Viaje viaje = Viaje(
+                viaj_Id: 0,
+                viaj_Cantidad: _numBoletos,
+                horT_Id: transporte["horT_Id"],
+                paqu_Id: _paqueteSeleccionado.paquId,
+                viaj_Precio: 0, 
+                viaj_Usua_Creacion: 1,
+                viaj_Fecha_Creacion: DateTime.now().toUtc().toIso8601String()
+              );
 
               var resultado = await http.post(
                 Uri.parse(url),
@@ -207,6 +231,33 @@ class _TransportesState extends State<Transportes> {
               content: Form(
                 key: _formKey,
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
+                                const Text(
+                                  "Boletos:",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.remove,
+                                          color: Colors.white),
+                                      onPressed: _disminuirPersonas,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      "$_numBoletos",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    IconButton(
+                                      icon: const Icon(Icons.add,
+                                          color: Colors.white),
+                                      onPressed: _incrementarPersonas,
+                                    ),
+                                  ],
+                                ),
                   const SizedBox(height: 10.0),
                   FutureBuilder<List<Paquete>>(
                     future: _paquetesFuture, // Use the assigned future
@@ -229,6 +280,35 @@ class _TransportesState extends State<Transportes> {
                       }
                     },
                   ),
+                                    Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFBD59),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                         const Text(
+                          'Número de boletos:',
+                          style: TextStyle(
+                            color: Color(0xFFFFBD59),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$_numBoletos',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     decoration: const BoxDecoration(
@@ -250,7 +330,7 @@ class _TransportesState extends State<Transportes> {
                           ),
                         ),
                         Text(
-                          'L. ${""}',
+                          'L. ${transporte["tran_Precio"]}',
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -279,7 +359,7 @@ class _TransportesState extends State<Transportes> {
                           ),
                         ),
                         Text(
-                          'L. ${_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches}',
+                          'L. ${_numBoletos * transporte["tran_Precio"]}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -302,14 +382,14 @@ class _TransportesState extends State<Transportes> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${hotel.impuDescripcion} (${hotel.paisPorcentajeImpuesto * 100}%):',
+                          '${transporte["impu_Descripcion"]} (${transporte["pais_PorcentajeImpuesto"] * 100}%):',
                           style: const TextStyle(
                             color: Color(0xFFFFBD59),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          'L. ${((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) * hotel.paisPorcentajeImpuesto)}',
+                          'L. ${((_numBoletos * transporte["tran_Precio"]) * transporte["pais_PorcentajeImpuesto"])}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -339,7 +419,7 @@ class _TransportesState extends State<Transportes> {
                           ),
                         ),
                         Text(
-                          'L. ${((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) + ((_numHabitaciones * habitacionCategoria!.haCaPrecioPorNoche * _numNoches) * hotel.paisPorcentajeImpuesto))}',
+                          'L. ${((_numBoletos * transporte["tran_Precio"]) + ((_numBoletos * transporte["tran_Precio"]) * transporte["pais_PorcentajeImpuesto"]))}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18.0,
@@ -360,11 +440,11 @@ class _TransportesState extends State<Transportes> {
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();
-                                    await postReservacion(context);
+                                    await postViaje(context, transporte);
                                   }
                                 },
                                 icon: const Icon(Icons.check),
-                                label: const Text('Guardar reservación'),
+                                label: const Text('Adquirir boletos'),
                               ),
                             )
                           ]))
@@ -479,7 +559,9 @@ class _TransportesState extends State<Transportes> {
                     color: Colors.white10,
                     clipBehavior: Clip.hardEdge,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        mostrarDialog(context, _transportes[index]);
+                      },
                       splashColor: const Color.fromARGB(255, 255, 239, 120)
                           .withAlpha(30),
                       child: SizedBox(

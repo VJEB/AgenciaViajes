@@ -60,6 +60,7 @@ namespace Practica.DataAcces.Repositorio
         #region Detalles Paquetes
         public static string DePa_Insertar = "[Agen].[SP_DetallePorPaquete_Insertar]";
         public static string Rese_Insertar = "[Agen].[SP_Reservaciones_Insertar]";
+        public static string Viaj_Insertar = "[Agen].[SP_Viajes_Insertar]";
         public static string DePa_Actualizar = "[Agen].[SP_DetallePorPaquete_Actualizar]";
         public static string DePa_Eliminar = "[Agen].[SP_DetallePorPaquete_Eliminar]";
         public static string DePa_Llenar = "[Agen].[SP_DetallePorPaquete_Llenar]";
