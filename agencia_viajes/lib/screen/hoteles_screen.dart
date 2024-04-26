@@ -6,6 +6,9 @@ import 'package:agencia_viajes/models/pais.dart';
 import 'package:agencia_viajes/screen/habitaciones_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:agencia_viajes/models/usuario.dart';
 import 'package:http/http.dart' as http;
 
 class Hoteles extends StatefulWidget {
@@ -93,7 +96,6 @@ class _HotelesState extends State<Hoteles> {
     _cargarPaises();
   }
 
-
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
     if (result.statusCode >= 200 && result.statusCode < 300) {
@@ -118,12 +120,11 @@ class _HotelesState extends State<Hoteles> {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Filtrar'),
-        
         backgroundColor: Colors.black,
         actions: [
           IconButton(
@@ -138,121 +139,128 @@ class _HotelesState extends State<Hoteles> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child:  Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField<int>(
-                  value: _paisSeleccionado,
-                  items: _paises
-                      .map(
-                        (pais) => DropdownMenuItem<int>(
-                          value: pais['pais_Id'],
-                          child: Text(pais['pais_Descripcion']),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _paisSeleccionado = value;
-                      _estadoSeleccionado = null;
-                      _ciudadSeleccionada = null;
-                      _cargarEstados(value!);
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'País',
-                    border: OutlineInputBorder(),
-                    
-                  ),
-                ),
-              ),
-              SizedBox(width: 10),
-               Expanded(
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 50), // Establecer un ancho máximo para el dropdown
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _estadoSeleccionado,
-                    items: _estados
+                    value: _paisSeleccionado,
+                    items: _paises
                         .map(
-                          (estado) => DropdownMenuItem<int>(
-                            value: estado['esta_Id'],
-                            child: Text(estado['esta_Descripcion']),
+                          (pais) => DropdownMenuItem<int>(
+                            value: pais['pais_Id'],
+                            child: Text(pais['pais_Descripcion']),
                           ),
                         )
                         .toList(),
                     onChanged: (value) {
                       setState(() {
-                        _estadoSeleccionado = value;
+                        _paisSeleccionado = value;
+                        _estadoSeleccionado = null;
                         _ciudadSeleccionada = null;
-                        _cargarCiudades(value!);
+                        _cargarEstados(value!);
                       });
                     },
                     decoration: InputDecoration(
-                      labelText: 'Estado',
+                      labelText: 'País',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ), 
+              ],
+            ),
+
+                Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    constraints: BoxConstraints(
+                        maxWidth:
+                            10), // Establecer un ancho máximo para el dropdown
+                    child: DropdownButtonFormField<int>(
+                      value: _estadoSeleccionado,
+                      items: _estados
+                          .map(
+                            (estado) => DropdownMenuItem<int>(
+                              value: estado['esta_Id'],
+                              child: Text(estado['esta_Descripcion']),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _estadoSeleccionado = value;
+                          _ciudadSeleccionada = null;
+                          _cargarCiudades(value!);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Estado',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+               
+              ],
+            ),
+              Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<int>(
+                    value: _ciudadSeleccionada,
+                    items: _ciudades
+                        .map(
+                          (ciudad) => DropdownMenuItem<int>(
+                            value: ciudad['ciud_Id'],
+                            child: Text(ciudad['ciud_Descripcion']),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _ciudadSeleccionada = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Ciudad',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: DropdownButtonFormField<int>(
-                  value: _ciudadSeleccionada,
-                  items: _ciudades
-                      .map(
-                        (ciudad) => DropdownMenuItem<int>(
-                          value: ciudad['ciud_Id'],
-                          child: Text(ciudad['ciud_Descripcion']),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _ciudadSeleccionada = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Ciudad',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: FutureBuilder<dynamic>(
-              future: _getListado(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView(
-                    children: [
-                      ...listadoHotelesConCollapse(snapshot.data),
-                    ],
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
+              ],
             ),
-          ),
-           SizedBox(width: 40),
-        ],
-        
+            SizedBox(width: 20,),
+             Expanded(
+              child: FutureBuilder<dynamic>(
+                future: _getListado(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView(
+                      children: [
+                        ...listadoHotelesConCollapse(snapshot.data),
+                      ],
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+            SizedBox(width: 40),
+          ],
+        ),
       ),
-      ),
-
-     
     );
   }
-  
+
   // @override
   // Widget build(BuildContext context) {
   //   return Scaffold(
   //     body: FutureBuilder<dynamic>(
-  //       future: _getListado(), 
+  //       future: _getListado(),
   //       builder: (context, snapshot) {
   //         if (snapshot.hasData) {
   //           return ListView(
@@ -309,8 +317,33 @@ class HotelExpansionTile extends StatefulWidget {
 
 class _HotelExpansionTileState extends State<HotelExpansionTile> {
   bool isExpanded = false;
+  late UsuarioModel _usuario = UsuarioModel(usuaId: -1);
+
   Future<List<dynamic>> getFotosPorHotel(int hotelId) {
     return widget.getFotosPorHotel(hotelId);
+  }
+
+  Future<void> _loadUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? usuaId = prefs.getInt('usua_Id');
+    final String? usuaUsuario = prefs.getString('usua_Usuario');
+    final String? usuaContra = prefs.getString('usua_Contra');
+
+    if (usuaId != null && usuaUsuario != null && usuaContra != null) {
+      setState(() {
+        _usuario = UsuarioModel(
+          usuaId: usuaId,
+          usuaUsuario: usuaUsuario,
+          usuaContra: usuaContra,
+        );
+      });
+    } else {}
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsuario();
   }
 
   @override
@@ -318,215 +351,229 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
     final hotelData = widget.hotelData;
     return GestureDetector(
       child: Padding(
-         padding: const EdgeInsets.all(10.0),
-        child:   Card(
-        color: Colors.white10,
-        clipBehavior: Clip.hardEdge,
-        child: ExpansionTile(
-          tilePadding: EdgeInsets.zero,
-          textColor: Colors.white,
-          collapsedTextColor: Colors.white,
-          iconColor: Colors.white,
-          collapsedIconColor: Colors.white,
-          backgroundColor: Colors.transparent,
-          collapsedBackgroundColor: Colors.transparent,
-          childrenPadding: const EdgeInsets.all(16),
-          title: SizedBox(
-            height: 100,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: CachedNetworkImage(
-                    imageUrl: hotelData["hote_Imagen"],
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
+        padding: const EdgeInsets.all(10.0),
+        child: Card(
+          color: Colors.white10,
+          clipBehavior: Clip.hardEdge,
+          child: ExpansionTile(
+            tilePadding: EdgeInsets.zero,
+            textColor: Colors.white,
+            collapsedTextColor: Colors.white,
+            iconColor: Colors.white,
+            collapsedIconColor: Colors.white,
+            backgroundColor: Colors.transparent,
+            collapsedBackgroundColor: Colors.transparent,
+            childrenPadding: const EdgeInsets.all(16),
+            title: SizedBox(
+              height: 100,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: CachedNetworkImage(
+                      imageUrl: hotelData["hote_Imagen"],
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                '${hotelData["hote_Nombre"]}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFFFFBD59),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  '${hotelData["hote_Nombre"]}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFFFFBD59),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(
-                              'Desde: L.${hotelData["haHo_PrecioPorNoche"]}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 44, 214, 50),
-                                fontWeight: FontWeight.bold,
+                              Text(
+                                'Desde: L.${hotelData["haHo_PrecioPorNoche"]}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(255, 44, 214, 50),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4.0),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 12,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              '${hotelData["hote_Estrellas"]}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                                size: 12,
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              // Wrap the first Text widget with Expanded
-                              child: Text(
-                                hotelData["hote_DireccionExacta"],
+                              const SizedBox(width: 5),
+                              Text(
+                                '${hotelData["hote_Estrellas"]}',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,
                                 ),
-                                softWrap: true,
                               ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  hotelData["ciud_Descripcion"],
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                // Wrap the first Text widget with Expanded
+                                child: Text(
+                                  hotelData["hote_DireccionExacta"],
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                   ),
+                                  softWrap: true,
                                 ),
-                                Text(
-                                  hotelData["pais_Descripcion"],
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    hotelData["ciud_Descripcion"],
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ), // ... same as before
-          initiallyExpanded: isExpanded,
-          onExpansionChanged: (bool expanded) {
-            setState(() {
-              isExpanded = expanded;
-            });
-          },
-          trailing: IconButton(
-            icon: Icon(
-              isExpanded ? Icons.arrow_right : Icons.arrow_right,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => Habitaciones(
-                          hotel: Hotel(
-                              hoteId: hotelData["hote_Id"] ?? 0,
-                              hoteNombre: hotelData["hote_Nombre"],
-                              hoteDireccionExacta:
-                                  hotelData["hote_DireccionExacta"],
-                              ciudDescripcion: hotelData["ciud_Descripcion"],
-                              ciudId: int.parse(hotelData["ciud_Id"]),
-                              estaDescripcion: hotelData["esta_Descripcion"],
-                              haHoPrecioPorNoche:
-                                  hotelData["haHo_PrecioPorNoche"] ?? 0,
-                              hoteEstado: hotelData["hote_Estado"] ?? 0,
-                              hoteEstrellas: hotelData["hote_Estrellas"],
-                              hoteTelefono: hotelData["hote_Telefono"],
-                              hoteCorreo: hotelData["hote_Correo"],
-                              hoteResena: hotelData["hote_Reseña"],
-                              hoteFechaCreacion:
-                                  hotelData["hote_Fecha_Creacion"],
-                              hoteHoraSalida: "12:00:00",
-                              // hotelData["hote_HoraSalida"].toString(),
-                              hoteImagen: hotelData["hote_Imagen"],
-                              hotePrecioTodoIncluido:
-                                  hotelData["hote_PrecioTodoIncluido"] ?? 0,
-                              hoteUsuaCreacion: hotelData["hote_Usua_Creacion"],
-                              paisDescripcion: hotelData["pais_Descripcion"],
-                              impuId: hotelData["impu_Id"],
-                              impuDescripcion: hotelData["impu_Descripcion"],
-                              paisPorcentajeImpuesto:
-                                  hotelData["pais_PorcentajeImpuesto"]))));
-            },
-          ),
-          children: [
-            FutureBuilder<List<dynamic>>(
-              future: getFotosPorHotel(hotelData["hote_Id"]),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CachedNetworkImage(
-                            imageUrl: snapshot.data![index]["foHa_UrlImagen"],
-                            fit: BoxFit.cover,
-                            width: 100,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                                  Text(
+                                    hotelData["pais_Descripcion"],
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                  );
+                  ),
+                ],
+              ),
+            ), // ... same as before
+            initiallyExpanded: isExpanded,
+            onExpansionChanged: (bool expanded) {
+              setState(() {
+                isExpanded = expanded;
+              });
+            },
+            trailing: IconButton(
+              icon: Icon(
+                isExpanded ? Icons.arrow_right : Icons.arrow_right,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                if ((_usuario.usuaId == null || _usuario.usuaId == -1)) {
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const InicioSesion()),
+                    );
+                  });
                 } else {
-                  return const Center(child: CircularProgressIndicator());
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Habitaciones(
+                              hotel: Hotel(
+                                  hoteId: hotelData["hote_Id"] ?? 0,
+                                  hoteNombre: hotelData["hote_Nombre"],
+                                  hoteDireccionExacta:
+                                      hotelData["hote_DireccionExacta"],
+                                  ciudDescripcion:
+                                      hotelData["ciud_Descripcion"],
+                                  ciudId: int.parse(hotelData["ciud_Id"]),
+                                  estaDescripcion:
+                                      hotelData["esta_Descripcion"],
+                                  haHoPrecioPorNoche:
+                                      hotelData["haHo_PrecioPorNoche"] ?? 0,
+                                  hoteEstado: hotelData["hote_Estado"] ?? 0,
+                                  hoteEstrellas: hotelData["hote_Estrellas"],
+                                  hoteTelefono: hotelData["hote_Telefono"],
+                                  hoteCorreo: hotelData["hote_Correo"],
+                                  hoteResena: hotelData["hote_Reseña"],
+                                  hoteFechaCreacion:
+                                      hotelData["hote_Fecha_Creacion"],
+                                  hoteHoraSalida: "12:00:00",
+                                  // hotelData["hote_HoraSalida"].toString(),
+                                  hoteImagen: hotelData["hote_Imagen"],
+                                  hotePrecioTodoIncluido:
+                                      hotelData["hote_PrecioTodoIncluido"] ?? 0,
+                                  hoteUsuaCreacion:
+                                      hotelData["hote_Usua_Creacion"],
+                                  paisDescripcion:
+                                      hotelData["pais_Descripcion"],
+                                  impuId: hotelData["impu_Id"],
+                                  impuDescripcion:
+                                      hotelData["impu_Descripcion"],
+                                  paisPorcentajeImpuesto:
+                                      hotelData["pais_PorcentajeImpuesto"]))));
                 }
               },
             ),
-          ], //
+            children: [
+              FutureBuilder<List<dynamic>>(
+                future: getFotosPorHotel(hotelData["hote_Id"]),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CachedNetworkImage(
+                              imageUrl: snapshot.data![index]["foHa_UrlImagen"],
+                              fit: BoxFit.cover,
+                              width: 100,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ], //
+          ),
         ),
       ),
-      ), 
-    
     );
   }
 }

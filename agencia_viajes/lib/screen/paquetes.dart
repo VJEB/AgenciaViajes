@@ -284,7 +284,7 @@ class _PaquetesState extends State<Paquetes> {
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       drawer: MenuLateral(
-        context: context,
+        // context: context,
       ),
       body: Container(
         color: Colors.black,

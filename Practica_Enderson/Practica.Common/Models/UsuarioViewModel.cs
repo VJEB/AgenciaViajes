@@ -24,6 +24,11 @@ namespace Practica.Common.Models
         [NotMapped]
         public string Pers_Email { get; set; }
         [NotMapped]
+        public string Pers_Nombre { get; set; }
+        [NotMapped]
+        public string Pers_Apellido { get; set; }
+        [NotMapped]
+
         public int Ciud_Id { get; set; }
         [NotMapped]
         public string Ciud_Descripcion { get; set; }

@@ -10,14 +10,44 @@ import 'package:agencia_viajes/models/usuario.dart';
 import 'package:agencia_viajes/screen/facturas.dart';
 
 
-class MenuLateral extends StatelessWidget {
-  final BuildContext context;
+class MenuLateral extends StatefulWidget {
+  
+  const MenuLateral({super.key});
 
-  const MenuLateral({
-    super.key,
-    required this.context,
-  });
+  @override
+  State<MenuLateral> createState() => _MenuLateral();
+}
 
+class _MenuLateral extends State<MenuLateral> {
+  // final BuildContext context;
+  
+ late UsuarioModel _usuario = UsuarioModel(usuaId: -1);
+  
+@override
+  void initState() {
+    super.initState();
+    _loadUsuario();
+  }
+
+
+   Future<void> _loadUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? usuaId = prefs.getInt('usua_Id');
+    final String? usuaUsuario = prefs.getString('usua_Usuario');
+    final String? usuaContra = prefs.getString('usua_Contra');
+    final String? usuaAdmin = prefs.getString('usua_Admin');
+
+    if (usuaId != null && usuaUsuario != null && usuaContra != null) {
+      setState(() {
+        _usuario = UsuarioModel(
+          usuaId: usuaId,
+          usuaUsuario: usuaUsuario,
+          usuaContra: usuaContra,
+          usuaAdmin: bool.parse(usuaAdmin as String),
+        );
+      });
+    } else {}
+  }
   void _inicio() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const Layout()));
@@ -48,13 +78,24 @@ class MenuLateral extends StatelessWidget {
         context, MaterialPageRoute(builder: (_) => const Transportes()));
   }
    void _AdministrarUsuarios() {
+  
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => Usuarios()));
   }
 
     void _Facturas() {
-    Navigator.pushReplacement(
+        if ((_usuario.usuaId == null || _usuario.usuaId == -1)) {
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const InicioSesion()),
+      );
+    });
+  } else {
+  Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => ApiScreen()));
+  }
   }
 
   @override
@@ -116,15 +157,19 @@ class MenuLateral extends StatelessWidget {
                       onTap: _Facturas,
                     ),
                   ),
+                
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
-                    child: ListTile(
+                    child: 
+                        ListTile(
                       leading:
                           const Icon(Icons.people, color: Color(0xFFFFBD59)),
                       title: const Text('Administrar Usuarios',
                           style: TextStyle(color: Color(0xFFFFBD59))),
                       onTap: _AdministrarUsuarios,
+ 
                     ),
+                 
                   ),
                 ],
               ),
