@@ -34,5 +34,21 @@ namespace Agencia.API.Controllers
             var list = _agenciaServicio.ListTipoTransporte();
             return Ok(list.Data);
         }
+
+        [HttpGet("EstadoViaje")]
+
+        public IActionResult EstadoViaje()
+        {
+            var result = _agenciaServicio.CiudadDestino();
+            return Ok(result.Data);
+        }
+
+        [HttpGet("CiudadHospedaje")]
+
+        public IActionResult CiudadHospedaje()
+        {
+            var result = _agenciaServicio.CiudadDestino();
+            return Ok(result.Data);
+        }
     }
 }

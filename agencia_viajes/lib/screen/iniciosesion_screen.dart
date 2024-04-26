@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'package:agencia_viajes/screen/enviar_pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:agencia_viajes/models/usuario.dart';
-
 class InicioSesion extends StatefulWidget {
   /// Callback for when this form is submitted successfully. Parameters are (email, password)
   final Function(String? email, String? password)? onSubmitted;
@@ -18,7 +16,7 @@ class InicioSesion extends StatefulWidget {
 
 class _InicioSesionState extends State<InicioSesion> {
   late String email, password;
-  UsuarioModel? usuario;
+  UsuarioModel? usuario; 
   String? emailError, passwordError;
   Function(String? email, String? password)? get onSubmitted =>
       widget.onSubmitted;
@@ -64,56 +62,63 @@ class _InicioSesionState extends State<InicioSesion> {
   }
 
   Future<void> submit() async {
+  
     // Check if fields are empty before making the request
-    if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        emailError =
-            email.isEmpty ? 'Por favor ingrese su correo electrónico' : null;
-        passwordError =
-            password.isEmpty ? 'Por favor ingrese su contraseña' : null;
-      });
-      return;
-    } else {
-      String url =
-          'https://etravel.somee.com/API/Usuario/Login/$email/$password';
+  if (email.isEmpty || password.isEmpty) {
+    setState(() {
+      emailError = email.isEmpty ? 'Por favor ingrese su correo electrónico' : null;
+      passwordError = password.isEmpty ? 'Por favor ingrese su contraseña' : null;
+    });
+    return;
+  }
+  else{
+ String url = 'https://etravel.somee.com/API/Usuario/Login/$email/$password';
 
-      try {
-        // Make the HTTP request
-        final response = await http.get(Uri.parse(url));
+    try {
+      // Make the HTTP request
+      final response = await http.get(Uri.parse(url));
 
-        if (response.statusCode == 200) {
-          final responseData = jsonDecode(response.body);
+     
+      if (response.statusCode == 200) {
+        
+        final responseData = jsonDecode(response.body);
 
           final usuario = UsuarioModel.fromJson(responseData['data'][0]);
 
-          // Almacena los datos del usuario en SharedPreferences
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setInt('usua_Id', usuario.usuaId ?? 0);
-          prefs.setString('usua_Usuario', usuario.usuaUsuario ?? '');
-          prefs.setString('usua_Contra', usuario.usuaContra ?? '');
-
+        // Almacena los datos del usuario en SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setInt('usua_Id', usuario.usuaId ?? 0);
+        prefs.setInt('pers_Id', usuario.persId ?? 0);
+        prefs.setString('usua_Usuario', usuario.usuaUsuario ?? '');
+        prefs.setString('usua_Contra', usuario.usuaContra ?? '');
+        
           // Navigate to another page if login is successful
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const Layout()),
           );
-        } else {
+        }
+         else {
+         
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Usuario o contraseña incorrectos'),
               backgroundColor: Colors.red,
             ),
           );
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+          }
+      } 
+     catch (e) {
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
+  }
+   
   }
 
   @override
@@ -160,7 +165,7 @@ class _InicioSesionState extends State<InicioSesion> {
                     email = value;
                   });
                 },
-                labelText: 'Usuario',
+                labelText: 'Correo electrónico',
                 errorText: emailError,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -182,12 +187,7 @@ class _InicioSesionState extends State<InicioSesion> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EnviarPin(),
-                    ),
-                  ),
+                  onPressed: () {},
                   child: const Text(
                     'Olvidé mi contraseña',
                     style: TextStyle(
@@ -242,8 +242,7 @@ class FormButton extends StatelessWidget {
   final String text;
   final IconData? iconData; // Icon data for the button icon
   final Function? onPressed;
-  const FormButton({this.text = '', this.iconData, this.onPressed, Key? key})
-      : super(key: key);
+  const FormButton({this.text = '', this.iconData, this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

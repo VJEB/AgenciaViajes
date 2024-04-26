@@ -63,5 +63,23 @@ namespace Agencia.DataAcces.Repositorio
                 return result;
             }
         }
+        public IEnumerable<tbTransportes> CiudDestino()
+        {
+            List<tbTransportes> result = new List<tbTransportes>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                result = db.Query<tbTransportes>(ScriptBaseDatos.Dash_CiudDestino, commandType: CommandType.Text).ToList();
+                return result;
+            }
+        }
+        public IEnumerable<tbTiposTransportes> CiudHospedaje()
+        {
+            List<tbTiposTransportes> result = new List<tbTiposTransportes>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                result = db.Query<tbTiposTransportes>(ScriptBaseDatos.TiTr_Mostrar, commandType: CommandType.Text).ToList();
+                return result;
+            }
+        }
     }
 }

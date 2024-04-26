@@ -17,7 +17,7 @@ class _LayoutState extends State<Layout> {
   int _selectedIndex = 1;
 
   final List<Widget> _widgetOptions = <Widget>[
-    const Dashboards(),
+     Dashboard(),
     const Hoteles(),
     ProfileScreen(),
   ];

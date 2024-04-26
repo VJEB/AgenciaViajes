@@ -78,6 +78,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
     });
   }
 
+
   Future<List<EstadoCivil>> _cargarEstadosCiviles() async {
     List<EstadoCivil> list = [];
     const url = "https://etravel.somee.com/API/EstadoCivil/List";
@@ -89,10 +90,9 @@ class _RegistroPersonaState extends State<RegistroPersona> {
           estadosCivilesJson.map((json) => EstadoCivil.fromJson(json)).toList();
       if (list.isNotEmpty) {
         if (persona == null) {
-          _estadoCivilSeleccionado = list.first.esCiId;
+          _estadoCivilSeleccionado = list.first.esCiId;        
         } else {
-          Iterable<EstadoCivil> estadoCivilEncontrado =
-              list.where((esCi) => esCi.esCiId == _estadoCivilSeleccionado);
+          Iterable<EstadoCivil> estadoCivilEncontrado = list.where((esCi) => esCi.esCiId == _estadoCivilSeleccionado);
           _estadoCivil = estadoCivilEncontrado.first.esCiDescripcion;
         }
       } else {
@@ -232,7 +232,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   }
 
   Future<int> reqPersona() async {
-    String url =
+     String url =
         'https://etravel.somee.com/API/Persona/${persona == null ? 'Create' : 'Edit/${persona!.persId}'}';
     Persona pers = Persona(
         cargId: persona == null ? 1 : persona!.cargId,
@@ -249,17 +249,15 @@ class _RegistroPersonaState extends State<RegistroPersona> {
         persUsuaCreacion: 1,
         persFechaCreacion: DateTime.now().toUtc().toIso8601String());
 
-    var resultado = persona == null
-        ? await http.post(
-            Uri.parse(url),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(pers.toJson()),
-          )
-        : await http.put(
-            Uri.parse(url),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(pers.toJson()),
-          );
+    var resultado = persona == null ? await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(pers.toJson()),
+    ) : await http.put(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(pers.toJson()),
+    );
 
     if (resultado.statusCode >= 200 && resultado.statusCode < 300) {
       final responseJson = jsonDecode(resultado.body);
@@ -636,8 +634,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                                               color: Color(0xFFFFBD59)),
                                         ),
                                         value: estadoCivil.esCiId,
-                                        selected: estadoCivil.esCiId ==
-                                            _estadoCivilSeleccionado,
+                                        selected: estadoCivil.esCiId == _estadoCivilSeleccionado,
                                         groupValue: _estadoCivilSeleccionado,
                                         onChanged: (value) {
                                           setState(() {

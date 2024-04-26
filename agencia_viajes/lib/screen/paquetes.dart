@@ -402,20 +402,31 @@ class _PaquetesState extends State<Paquetes> {
     );
   }
 
-  void _agregarAlCarrito(dynamic item) async {
-    if (_usuario.usuaId == null || _usuario.usuaId == -1) {
-      // Redirigir a otra página si el usua_Id es nulo o 0
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const InicioSesion()),
-      );
-    } else {
+ void _agregarAlCarrito(dynamic item) async {
+  if (_usuario.usuaId == null || _usuario.usuaId == -1) {
+    // Redirigir a otra página si el usua_Id es nulo o 0
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const InicioSesion()),
+    );
+  } else {
+    // Verificar si el elemento ya está en el carrito
+    if (!carrito.contains(item)) {
       setState(() {
         carrito.add(item);
       });
       await _guardarCarrito();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orange,
+          content: const Text('¡Este paquete ya está en el carrito!'),
+        ),
+      );
     }
   }
+}
+
 
   Future<void> _guardarCarrito() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

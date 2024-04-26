@@ -7,6 +7,7 @@ import 'package:agencia_viajes/screen/transportes.dart';
 import 'package:agencia_viajes/screen/usuarios_screen1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:agencia_viajes/models/usuario.dart';
+import 'package:agencia_viajes/screen/facturas.dart';
 
 
 class MenuLateral extends StatelessWidget {
@@ -30,7 +31,7 @@ class MenuLateral extends StatelessWidget {
   await prefs.remove('usua_Id');
   await prefs.remove('usua_Usuario');
   await prefs.remove('usua_Contra');
-
+  await prefs.remove('carrito');
   // Redirige al usuario al Layout
   Navigator.pushReplacement(
     context,
@@ -50,6 +51,12 @@ class MenuLateral extends StatelessWidget {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => Usuarios()));
   }
+
+    void _Facturas() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => ApiScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -106,9 +113,7 @@ class MenuLateral extends StatelessWidget {
                           color: Color(0xFFFFBD59)),
                       title: const Text('Facturas',
                           style: TextStyle(color: Color(0xFFFFBD59))),
-                      onTap: () {
-                        // Aquí puedes agregar la lógica para navegar a la página de listar, por ejemplo.
-                      },
+                      onTap: _Facturas,
                     ),
                   ),
                   Padding(

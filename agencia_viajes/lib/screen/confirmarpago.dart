@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:agencia_viajes/models/paquete.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'carrito.dart';
 import 'package:agencia_viajes/models/facutra.dart';
+import 'package:agencia_viajes/screen/hoteles_screen.dart';
+import 'package:agencia_viajes/models/usuario.dart';
 import 'package:agencia_viajes/models/facturaDetalle.dart';
+import 'package:agencia_viajes/screen/facturas.dart';
 
 class ConfirmarPago extends StatefulWidget {
   const ConfirmarPago({Key? key}) : super(key: key);
@@ -16,7 +20,12 @@ class ConfirmarPago extends StatefulWidget {
 
 
 class _ConfirmarPagoState extends State<ConfirmarPago> {
-  String url = "https://etravel.somee.com/API/Persona/CargarTarjetas/1";
+  
+ late UsuarioModel _usuario =
+     UsuarioModel(usuaId: -1, persId: -1);
+
+    
+String url = "";
 
   List<Map<String, dynamic>> carrito = [];
   double subtotal = 0;
@@ -31,7 +40,8 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   void initState() {
     super.initState();
     _cargarCarrito();
-    _cargarOpcionesTarjeta();
+     _loadUsuario();
+    // _cargarOpcionesTarjeta();
   }
 
   Future<void> _cargarCarrito() async {
@@ -41,6 +51,31 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
       carrito = jsonDecode(carritoJson).cast<Map<String, dynamic>>();
       _calcularTotales();
     });
+  }
+
+  Future<void> _loadUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? usuaId = prefs.getInt('usua_Id');
+    final int? persId = prefs.getInt('pers_Id');
+    final String? usuaUsuario = prefs.getString('usua_Usuario');
+    final String? usuaContra = prefs.getString('usua_Contra');
+
+
+    if (usuaId != null && usuaUsuario != null && usuaContra != null && persId != null) {
+      setState(() {
+        _usuario = UsuarioModel(
+          usuaId: usuaId,
+          persId: persId,
+          usuaUsuario: usuaUsuario,
+          usuaContra: usuaContra,
+         
+        );
+          url = "https://etravel.somee.com/API/Persona/CargarTarjetas/${_usuario.persId}";
+      });
+        _cargarOpcionesTarjeta();
+    } else {
+    
+    }
   }
 
   Future<void> _guardarCarrito() async {
@@ -72,6 +107,7 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
   Future<void> _cargarOpcionesTarjeta() async {
+    print("URL: $url");
     final response = await http.get(Uri.parse(url)); 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -88,38 +124,73 @@ class _ConfirmarPagoState extends State<ConfirmarPago> {
   }
 
 Future<void> _confirmarCompra() async {
- 
+  if (_selectedCard == null) {
+    // Si no se ha seleccionado una tarjeta, muestra un mensaje y devuelve sin hacer nada más.
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error', style: TextStyle(color: Colors.red),),
+          content: Text('Por favor, seleccione un método de pago antes de confirmar la compra.',
+          style: TextStyle(color: Colors.white),),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el diálogo
+              },
+              child: Text('Aceptar', style: TextStyle(color: Color(0xFFFFBD59)),),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  // Si se ha seleccionado una tarjeta, procede con el registro normal
   final factura = Factura(
     factId: 0, 
     factFecha: DateTime.now().toUtc().toIso8601String(), 
     metoId: 1 , 
     pagoId: 1, 
-    persId: 1, 
-    factUsuaCreacion: 1,
+    persId: _usuario.persId ?? 0, 
+    factUsuaCreacion: _usuario.usuaId ?? 0,
     factFechaCreacion: DateTime.now().toUtc().toIso8601String(),
   );
 
 
   final facturaJson = factura.toJson();
 
-
   final response = await http.post(
-    Uri.parse('https://localhost:44372/API/Factura/Create'), 
+    Uri.parse('https://etravel.somee.com/API/Factura/Create'), 
     headers:{
       'Content-Type': 'application/json',
     },
     body: jsonEncode(facturaJson),
   );
 
-   
-
   if (response.statusCode == 200) {
-
     final facturaId = int.parse(jsonDecode(response.body)['message']);
-   
     _insertarDetalleFactura(facturaId);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Éxito', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),),
+          content: Text('La compra se realizó exitosamente.',style: TextStyle(color: Colors.white),),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+                _limpiarCarritoYRedirigir(); // Llamar a la función para limpiar el carrito y redirigir
+              },
+              child: Text('Aceptar',style: TextStyle(color: Color(0xFFFFBD59)),),
+            ),
+          ],
+        );
+      },
+    );
   } else {
-  
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -140,6 +211,17 @@ Future<void> _confirmarCompra() async {
   }
 }
 
+
+void _limpiarCarritoYRedirigir() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('carrito'); // Eliminar el carrito de SharedPreferences
+  Navigator.pushReplacement( // Redirigir al usuario a otra pantalla, reemplazando la actual
+    context,
+    MaterialPageRoute(builder: (_) => ApiScreen()), // Reemplaza 'OtraPantalla()' con el nombre de la pantalla a la que deseas redirigir
+  );
+}
+
+
 Future<void> _insertarDetalleFactura(int facturaId) async {
   
   final detalles = carrito.map((element) {
@@ -159,7 +241,7 @@ Future<void> _insertarDetalleFactura(int facturaId) async {
   final detallesJson = detalles.map((detalle) => detalle.toJson()).toList();
 
   final response = await http.post(
-    Uri.parse('https://localhost:44372/API/Factura/CreateDetalle'), 
+    Uri.parse('https://etravel.somee.com/API/Factura/CreateDetalle'), 
     headers: {
       'Content-Type': 'application/json',
     },

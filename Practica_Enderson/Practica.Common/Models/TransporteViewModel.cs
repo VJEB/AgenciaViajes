@@ -9,6 +9,13 @@ namespace Agencia.Common.Models
 {
     public class TransporteViewModel
     {
+
+        [NotMapped]
+        public string NumeroPersonas { get; set; }
+        [NotMapped]
+        public string EsCi_Descripcion { get; set; }
+        [NotMapped]
+        public string Ciud_Descripcion { get; set; }
         public int Tran_Id { get; set; }
         public decimal? Tran_Precio { get; set; }
         public int? TiTr_Id { get; set; }
