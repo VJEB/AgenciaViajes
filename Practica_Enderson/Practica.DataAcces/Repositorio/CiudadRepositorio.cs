@@ -44,6 +44,25 @@ namespace Practica.DataAcces.Repositorio
             }
         }
 
+        public IEnumerable<tbCiudades> CiudHospedaje()
+        {
+            List<tbCiudades> result = new List<tbCiudades>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                result = db.Query<tbCiudades>(ScriptBaseDatos.Ciud_Mostrar, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
+
+        public IEnumerable<tbTransportes> CiudDestino()
+        {
+            List<tbTransportes> result = new List<tbTransportes>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                result = db.Query<tbTransportes>(ScriptBaseDatos.Dash_CiudDestino, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
         IEnumerable<tbCiudades> IRepository<tbCiudades>.List()
         {
             throw new NotImplementedException();
