@@ -434,6 +434,46 @@ namespace Agencia.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult CiudHospedaje()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _transporteRepositorio.CiudHospedaje();
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult HoteReservados()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _hotelRepositorio.HoteReservados();
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult SexoDestino()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var lost = _transporteRepositorio.SexoDestino();
+                return result.Ok(lost);
+            }
+            catch (Exception ex)
+            {
+
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult CiudadHospedaje()
         {
             var result = new ServiceResult();

@@ -40,15 +40,22 @@ namespace Agencia.API.Controllers
         public IActionResult EstadoViaje()
         {
             var result = _agenciaServicio.CiudadDestino();
-            return Ok(result.Data);
+            return Ok(result);
+        }
+        [HttpGet("SexoViaje")]
+
+        public IActionResult SexoViaje()
+        {
+            var result = _agenciaServicio.SexoDestino();
+            return Ok(result);
         }
 
         [HttpGet("CiudadHospedaje")]
 
         public IActionResult CiudadHospedaje()
         {
-            var result = _agenciaServicio.CiudadDestino();
-            return Ok(result.Data);
+            var result = _agenciaServicio.CiudHospedaje();
+            return Ok(result);
         }
     }
 }
