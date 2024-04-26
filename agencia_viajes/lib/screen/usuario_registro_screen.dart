@@ -143,15 +143,14 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
           style: TextStyle(color: Color(0xFFFFBD59)),
         ),
         backgroundColor: Colors.black,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back),
-        //   tooltip: 'Volver',
-        //   onPressed: () {
-        //     Navigator.push(context,
-        //         MaterialPageRoute(builder: (_) => const RegistroPersona()));
-        //   },
-        // ),
-        // iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Volver',
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       body: Container(
         color: Colors.black,

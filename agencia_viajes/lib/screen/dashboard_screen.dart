@@ -51,7 +51,8 @@ class _Graficos extends State<Graficos> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(16.0),
-      child: Column(
+      child: 
+      Column(
         children: [
           _buildTarjetaGrafico(_ciudadesData, 'Ciudades Más Visitadas'),
           _buildTarjetaGrafico(_hotelesData, 'Hoteles Más Reservados'),
@@ -66,6 +67,7 @@ class _Graficos extends State<Graficos> {
   Widget _buildTarjetaGrafico(
       Future<List<Map<String, dynamic>>> data, String titulo) {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.only(bottom: 20.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -74,7 +76,7 @@ class _Graficos extends State<Graficos> {
           children: [
             Text(
               titulo,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             SizedBox(height: 10.0),
             _buildGrafico(data, titulo),
@@ -106,10 +108,11 @@ class _Graficos extends State<Graficos> {
 
   Widget _buildChart(List<Map<String, dynamic>> data, String titulo) {
     final List<Color> colores = [
-      Colors.blue,
-      Colors.green,
+      Color(0xFFFFBD59),
+      Color.fromARGB(255, 177, 115, 1),
       Colors.red,
-      Colors.yellow,
+      Colors.grey,
+      Colors.red
       // Agrega más colores si lo necesitas
     ];
 
