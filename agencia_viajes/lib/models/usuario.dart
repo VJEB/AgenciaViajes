@@ -14,8 +14,6 @@ class UsuarioModel {
   int? usuaUsuaModifica;
   final String? usuaFechaModifica;
   String? persona;
-  String? persNombre;
-  String? persApellido;
   String? usuaUrlImagen;
   String? persDNI;
   String? persSexo;
@@ -31,39 +29,38 @@ class UsuarioModel {
   String? estaDescripcion;
   int? paisId;
   String? paisDescripcion;
+  bool? usuaEstado;
 
-  UsuarioModel({
-    this.usuaId,
-    this.usuaUsuario,
-    this.usuaContra,
-    this.usuaAdmin,
-    this.rolId,
-    this.persId,
-    this.rolDescripcion,
-    this.persEmail,
-    this.usuaUsuaCreacion,
-    this.usuaFechaCreacion,
-    this.usuaUsuaModifica,
-    this.usuaFechaModifica,
-    this.persona,
-    this.persNombre,
-    this.persApellido,
-    this.usuaUrlImagen,
-    this.persDNI,
-    this.persSexo,
-    this.persTelefono,
-    this.persPasaporte,
-    this.ciudId,
-    this.ciudDescripcion,
-    this.esCiId,
-    this.esCiDescripcion,
-    this.cargId,
-    this.cargDescripcion,
-    this.estaId,
-    this.estaDescripcion,
-    this.paisId,
-    this.paisDescripcion,
-  });
+  UsuarioModel(
+      {this.usuaId,
+      this.usuaUsuario,
+      this.usuaContra,
+      this.usuaAdmin,
+      this.rolId,
+      this.persId,
+      this.rolDescripcion,
+      this.persEmail,
+      this.usuaUsuaCreacion,
+      this.usuaFechaCreacion,
+      this.usuaUsuaModifica,
+      this.usuaFechaModifica,
+      this.persona,
+      this.usuaUrlImagen,
+      this.persDNI,
+      this.persSexo,
+      this.persTelefono,
+      this.persPasaporte,
+      this.ciudId,
+      this.ciudDescripcion,
+      this.esCiId,
+      this.esCiDescripcion,
+      this.cargId,
+      this.cargDescripcion,
+      this.estaId,
+      this.estaDescripcion,
+      this.paisId,
+      this.paisDescripcion,
+      this.usuaEstado});
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) {
     return UsuarioModel(
@@ -77,8 +74,6 @@ class UsuarioModel {
       rolDescripcion: json['rol_Descripcion'],
       usuaUsuaCreacion: json['usua_Usua_Creacion'],
       persona: json['persona'],
-      persNombre: json['pers_Nombre'],
-      persApellido: json['pers_Apellido'],
       usuaUrlImagen: json['usua_UrlImagen'],
       persDNI: json['pers_DNI'],
       persSexo: json['pers_Sexo'],
@@ -106,26 +101,28 @@ class UsuarioModel {
       'rol_Id': rolId,
       'pers_Id': persId,
       'pers_Email': persEmail,
-      'rol_Descripcion': rolId,
+      // 'rol_Descripcion': rolId,
       'usua_Usua_Creacion': usuaUsuaCreacion,
-      'persona': persona,
-      'pers_Nombre': persNombre,
-      'pers_Apellido': persApellido,
-      'usua_UrlImagen': usuaUrlImagen,
-      'pers_DNI': persDNI,
-      'pers_Sexo': persSexo,
-      'pers_Telefono': persTelefono,
-      'pers_Pasaporte': persPasaporte,
-      'ciud_Id': ciudId,
-      'ciud_Descripcion': ciudDescripcion,
-      'esCi_Id': esCiId,
-      'esCi_Descripcion': esCiDescripcion,
-      'carg_Id': cargId,
-      'carg_Descripcion': cargDescripcion,
-      'esta_Id': estaId,
-      'esta_Descripcion': estaDescripcion,
-      'pais_Id': paisId,
-      'pais_Descripcion': paisDescripcion,
+      'usua_Fecha_Creacion': usuaFechaCreacion,
+      'usua_Usua_Modifica': usuaUsuaModifica,
+      'usua_Fecha_Modifica': usuaFechaModifica,
+      // 'persona': persona,
+      // 'usua_UrlImagen': usuaUrlImagen,
+      // 'pers_DNI': persDNI,
+      // 'pers_Sexo': persSexo,
+      // 'pers_Telefono': persTelefono,
+      // 'pers_Pasaporte': persPasaporte,
+      // 'ciud_Id': ciudId,
+      // 'ciud_Descripcion': ciudDescripcion,
+      // 'esCi_Id': esCiId,
+      // 'esCi_Descripcion': esCiDescripcion,
+      // 'carg_Id': cargId,
+      // 'carg_Descripcion': cargDescripcion,
+      // 'esta_Id': estaId,
+      // 'esta_Descripcion': estaDescripcion,
+      // 'pais_Id': paisId,
+      // 'pais_Descripcion': paisDescripcion,
+      'usua_Estado': false
     };
   }
 }

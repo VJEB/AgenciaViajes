@@ -11,21 +11,21 @@ import 'package:http/http.dart' as http;
 // import 'package:flutter/gestures.dart';
 // import 'dart:collection';
 
-class HotelScreen extends StatefulWidget {
+class AirBnbScreen extends StatefulWidget {
   final Hotel hotel;
   final List<String> imageUrls;
   final HabitacionCategoria? habitacionCategoria;
-  const HotelScreen(
+  const AirBnbScreen(
       {required this.hotel,
       this.habitacionCategoria,
       super.key,
       required this.imageUrls});
 
   @override
-  State<HotelScreen> createState() => _HotelScreenState();
+  State<AirBnbScreen> createState() => _AirBnbScreenState();
 }
 
-class _HotelScreenState extends State<HotelScreen> {
+class _AirBnbScreenState extends State<AirBnbScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String persId = 1.toString();
@@ -63,43 +63,43 @@ class _HotelScreenState extends State<HotelScreen> {
     });
   }
 
-  void _updatePersonas() {
-    setState(() {
-      _numPersonas = _numHabitaciones * _numPersonasHabitacion;
-    });
-  }
+  // void _updatePersonas() {
+  //   setState(() {
+  //     _numPersonas = _numHabitaciones * _numPersonasHabitacion;
+  //   });
+  // }
 
-  void _incrementarHabitaciones() {
-    setState(() {
-      _numHabitaciones++;
-      _updatePersonas();
-    });
-  }
+  // void _incrementarHabitaciones() {
+  //   setState(() {
+  //     _numHabitaciones++;
+  //     _updatePersonas();
+  //   });
+  // }
 
-  void _disminuirHabitaciones() {
-    setState(() {
-      if (_numHabitaciones > 1) {
-        _numHabitaciones--;
-      }
-      _updatePersonas();
-    });
-  }
+  // void _disminuirHabitaciones() {
+  //   setState(() {
+  //     if (_numHabitaciones > 1) {
+  //       _numHabitaciones--;
+  //     }
+  //     _updatePersonas();
+  //   });
+  // }
 
-  void _incrementarPersonas() {
-    setState(() {
-      _numPersonas++;
-      _updateHabitaciones();
-    });
-  }
+  // void _incrementarPersonas() {
+  //   setState(() {
+  //     _numPersonas++;
+  //     _updateHabitaciones();
+  //   });
+  // }
 
-  void _disminuirPersonas() {
-    setState(() {
-      if (_numPersonas > 1) {
-        _numPersonas--;
-        _updateHabitaciones();
-      }
-    });
-  }
+  // void _disminuirPersonas() {
+  //   setState(() {
+  //     if (_numPersonas > 1) {
+  //       _numPersonas--;
+  //       _updateHabitaciones();
+  //     }
+  //   });
+  // }
 
   void _onPaqueteSelected(Paquete paquete) {
     setState(() {
@@ -156,9 +156,6 @@ class _HotelScreenState extends State<HotelScreen> {
                 habiNumPersonas: habitacionCategoria!.habiNumPersonas,
                 reseUsuaCreacion: 1,
                 reseFechaCreacion: DateTime.now().toUtc().toIso8601String(),
-                reseUsuaModifica: 0,
-                reseFechaModifica: DateTime.now().toUtc().toIso8601String(),
-
               );
 
               var resultado = await http.post(
@@ -297,35 +294,35 @@ class _HotelScreenState extends State<HotelScreen> {
                       }
                     },
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Color(0xFFFFBD59),
-                          width: 1.0,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Número de Habitaciones:',
-                          style: TextStyle(
-                            color: Color(0xFFFFBD59),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '$_numHabitaciones',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  //   decoration: const BoxDecoration(
+                  //     border: Border(
+                  //       bottom: BorderSide(
+                  //         color: Color(0xFFFFBD59),
+                  //         width: 1.0,
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       const Text(
+                  //         'Número de Habitaciones:',
+                  //         style: TextStyle(
+                  //           color: Color(0xFFFFBD59),
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //       Text(
+                  //         '$_numHabitaciones',
+                  //         style: const TextStyle(
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     decoration: const BoxDecoration(
@@ -624,79 +621,79 @@ class _HotelScreenState extends State<HotelScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Habitaciones:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.remove,
-                                          color: Colors.white),
-                                      onPressed: _disminuirHabitaciones,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "$_numHabitaciones",
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    IconButton(
-                                      icon: const Icon(Icons.add,
-                                          color: Colors.white),
-                                      onPressed: _incrementarHabitaciones,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Personas:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.remove,
-                                          color: Colors.white),
-                                      onPressed: _disminuirPersonas,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "$_numPersonas",
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    IconButton(
-                                      icon: const Icon(Icons.add,
-                                          color: Colors.white),
-                                      onPressed: _incrementarPersonas,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const MyDivider(),
+                      // Row(
+                      // children: [
+                      // Expanded(
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       const Text(
+                      //         "Habitaciones:",
+                      //         style: TextStyle(color: Colors.white),
+                      //       ),
+                      //       const SizedBox(height: 5),
+                      //       Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           IconButton(
+                      //             icon: const Icon(Icons.remove,
+                      //                 color: Colors.white),
+                      //             onPressed: _disminuirHabitaciones,
+                      //           ),
+                      //           const SizedBox(width: 10),
+                      //           Text(
+                      //             "$_numHabitaciones",
+                      //             style:
+                      //                 const TextStyle(color: Colors.white),
+                      //           ),
+                      //           const SizedBox(width: 10),
+                      //           IconButton(
+                      //             icon: const Icon(Icons.add,
+                      //                 color: Colors.white),
+                      //             onPressed: _incrementarHabitaciones,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Expanded(
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       const Text(
+                      //         "Personas:",
+                      //         style: TextStyle(color: Colors.white),
+                      //       ),
+                      //       const SizedBox(height: 5),
+                      //       Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           IconButton(
+                      //             icon: const Icon(Icons.remove,
+                      //                 color: Colors.white),
+                      //             onPressed: _disminuirPersonas,
+                      //           ),
+                      //           const SizedBox(width: 10),
+                      //           Text(
+                      //             "$_numPersonas",
+                      //             style:
+                      //                 const TextStyle(color: Colors.white),
+                      //           ),
+                      //           const SizedBox(width: 10),
+                      //           IconButton(
+                      //             icon: const Icon(Icons.add,
+                      //                 color: Colors.white),
+                      //             onPressed: _incrementarPersonas,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // ],
+                      // ),
+                      // const MyDivider(),
                       Text(
                         habitacionCategoria!.hoCaNombre,
                         style: const TextStyle(
@@ -719,6 +716,13 @@ class _HotelScreenState extends State<HotelScreen> {
                             ),
                             RatingRow(
                               rating: hotel.hoteEstrellas as double,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${3} habitaciones', // hotel.hoteCorreo,
+                              style: const TextStyle(
+                                  color: Color(0xFFFFBD59),
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ).toList(),

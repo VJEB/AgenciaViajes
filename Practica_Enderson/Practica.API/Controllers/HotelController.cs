@@ -27,5 +27,12 @@ namespace Agencia.API.Controllers
             var list = _agenciaServicio.ListHoteles(Ciud_Id);
             return Ok(list.Data);
         }
+        [HttpGet("HoteReservados")]
+
+        public IActionResult HoteReservados()
+        {
+            var result = _agenciaServicio.HoteReservados();
+            return Ok(result);
+        }
     }
 }

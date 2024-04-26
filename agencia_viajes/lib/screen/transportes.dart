@@ -83,7 +83,7 @@ class _TransportesState extends State<Transportes> {
   // Función para cargar la lista de transportes
   Future<void> _cargarTransportes(int ciudadId) async {
     String url =
-        "https://localhost:44372/API/Transporte/TransporteList/$ciudadId";
+        "https://etravel.somee.com/API/Transporte/TransporteList/$ciudadId";
     final respuesta = await http.get(Uri.parse(url));
 
     if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
@@ -155,20 +155,22 @@ class _TransportesState extends State<Transportes> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-              void _incrementarPersonas() {
-    setState(() {
-      _numBoletos++;
-    });
-  }
+            void _incrementarPersonas() {
+              setState(() {
+                _numBoletos++;
+              });
+            }
 
-  void _disminuirPersonas() {
-    setState(() {
-      if (_numBoletos > 1) {
-        _numBoletos--;
-      }
-    });
-  }
-            Future<void> postViaje(BuildContext context, dynamic transporte) async {
+            void _disminuirPersonas() {
+              setState(() {
+                if (_numBoletos > 1) {
+                  _numBoletos--;
+                }
+              });
+            }
+
+            Future<void> postViaje(
+                BuildContext context, dynamic transporte) async {
               String url =
                   "https://etravel.somee.com/API/DetallePorPaquete/ViajesCreate";
 
@@ -177,9 +179,11 @@ class _TransportesState extends State<Transportes> {
                 viaj_Cantidad: _numBoletos,
                 horT_Id: transporte["horT_Id"],
                 paqu_Id: _paqueteSeleccionado.paquId,
-                viaj_Precio: 0, 
+                viaj_Precio: 0,
                 viaj_Usua_Creacion: 1,
-                viaj_Fecha_Creacion: DateTime.now().toUtc().toIso8601String()
+                viaj_Fecha_Creacion: DateTime.now().toUtc().toIso8601String(),
+                // viaj_Usua_Modifica: 1,
+                // viaj_Fecha_Modifica: DateTime.now().toUtc().toIso8601String()
               );
 
               var resultado = await http.post(
@@ -231,33 +235,30 @@ class _TransportesState extends State<Transportes> {
               content: Form(
                 key: _formKey,
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
-                                const Text(
-                                  "Boletos:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.remove,
-                                          color: Colors.white),
-                                      onPressed: _disminuirPersonas,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "$_numBoletos",
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    IconButton(
-                                      icon: const Icon(Icons.add,
-                                          color: Colors.white),
-                                      onPressed: _incrementarPersonas,
-                                    ),
-                                  ],
-                                ),
+                  const Text(
+                    "Boletos:",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove, color: Colors.white),
+                        onPressed: _disminuirPersonas,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        "$_numBoletos",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        icon: const Icon(Icons.add, color: Colors.white),
+                        onPressed: _incrementarPersonas,
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 10.0),
                   FutureBuilder<List<Paquete>>(
                     future: _paquetesFuture, // Use the assigned future
@@ -280,7 +281,7 @@ class _TransportesState extends State<Transportes> {
                       }
                     },
                   ),
-                                    Container(
+                  Container(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     decoration: const BoxDecoration(
                       border: Border(
@@ -293,7 +294,7 @@ class _TransportesState extends State<Transportes> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         const Text(
+                        const Text(
                           'Número de boletos:',
                           style: TextStyle(
                             color: Color(0xFFFFBD59),

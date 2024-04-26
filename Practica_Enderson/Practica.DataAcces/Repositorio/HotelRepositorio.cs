@@ -49,5 +49,14 @@ namespace Agencia.DataAcces.Repositorio
         {
             throw new NotImplementedException();
         }
+        public IEnumerable<tbHoteles> HoteReservados()
+        {
+            List<tbHoteles> result = new List<tbHoteles>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                result = db.Query<tbHoteles>(ScriptBaseDatos.Dash_HotelesReservados, commandType: CommandType.Text).ToList();
+                return result;
+            }
+        }
     }
 }

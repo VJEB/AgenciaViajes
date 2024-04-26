@@ -1,8 +1,11 @@
 import 'dart:convert';
 
-import 'package:agencia_viajes/models/detalle_de_paquete.dart';
 import 'package:agencia_viajes/models/paquete.dart';
+import 'package:agencia_viajes/models/reservacion.dart';
+import 'package:agencia_viajes/models/viaje.dart';
+import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/paquetes.dart';
+import 'package:agencia_viajes/screen/transportes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -18,31 +21,287 @@ class PaquetesForm extends StatefulWidget {
 class _PaquetesState extends State<PaquetesForm> {
   final _formKey = GlobalKey<FormState>();
 
-  List<DetalleDePaquete> _detalles = [];
+  Map<String?, int> uniqueHaCaNombres = {};
+  List<Widget> lista = [];
 
-  Future<List<DetalleDePaquete>>? _detallesFuture;
+  Future<List<Reservacion>>? _reservacionesFuture;
+  Future<List<Viaje>>? _viajesFuture;
+  // List<Reservacion>? _localReservaciones;
 
   @override
   void initState() {
     super.initState();
-    _detallesFuture ??= _cargarDetalles();
     paquete = widget.paquete;
+    _reservacionesFuture ??= _cargarReservaciones();
+    _viajesFuture ??= _cargarViajes();
     url += paquete.paquId.toString();
   }
 
-  Future<List<DetalleDePaquete>> _cargarDetalles() async {
-    List<DetalleDePaquete> list = [];
-    const url = "https://etravel.somee.com/API/DetallePorPaquete/List";
+  List<Widget> listadoReservaciones(List<dynamic>? info) {
+    List<Widget> tempList = [];
+    Set<String> uniqueHaCaNombresForRendering = {};
+
+    if (info != null) {
+      for (var element in info) {
+        if (!uniqueHaCaNombresForRendering.contains(element.haCaNombre)) {
+          uniqueHaCaNombresForRendering.add(element.haCaNombre);
+          tempList.add(Row(
+            children: [
+              Expanded(
+                child: Text(
+                  element.haCaNombre,
+                  style: const TextStyle(
+                      color: Color(0xFFFFBD59),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Text(
+                'Cantidad: ${uniqueHaCaNombres[element.haCaNombre]}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              )
+            ],
+          ));
+          tempList.add(Row(
+            children: [
+              Expanded(
+                child: Text(
+                  element.hoteNombre,
+                  style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: Text(
+                  '${element.ciudDescripcion}, ${element.estaDescripcion}, ${element.paisDescripcion}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ));
+          tempList.add(Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Fecha entrada: ${element.reseFechaEntrada.toString().split("T")[0]}',
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Precio por noche: L. ${element.resePrecio.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ));
+          tempList.add(Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Fecha salida: ${element.reseFechaSalida.toString().split("T")[0]}',
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
+                ),
+              ),
+              Expanded(
+                  child: Text(
+                '${element.impuDescripcion} (${element.paisPorcentajeImpuesto * 100}%) por noche: \n L. ${(element.resePrecio * element.paisPorcentajeImpuesto).toStringAsFixed(2)}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              )),
+            ],
+          ));
+          tempList.add(Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'Total reservación: ',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Text(
+                'L. ${((element.resePrecio * uniqueHaCaNombres[element.haCaNombre]) + (element.resePrecio * uniqueHaCaNombres[element.haCaNombre] * element.paisPorcentajeImpuesto)).toStringAsFixed(2)}',
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ));
+          tempList.add(const Divider());
+        }
+      }
+    }
+    return tempList;
+  }
+
+  Future<List<Reservacion>> _cargarReservaciones() async {
+    List<Reservacion> list = [];
+    url =
+        "https://etravel.somee.com/API/DetallePorPaquete/Reservaciones/${paquete.paquId}";
     final respuesta = await http.get(Uri.parse(url));
 
     if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
       setState(() {
         final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
         list = estadosCivilesJson
-            .map((json) => DetalleDePaquete.fromJson(json))
+            .map((json) => Reservacion.fromJson(json))
             .toList();
         if (list.isNotEmpty) {
-          ////////////////////////////////
+          for (var element in list) {
+            if (uniqueHaCaNombres.containsKey(element.haCaNombre)) {
+              uniqueHaCaNombres[element.haCaNombre] =
+                  uniqueHaCaNombres[element.haCaNombre]! + 1;
+            } else {
+              uniqueHaCaNombres[element.haCaNombre] = 1;
+            }
+          }
+        } else {
+          print('Error al cargar los detalles');
+        }
+      });
+    }
+    return list;
+  }
+
+  List<Widget> listadoViajes(List<dynamic>? info) {
+    List<Widget> tempList = [];
+    // Set<String> uniqueHaCaNombresForRendering = {};
+
+    if (info != null) {
+      for (var element in info) {
+        // if (!uniqueHaCaNombresForRendering.contains(element.haCaNombre)) {
+        //   uniqueHaCaNombresForRendering.add(element.haCaNombre);
+        // }
+        tempList.add(Row(
+          children: [
+            Expanded(
+              child: Text(
+                element.puntoFinal,
+                style: const TextStyle(
+                    color: Color(0xFFFFBD59),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Text(
+              'Cantidad: ${element.viaj_Cantidad}',
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            )
+          ],
+        ));
+        tempList.add(Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${element.estadoFinal}, ${element.paisFinal}',
+                style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Expanded(
+              child: Text(
+                'Precio por boleto: L. ${element.viaj_Precio.toStringAsFixed(2)}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ));
+        tempList.add(Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Sale de: ${element.puntoInicio}, ${element.estadoInicio}, ${element.paisInicio}',
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                '${element.impu_Descripcion} (${element.pais_PorcentajeImpuesto * 100}%) por boleto: \n L. ${(element.viaj_Precio * element.pais_PorcentajeImpuesto).toStringAsFixed(2)}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ));
+        tempList.add(Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Fecha y hora salida: ${element.horT_FechaYhora.toString().split(" ")[0]} ${element.horT_FechaYhora.toString().split(" ")[1]}',
+                style: const TextStyle(fontSize: 14, color: Colors.white),
+              ),
+            ),
+            const Expanded(
+                child: Text(
+              '',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            )),
+          ],
+        ));
+        tempList.add(Row(
+          children: [
+            const Expanded(
+              child: Text(
+                'Total reservación: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Text(
+              'L. ${((element.viaj_Precio * element.viaj_Cantidad) + (element.viaj_Precio * element.viaj_Cantidad * element.pais_PorcentajeImpuesto)).toStringAsFixed(2)}',
+              style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ));
+        tempList.add(const Divider());
+      }
+    }
+    return tempList;
+  }
+
+  Future<List<Viaje>> _cargarViajes() async {
+    List<Viaje> list = [];
+    url =
+        "https://etravel.somee.com/API/DetallePorPaquete/Viajes/${paquete.paquId}";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      setState(() {
+        final List<dynamic> estadosCivilesJson = jsonDecode(respuesta.body);
+        list = estadosCivilesJson.map((json) => Viaje.fromJson(json)).toList();
+        if (list.isNotEmpty) {
+          // for (var element in list) {
+          //   if (uniqueHaCaNombres.containsKey(element.haCaNombre)) {
+          //     uniqueHaCaNombres[element.haCaNombre] =
+          //         uniqueHaCaNombres[element.haCaNombre]! + 1;
+          //   } else {
+          //     uniqueHaCaNombres[element.haCaNombre] = 1;
+          //   }
+          // }
         } else {
           print('Error al cargar los detalles');
         }
@@ -118,7 +377,7 @@ class _PaquetesState extends State<PaquetesForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   SizedBox(
-                    width: 150, // max width of the button
+                    width: 150,
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -208,7 +467,7 @@ class _PaquetesState extends State<PaquetesForm> {
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       body: ListView(
-        reverse: true,
+        // reverse: true,
         children: [
           Card(
             color: Colors.white10,
@@ -216,12 +475,85 @@ class _PaquetesState extends State<PaquetesForm> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  FutureBuilder<List<DetalleDePaquete>>(
-                    future: _detallesFuture,
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Reservaciones: ',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFFFFBD59),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const Layout()));
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          color: Color(0xFFFFBD59),
+                        ),
+                        label: const Text("Agregar"),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  FutureBuilder<List<Reservacion>>(
+                    future: _reservacionesFuture,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Column(
-                          children: listadoPaquetes(snapshot.data),
+                          children: listadoReservaciones(snapshot.data),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Viajes: ',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFFFFBD59),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const Transportes()));
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          color: Color(0xFFFFBD59),
+                        ),
+                        label: const Text("Agregar"),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  FutureBuilder<List<Viaje>>(
+                    future: _viajesFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Column(
+                          children: listadoViajes(snapshot.data),
                         );
                       } else {
                         return const Center(child: CircularProgressIndicator());
@@ -235,15 +567,5 @@ class _PaquetesState extends State<PaquetesForm> {
         ],
       ),
     );
-  }
-
-  List<Widget> listadoPaquetes(List<dynamic>? info) {
-    List<Widget> lista = [];
-    if (info != null) {
-      for (var element in info) {
-        lista.add(Text(element["name"]));
-      }
-    }
-    return lista;
   }
 }

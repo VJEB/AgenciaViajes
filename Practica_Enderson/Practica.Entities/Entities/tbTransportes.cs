@@ -39,9 +39,11 @@ namespace Agencia.Entities.Entities
         [NotMapped]
         public string EsCi_Descripcion { get; set; }
         [NotMapped]
+        public string Pers_Sexo { get; set; }
+        [NotMapped]
         public string Ciud_Descripcion { get; set; }
         [NotMapped]
-        public string NumeroPersonas { get; set; }
+        public int NumeroPersonas { get; set; }
         [NotMapped]
         public double Pais_PorcentajeImpuesto { get; set; }
         [NotMapped]

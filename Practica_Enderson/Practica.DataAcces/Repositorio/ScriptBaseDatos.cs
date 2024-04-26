@@ -8,12 +8,20 @@ namespace Practica.DataAcces.Repositorio
 {
     public class ScriptBaseDatos
     {
+
+        public static string Viaj_Mostrar = "[Agen].[SP_Viajes_Mostrar]";
+
+        public static string Rese_Mostrar = "[Agen].[SP_Reservaciones_Mostrar]";
+
+
         #region Usuarios
         public static string Usua_Mostrar = "Acce.SP_Usuarios_Mostrar";
         public static string Usua_Mostrar2 = "Acce.SP_Usuarios_Mostrar2";
+        public static string Usua_MostrarPorUsuario = "Acce.SP_Usuarios_MostrarPorUsuario";
         public static string Usua_Insertar = "Acce.SP_Usuarios_Insertar";
         public static string Usua_Actualizar = "Acce.SP_Usuarios_Actualizar";
         public static string Usua_Codigo = "[Acce].[SP_Usuarios_ActualizarCodigoVerificacion]";
+        public static string Usua_ValidarPin = "[Acce].[SP_Usuarios_ValidarPin]";
         public static string Usua_Eliminar = "Acce.SP_Usuarios_Eliminar";
         public static string Usua_Detalles = "Acce.SP_Usuarios_Llenar";
         public static string Usua_Reestablecer = "[Acce].[SP_Usuarios_Reestablecer]";
@@ -102,8 +110,8 @@ namespace Practica.DataAcces.Repositorio
 
         #region Dashboards
         public static string Dash_CiudDestino = "[Agen].[SP_EstadosCivilesQueMasViajan_Dashboard]";
-        public static string Dash_CiudHospedaje = "[Agen].[SP_CiudadesHospedaje_Dashboard]";
-        public static string Dash_TipoTransporte = "[Agen].[SP_TiposTransporte_Dashboard]";
+        public static string Dash_CiudHospedaje = "[Agen].[SP_CiudadMasTransitada_Dashboard]";
+        public static string Dash_SexoDestino = "[Agen].[SP_SexoQueMasViaja_Dashboard]";
         public static string Dash_HotelesReservados = "[Agen].[SP_HotelesMasReservados_Dashboard]";
         #endregion
     }

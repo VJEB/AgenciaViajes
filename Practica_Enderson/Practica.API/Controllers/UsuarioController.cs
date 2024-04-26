@@ -113,32 +113,39 @@ namespace Practica.API.Controllers
                 return View("Error");
             }
         }
-        [HttpPost("EnviarCodigo")]
-        public IActionResult EnviarCodigo(MailData mailData)
+        [HttpPost("ValidarPin")]
+        public IActionResult ValidarPin(string PIN)
         {
+            bool validado = _accesoServicio.ValidarPin(PIN);
+            return validado ? Ok(PIN) : BadRequest("Código de verificación incorrecto");
+        }
+        [HttpPost("EnviarCodigo")]
+        public IActionResult EnviarCodigo(string Usuario)
+        {
+            tbUsuarios usuario = _accesoServicio.MostrarPorUsua_Usuario(Usuario);
+            if (usuario.Usua_Id == 0)
+            {
+                return BadRequest("No existe ese usuario");
+            }
+            MailData mailData = new MailData();
+            mailData.EmailToId = usuario.Pers_Email;
+            mailData.EmailToName = usuario.Persona;
+            mailData.EmailSubject = usuario.Usua_Id.ToString();
             var enviarCorreo = _mailService.SendMail(mailData);
             return Ok(enviarCorreo);
         }
-        [HttpPut("restablecer/{id}")]
-        public IActionResult restablecer(int id, UsuarioViewModel item)
+        [HttpPut("restablecer/{PIN}")]
+        public IActionResult restablecer(string PIN, UsuarioViewModel item)
         {
-            if (id > 0)
+            //var model = _mapper.Map<tbUsuarios>(item);
+            var modelo = new tbUsuarios()
             {
-                var model = _mapper.Map<tbUsuarios>(item);
-                var modelo = new tbUsuarios()
-                {
-                    Usua_Id = id,
-                    Usua_Contra = item.Usua_Contra,
-                };
-                var listado = _accesoServicio.ListUsua();
+                Usua_CodigoVerificacion = PIN,
+                Usua_Contra = item.Usua_Contra,
+            };
 
-                _accesoServicio.restablecer(modelo);
-                return Ok(listado);
-            }
-            else
-            {
-                return View("Error");
-            }
+            var result = _accesoServicio.restablecer(modelo);
+            return Ok(result);
         }
 
         [HttpDelete("Delete/{id}")]

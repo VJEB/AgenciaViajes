@@ -10,6 +10,7 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using SistemaAsilos.BussinesLogic;
 using Practica.DataAcces.Repositorio;
+using Agencia.Entities.Entities;
 
 namespace Agencia.BussinesLogic.Servicios
 {
@@ -37,13 +38,13 @@ namespace Agencia.BussinesLogic.Servicios
                     MailboxAddress emailTo = new MailboxAddress(mailData.EmailToName, mailData.EmailToId);
                     emailMessage.To.Add(emailTo);
 
-                    emailMessage.Subject = "Codigo de registro";
+                    emailMessage.Subject = "PIN de verificación";
 
                     BodyBuilder emailBodyBuilder = new BodyBuilder();
                     
                     Random generator = new Random();
                     var codigo = generator.Next(0, 1000000).ToString("D6");
-                    _usuarioRepositorio.ActualizarCodigoVerificacion(mailData.EmailSubject, codigo);
+                    _usuarioRepositorio.ActualizarCodigoVerificacion(Convert.ToInt32(mailData.EmailSubject), codigo);
                     emailBodyBuilder.TextBody = codigo;
 
                     emailMessage.Body = emailBodyBuilder.ToMessageBody();

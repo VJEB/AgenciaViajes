@@ -8,41 +8,35 @@ import 'dart:convert';
 
 import 'package:agencia_viajes/models/usuario.dart';
 import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
-import 'package:agencia_viajes/screen/persona_registro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class RegistroUsuario extends StatefulWidget {
-  final int persId;
-
-  const RegistroUsuario({required this.persId, super.key});
+class ReestablecerContrasena extends StatefulWidget {
+  final String pin;
+  const ReestablecerContrasena({super.key, required this.pin});
 
   @override
-  State<RegistroUsuario> createState() => _RegistroUsuarioState();
+  State<ReestablecerContrasena> createState() => _ReestablecerContrasenaState();
 }
 
-class _RegistroUsuarioState extends State<RegistroUsuario> {
-  late String usuario, persEmail, password, confirmPassword;
-  String? usuarioError, emailError, passwordError;
+class _ReestablecerContrasenaState extends State<ReestablecerContrasena> {
+  late String password, confirmPassword;
+  String? passwordError;
 
   late int? persId;
+  late String? pin;
 
   @override
   void initState() {
     super.initState();
-    usuario = '';
-    persId = widget.persId;
-    persEmail = '';
+    pin = widget.pin;
     password = '';
     confirmPassword = '';
-    usuarioError = null;
-    emailError = null;
     passwordError = null;
   }
 
   void resetErrorText() {
     setState(() {
-      emailError = null;
       passwordError = null;
     });
   }
@@ -50,24 +44,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
   bool validate() {
     resetErrorText();
 
-    RegExp emailExp = RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-
     bool isValid = true;
-
-    if (usuario.isEmpty) {
-      setState(() {
-        usuarioError = 'El usuario es inválido';
-      });
-      isValid = false;
-    }
-
-    if (persEmail.isEmpty || !emailExp.hasMatch(persEmail)) {
-      setState(() {
-        emailError = 'El correo es inválido';
-      });
-      isValid = false;
-    }
 
     if (password.isEmpty || confirmPassword.isEmpty) {
       setState(() {
@@ -85,13 +62,14 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     return isValid;
   }
 
-  Future<void> postUsuario() async {
-    const String url = "https://etravel.somee.com/API/Usuario/Create";
+  Future<void> postContra() async {
+    String url =
+        "https://etravel.somee.com/API/Usuario/restablecer/${pin as String}";
     UsuarioModel usua = UsuarioModel(
-        persId: persId,
-        usuaUsuario: usuario,
+        persId: 0,
+        usuaUsuario: "usuario",
         usuaContra: password,
-        persEmail: persEmail,
+        persEmail: "persEmail",
         usuaUsuaCreacion: 1,
         usuaFechaCreacion: DateTime.now().toUtc().toIso8601String(),
         usuaId: 0,
@@ -102,7 +80,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
         usuaUrlImagen: "aa",
         usuaEstado: false);
 
-    var resultado = await http.post(
+    var resultado = await http.put(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(usua.toJson()),
@@ -112,8 +90,8 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             backgroundColor: Color.fromARGB(255, 80, 239, 136),
-            content:
-                Text('Usuario registrado con exito! Por favor inicie sesión.')),
+            content: Text(
+                'Contraseña actualizada con éxito! Por favor inicie sesión.')),
       );
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => const InicioSesion()));
@@ -121,14 +99,15 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             backgroundColor: Colors.red[400],
-            content: const Text('Ya existe este usuario')),
+            content: const Text(
+                'Ha ocurrido un error al intentar cambiar la contraseña')),
       );
     }
   }
 
   Future<void> submit() async {
     if (validate()) {
-      await postUsuario();
+      await postContra();
     }
   }
 
@@ -139,7 +118,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Registro de usuarios",
+          "Reestablecer contraseña",
           style: TextStyle(color: Color(0xFFFFBD59)),
         ),
         backgroundColor: Colors.black,
@@ -167,7 +146,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 ),
               ),
               const Text(
-                'Crear una cuenta,',
+                'Reestablecer contraseña,',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
@@ -177,7 +156,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
               ),
               SizedBox(height: screenHeight * .01),
               const Text(
-                'Registrate para empezar!',
+                'Ya no olvide su contraseña porfa',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -185,30 +164,6 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 ),
               ),
               SizedBox(height: screenHeight * .05),
-              TextInput(
-                onChanged: (value) {
-                  setState(() {
-                    usuario = value;
-                  });
-                },
-                labelText: 'Usuario',
-                errorText: usuarioError,
-                textInputAction: TextInputAction.next,
-                autoFocus: true,
-              ),
-              SizedBox(height: screenHeight * .05),
-              TextInput(
-                onChanged: (value) {
-                  setState(() {
-                    persEmail = value;
-                  });
-                },
-                labelText: 'Correo electrónico',
-                errorText: emailError,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-              ),
-              SizedBox(height: screenHeight * .025),
               TextInput(
                 onChanged: (value) {
                   setState(() {
@@ -237,30 +192,12 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 height: screenHeight * .03,
               ),
               FormButton(
-                text: 'Registrarse',
+                text: 'Cambiar contraseña',
                 onPressed: submit,
               ),
               SizedBox(
                 height: screenHeight * .075,
               ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: RichText(
-                  text: const TextSpan(
-                    text: "Ya tengo una cuenta, ",
-                    style: TextStyle(color: Colors.white),
-                    children: [
-                      TextSpan(
-                        text: 'Iniciar Sesión',
-                        style: TextStyle(
-                          color: Color(0xFFFFBD59),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
             ],
           ),
         ),

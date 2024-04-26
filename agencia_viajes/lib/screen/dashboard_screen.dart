@@ -14,27 +14,26 @@ class Graficos extends StatefulWidget {
 }
 
 class _Graficos extends State<Graficos> {
-  String categoriUtilerias =
-      "http://gestioneventooooss.somee.com/API/Evento/ListUtileriasMasCompradas";
-  String categoriPaquetes =
-      "http://gestioneventooooss.somee.com/API/Evento/ListPaquetesMasSolicitados";
-  String categoriEventos =
-      "http://gestioneventooooss.somee.com/API/Evento/ListMayorEventos_Mostrar";
-  String categoriEventosPorSexo =
-      "http://gestioneventooooss.somee.com/API/Evento/ListMayorEventosPorSexo_Mostrar";
+  String ciudadesTranscurridas =
+      "https://etravel.somee.com/API/Transporte/CiudadHospedaje";
+  String hotelesReservados =
+      "https://etravel.somee.com/API/Hotel/HoteReservados";
+  String viajesPorSexo = "https://etravel.somee.com/API/Transporte/SexoViaje";
+  String viajesPorEstadoCivil =
+      "https://etravel.somee.com/API/Transporte/EstadoViaje";
 
-  late Future<List<Map<String, dynamic>>> _utileriasData;
-  late Future<List<Map<String, dynamic>>> _paquetesData;
-  late Future<List<Map<String, dynamic>>> _eventosData;
-  late Future<List<Map<String, dynamic>>> _eventosPorSexoData;
+  late Future<List<Map<String, dynamic>>> _ciudadesData;
+  late Future<List<Map<String, dynamic>>> _hotelesData;
+  late Future<List<Map<String, dynamic>>> _sexoViajerosData;
+  late Future<List<Map<String, dynamic>>> _estadosCivilesViajerosData;
 
   @override
   void initState() {
     super.initState();
-    _utileriasData = _getListado(categoriUtilerias);
-    _paquetesData = _getListado(categoriPaquetes);
-    _eventosData = _getListado(categoriEventos);
-    _eventosPorSexoData = _getListado(categoriEventosPorSexo);
+    _ciudadesData = _getListado(ciudadesTranscurridas);
+    _hotelesData = _getListado(hotelesReservados);
+    _sexoViajerosData = _getListado(viajesPorSexo);
+    _estadosCivilesViajerosData = _getListado(viajesPorEstadoCivil);
   }
 
   Future<List<Map<String, dynamic>>> _getListado(String categori) async {
@@ -52,12 +51,14 @@ class _Graficos extends State<Graficos> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(16.0),
-      child: Column(
+      child: 
+      Column(
         children: [
-          _buildTarjetaGrafico(_utileriasData, 'Utilerías Más Compradas'),
-          _buildTarjetaGrafico(_paquetesData, 'Paquetes Más Solicitados'),
-          _buildTarjetaGrafico(_eventosData, 'Mayores Eventos'),
-          _buildTarjetaGrafico(_eventosPorSexoData, 'Mayores Eventos por Sexo'),
+          _buildTarjetaGrafico(_ciudadesData, 'Ciudades Más Visitadas'),
+          _buildTarjetaGrafico(_hotelesData, 'Hoteles Más Reservados'),
+          _buildTarjetaGrafico(_sexoViajerosData, 'Viajes por Sexo'),
+          _buildTarjetaGrafico(
+              _estadosCivilesViajerosData, 'Viajes por Estado Civil'),
         ],
       ),
     );
@@ -66,6 +67,7 @@ class _Graficos extends State<Graficos> {
   Widget _buildTarjetaGrafico(
       Future<List<Map<String, dynamic>>> data, String titulo) {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.only(bottom: 20.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -74,7 +76,7 @@ class _Graficos extends State<Graficos> {
           children: [
             Text(
               titulo,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 0, 0, 0)),
             ),
             SizedBox(height: 10.0),
             _buildGrafico(data, titulo),
@@ -106,10 +108,11 @@ class _Graficos extends State<Graficos> {
 
   Widget _buildChart(List<Map<String, dynamic>> data, String titulo) {
     final List<Color> colores = [
-      Colors.blue,
-      Colors.green,
+      Color(0xFFFFBD59),
+      Color.fromARGB(255, 177, 115, 1),
       Colors.red,
-      Colors.yellow,
+      Colors.grey,
+      Colors.red
       // Agrega más colores si lo necesitas
     ];
 
@@ -117,38 +120,38 @@ class _Graficos extends State<Graficos> {
       charts.Series<Map<String, dynamic>, String>(
         id: titulo,
         data: data,
-        domainFn: (datum, _) => datum[titulo == 'Utilerías Más Compradas'
-            ? 'nombreUtileria'
-            : titulo == 'Paquetes Más Solicitados'
-                ? 'nombrePaquete'
-                : titulo == 'Mayores Eventos'
-                    ? 'ever_Descripcion'
-                    : 'even_Sexo'] as String,
-        measureFn: (datum, _) => datum[titulo == 'Utilerías Más Compradas'
-            ? 'totalCompras'
-            : titulo == 'Paquetes Más Solicitados'
-                ? 'totalPaquetesSolicitados'
-                : titulo == 'Mayores Eventos'
-                    ? 'totalEventos'
-                    : 'totalEventosEve'] as int,
+        domainFn: (datum, _) => datum[titulo == 'Ciudades Más Visitadas'
+            ? 'ciud_Descripcion'
+            : titulo == 'Hoteles Más Reservados'
+                ? 'hote_Nombre'
+                : titulo == 'Viajes por Sexo'
+                    ? 'pers_Sexo'
+                    : 'esCi_Descripcion'] as String,
+        measureFn: (datum, _) => datum[titulo == 'Ciudades Más Visitadas'
+            ? 'numeroViajes'
+            : titulo == 'Hoteles Más Reservados'
+                ? 'numeroReservaciones'
+                : titulo == 'Viajes por Sexo'
+                    ? 'numeroPersonas'
+                    : 'numeroPersonas'] as int,
         colorFn: (_, index) {
           final color = colores[index! % colores.length];
           return charts.ColorUtil.fromDartColor(color);
         },
         labelAccessorFn: (datum, _) {
-          final sexo = datum[titulo == 'Utilerías Más Compradas'
-              ? 'nombreUtileria'
-              : titulo == 'Paquetes Más Solicitados'
-                  ? 'nombrePaquete'
-                  : titulo == 'Mayores Eventos'
-                      ? 'ever_Descripcion'
-                      : 'even_Sexo'] as String;
+          final sexo = datum[titulo == 'Ciudades Más Visitadas'
+              ? 'ciud_Descripcion'
+              : titulo == 'Hoteles Más Reservados'
+                  ? 'hote_Nombre'
+                  : titulo == 'Viajes por Sexo'
+                      ? 'pers_Sexo'
+                      : 'esCi_Descripcion'] as String;
           if (sexo == 'M') {
-            return 'Masculino: ${datum[titulo == 'Utilerías Más Compradas' ? 'totalCompras' : titulo == 'Paquetes Más Solicitados' ? 'totalPaquetesSolicitados' : titulo == 'Mayores Eventos' ? 'totalEventos' : 'totalEventosEve']}';
+            return 'Masculino: ${datum[titulo == 'Ciudades Más Visitadas' ? 'numeroViajes' : titulo == 'Hoteles Más Reservados' ? 'numeroReservaciones' : titulo == 'Viajes por Sexo' ? 'numeroPersonas' : 'numeroPersonas']}';
           } else if (sexo == 'F') {
-            return 'Femenino: ${datum[titulo == 'Utilerías Más Compradas' ? 'totalCompras' : titulo == 'Paquetes Más Solicitados' ? 'totalPaquetesSolicitados' : titulo == 'Mayores Eventos' ? 'totalEventos' : 'totalEventosEve']}';
+            return 'Femenino: ${datum[titulo == 'Ciudades Más Visitadas' ? 'numeroViajes' : titulo == 'Hoteles Más Reservados' ? 'numeroReservaciones' : titulo == 'Viajes por Sexo' ? 'numeroPersonas' : 'numeroPersonas']}';
           } else {
-            return ': ${datum[titulo == 'Utilerías Más Compradas' ? 'totalCompras' : titulo == 'Paquetes Más Solicitados' ? 'totalPaquetesSolicitados' : titulo == 'Mayores Eventos' ? 'totalEventos' : 'totalEventosEve']}';
+            return ': ${datum[titulo == 'Ciudades Más Visitadas' ? 'numeroViajes' : titulo == 'Hoteles Más Reservados' ? 'numeroReservaciones' : titulo == 'Viajes por Sexo' ? 'numeroPersonas' : 'numeroPersonas']}';
           }
         },
       ),

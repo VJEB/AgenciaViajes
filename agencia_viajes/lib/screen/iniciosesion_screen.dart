@@ -137,6 +137,19 @@ class _InicioSesionState extends State<InicioSesion> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const Layout()),
+            );
+          },
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
+      ),
       body: Container(
         color: Colors.black,
         child: Padding(
@@ -176,7 +189,7 @@ class _InicioSesionState extends State<InicioSesion> {
                     email = value;
                   });
                 },
-                labelText: 'Correo electrónico',
+                labelText: 'Usuario',
                 errorText: emailError,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,

@@ -10,6 +10,7 @@ namespace Agencia.Entities.Entities
     public partial class tbReservaciones
     {
         public int Rese_Id { get; set; }
+        public decimal Rese_PrecioPorNoche { get; set; }
         public decimal Rese_Precio { get; set; }
         public int Rese_Cantidad { get; set; }
         public decimal Rese_PrecioTodoIncluido { get; set; }
@@ -29,6 +30,22 @@ namespace Agencia.Entities.Entities
         public DateTime? Rese_Fecha_Creacion { get; set; }
         public int? Rese_Usua_Modifica { get; set; }
         public DateTime? Rese_Fecha_Modifica { get; set; }
+        [NotMapped]
+        public string HaHo_Numero { get; set; }
+        [NotMapped]
+        public string HaCa_Nombre { get; set; }
+        [NotMapped]
+        public string Hote_Nombre { get; set; }
+        [NotMapped]
+        public string Ciud_Descripcion { get; set; }
+        [NotMapped]
+        public string Esta_Descripcion { get; set; }
+        [NotMapped]
+        public string Pais_Descripcion { get; set; }
+        [NotMapped]
+        public double Pais_PorcentajeImpuesto { get; set; }
+        [NotMapped]
+        public string Impu_Descripcion { get; set; }
 
         public virtual tbHabitacionesPorHotel HaHo { get; set; }
         public virtual tbPaquetes Paqu { get; set; }

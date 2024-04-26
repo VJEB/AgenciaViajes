@@ -14,6 +14,26 @@ namespace Agencia.DataAcces.Repositorio
 {
     public class DetallePorPaqueteRepositorio: IRepository<tbDetallePorPaquete>
     {
+        public IEnumerable<tbReservaciones> ListReservaciones(int Paqu_Id)
+        {
+            List<tbReservaciones> result = new List<tbReservaciones>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Paqu_Id };
+                result = db.Query<tbReservaciones>(ScriptBaseDatos.Rese_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
+        public IEnumerable<tbViajes> ListViajes(int Paqu_Id)
+        {
+            List<tbViajes> result = new List<tbViajes>();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Paqu_Id };
+                result = db.Query<tbViajes>(ScriptBaseDatos.Viaj_Mostrar, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return result;
+            }
+        }
         public RequestStatus Actualizar(int id,tbDetallePorPaquete item)
         {
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))

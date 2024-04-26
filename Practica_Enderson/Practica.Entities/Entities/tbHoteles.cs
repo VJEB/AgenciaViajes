@@ -44,6 +44,8 @@ namespace Agencia.Entities.Entities
         public string Impu_Descripcion { get; set; }
         [NotMapped]
         public int Impu_Id { get; set; }
+        [NotMapped]
+        public int NumeroReservaciones { get; set; }
 
         public virtual tbUsuarios Hote_Usua_CreacionNavigation { get; set; }
         public virtual tbUsuarios Hote_Usua_ModificaNavigation { get; set; }
