@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:agencia_viajes/screen/enviar_pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencia_viajes/screen/layout.dart';
@@ -209,7 +210,12 @@ class _InicioSesionState extends State<InicioSesion> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+              context,
+                  MaterialPageRoute(
+                    builder: (_) => const EnviarPin()));
+                  },
                   child: const Text(
                     'Olvidé mi contraseña',
                     style: TextStyle(

@@ -131,9 +131,9 @@ class _ValidarPinState extends State<ValidarPin> {
               ),
               SizedBox(height: screenHeight * .025),
               FormButton(
-                text: 'Enviar código de verificación',
+                text: 'Verificar pin',
                 onPressed: submit,
-                iconData: Icons.mail,
+                iconData: Icons.check,
               ),
               SizedBox(
                 height: screenHeight * .075,
