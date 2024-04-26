@@ -73,16 +73,7 @@ class Viaje {
       'viaj_Usua_Creacion': viaj_Usua_Creacion,
       'viaj_Fecha_Creacion': viaj_Fecha_Creacion,
       'viaj_Usua_Modifica': viaj_Usua_Modifica,
-      'viaj_Fecha_Modifica': viaj_Fecha_Modifica,
-      'puntoInicio': puntoInicio,
-      'puntoFinal': puntoFinal,
-      'estadoInicio': estadoInicio,
-      'estadoFinal': estadoFinal,
-      'paisInicio': paisInicio,
-      'paisFinal': paisFinal,
-      'pais_PorcentajeImpuesto': pais_PorcentajeImpuesto,
-      'impu_Descripcion': impu_Descripcion,
-      'horT_FechaYhora': horT_FechaYhora, // Include it in the JSON output
+      'viaj_Fecha_Modifica': viaj_Fecha_Modifica
     };
   }
 }

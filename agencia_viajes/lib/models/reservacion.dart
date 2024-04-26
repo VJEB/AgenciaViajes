@@ -84,6 +84,7 @@ class Reservacion {
     return {
       'rese_Id': reseId,
       'rese_PrecioPorNoche': resePrecio,
+      'rese_Precio': resePrecio,
       'rese_Cantidad': reseCantidad,
       'rese_PrecioTodoIncluido': resePrecioTodoIncluido,
       'rese_FechaEntrada': reseFechaEntrada,
@@ -98,14 +99,7 @@ class Reservacion {
       'rese_Usua_Creacion': reseUsuaCreacion,
       'rese_Fecha_Creacion': reseFechaCreacion,
       'rese_Usua_Modifica': reseUsuaModifica,
-      'rese_Fecha_Modifica': reseFechaModifica,
-      'haCa_Nombre': haCaNombre,
-      'hote_Nombre': hoteNombre,
-      'ciud_Descripcion': ciudDescripcion,
-      'esta_Descripcion': estaDescripcion,
-      'pais_Descripcion': paisDescripcion,
-      'pais_PorcentajeImpuesto': paisPorcentajeImpuesto,
-      'impu_Descripcion': impuDescripcion,
+      'rese_Fecha_Modifica': reseFechaModifica
     };
   }
 }

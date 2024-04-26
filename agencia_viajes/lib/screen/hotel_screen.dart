@@ -156,6 +156,9 @@ class _HotelScreenState extends State<HotelScreen> {
                 habiNumPersonas: habitacionCategoria!.habiNumPersonas,
                 reseUsuaCreacion: 1,
                 reseFechaCreacion: DateTime.now().toUtc().toIso8601String(),
+                reseUsuaModifica: 0,
+                reseFechaModifica: DateTime.now().toUtc().toIso8601String(),
+
               );
 
               var resultado = await http.post(

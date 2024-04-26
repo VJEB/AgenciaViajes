@@ -277,8 +277,8 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => AirBnbScreen(
-                        // builder: (_) => HotelScreen(
+                        // builder: (_) => AirBnbScreen(
+                        builder: (_) => HotelScreen(
                           habitacionCategoria: HabitacionCategoria(
                             haCaId: habitacionesData['haCa_Id'],
                             hoCaNombre: habitacionesData['haCa_Nombre'],
