@@ -5,7 +5,8 @@ import 'dart:convert';
 import 'package:agencia_viajes/models/estadoCivil.dart';
 import 'package:agencia_viajes/models/persona.dart';
 import 'package:agencia_viajes/models/service_result.dart';
-import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+// import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:agencia_viajes/screen/layout.dart';
 import 'package:agencia_viajes/screen/usuario_registro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agencia_viajes/models/pais.dart';
@@ -96,7 +97,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
           _estadoCivil = estadoCivilEncontrado.first.esCiDescripcion;
         }
       } else {
-        print('Error al cargar los paises');
+        print('Cargando..');
       }
       // setState(() {
       // });
@@ -115,7 +116,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
       if (list.isNotEmpty) {
         _paisSeleccionado = list.first.paisId;
       } else {
-        print('Error al cargar los paises');
+        print('Cargando...');
       }
       // setState(() {
       // });
@@ -143,7 +144,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
         if (list.isNotEmpty) {
           _estadoSeleccionado = list.first.estaId;
         } else {
-          print('Error al cargar los estados');
+          print('Cargando...');
         }
       });
     }
@@ -171,7 +172,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
         if (list.isNotEmpty) {
           _estadoSeleccionado = list.first.estaId;
         } else {
-          print('Error al cargar las ciudades');
+          print('Cargando...');
         }
       });
     }
@@ -290,7 +291,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
           tooltip: 'Volver',
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const InicioSesion()));
+                MaterialPageRoute(builder: (_) => const Layout()));
           },
         ),
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
@@ -590,7 +591,7 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                         } else if (snapshot.hasError) {
                           return const Center(
                             child: Text(
-                              'Error al cargar los estados civiles',
+                              'Cargando...',
                               style: TextStyle(color: Color(0xFFFFBD59)),
                             ),
                           );
@@ -684,8 +685,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                               paises: _paises, onPaisSelected: _onPaisSelected);
                         } else {
                           return const Text(
-                            "Error al cargar los países",
-                            style: TextStyle(color: Colors.red),
+                            "Cargando...",
+                            style: TextStyle(color: Color(0xFFC28427)),
                           );
                         }
                       },
@@ -709,8 +710,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                           );
                         } else {
                           return const Text(
-                            "Error al cargar los estados",
-                            style: TextStyle(color: Colors.red),
+                            "Cargando...",
+                            style: TextStyle(color: Color(0xFFC28427)),
                           );
                         }
                       },
@@ -734,8 +735,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
                           );
                         } else {
                           return const Text(
-                            "Error al cargar las ciudades",
-                            style: TextStyle(color: Colors.red),
+                            "Cargando",
+                            style: TextStyle(color: Color(0xFFC28427)),
                           );
                         }
                       },

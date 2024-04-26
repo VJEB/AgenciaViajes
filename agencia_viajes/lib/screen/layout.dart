@@ -4,6 +4,9 @@ import 'package:agencia_viajes/screen/hoteles_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:agencia_viajes/screen/usuarios_screen1.dart';
 import 'package:agencia_viajes/screen/perfil_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
+import 'package:agencia_viajes/models/usuario.dart';
 
 class Layout extends StatefulWidget {
   const Layout({super.key});
@@ -14,9 +17,34 @@ class Layout extends StatefulWidget {
 
 class _LayoutState extends State<Layout> {
   int _selectedIndex = 1;
+ late UsuarioModel _usuario = UsuarioModel(usuaId: -1);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsuario();
+  }
+
+
+   Future<void> _loadUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? usuaId = prefs.getInt('usua_Id');
+    final String? usuaUsuario = prefs.getString('usua_Usuario');
+    final String? usuaContra = prefs.getString('usua_Contra');
+
+    if (usuaId != null && usuaUsuario != null && usuaContra != null) {
+      setState(() {
+        _usuario = UsuarioModel(
+          usuaId: usuaId,
+          usuaUsuario: usuaUsuario,
+          usuaContra: usuaContra,
+        );
+      });
+    } else {}
+  }
 
   final List<Widget> _widgetOptions = <Widget>[
-     Dashboard(),
+     Graficos(),
     const Hoteles(),
     ProfileScreen(),
   ];
@@ -33,8 +61,21 @@ class _LayoutState extends State<Layout> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+@override
+Widget build(BuildContext context) {
+  // Verificar si el usuario está autenticado solo para la pantalla de perfil
+  if (_selectedIndex == 2 && (_usuario.usuaId == null || _usuario.usuaId == -1)) {
+    // Si el usua_Id es nulo o -1 y se está en la pantalla de perfil, redirigir a la pantalla de inicio de sesión
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const InicioSesion()),
+      );
+    });
+    // Retornar un contenedor vacío mientras se redirige
+    return Container();
+  } else {
+    // Si el usuario está autenticado o no se está en la pantalla de perfil, mostrar el layout normalmente
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -76,4 +117,6 @@ class _LayoutState extends State<Layout> {
       ),
     );
   }
+}
+
 }

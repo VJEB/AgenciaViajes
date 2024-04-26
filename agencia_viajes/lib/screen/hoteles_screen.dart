@@ -20,6 +20,80 @@ class _HotelesState extends State<Hoteles> {
 
   Map<int, bool> expansionState = {};
 
+  List<dynamic> _hoteles = [];
+  List<dynamic> _paises = [];
+  List<dynamic> _estados = [];
+  List<dynamic> _ciudades = [];
+
+  int? _paisSeleccionado;
+  int? _estadoSeleccionado;
+  int? _ciudadSeleccionada;
+
+  Future<void> _cargarPaises() async {
+    final url = "https://etravel.somee.com/API/Pais/List";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      final List<dynamic> paisesJson = jsonDecode(respuesta.body);
+      setState(() {
+        _paises = paisesJson;
+      });
+    } else {
+      print('Error al cargar los países');
+    }
+  }
+
+  Future<void> _cargarEstados(int paisId) async {
+    final url = "https://etravel.somee.com/API/Estado/List/$paisId";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      final List<dynamic> estadosJson = jsonDecode(respuesta.body);
+      setState(() {
+        _estados = estadosJson;
+      });
+    } else {
+      print('Error al cargar los estados');
+    }
+  }
+
+  Future<void> _cargarCiudades(int estadoId) async {
+    final url = "https://etravel.somee.com/API/Ciudad/List/$estadoId";
+    final respuesta = await http.get(Uri.parse(url));
+
+    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
+      final List<dynamic> ciudadesJson = jsonDecode(respuesta.body);
+      setState(() {
+        _ciudades = ciudadesJson;
+      });
+    } else {
+      print('Error al cargar las ciudades');
+    }
+  }
+
+  Future<void> _filtrarHoteles() async {
+    String url = "https://etravel.somee.com/API/Hotel/HotelesList/";
+    if (_ciudadSeleccionada != null) {
+      url += "$_ciudadSeleccionada";
+    }
+
+    final result = await http.get(Uri.parse(url));
+    if (result.statusCode >= 200 && result.statusCode < 300) {
+      setState(() {
+        _hoteles = jsonDecode(result.body);
+      });
+    } else {
+      print("Error en el endPoint");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarPaises();
+  }
+
+
   Future<dynamic> _getListado() async {
     final result = await http.get(Uri.parse(url));
     if (result.statusCode >= 200 && result.statusCode < 300) {
@@ -44,130 +118,155 @@ class _HotelesState extends State<Hoteles> {
     }
   }
 
-  int _paisSeleccionado = 0;
-  final List<Pais> _paises = [];
-
-  int _estadoSeleccionado = 0;
-  final List<Estado> _estados = [];
-
-  int _ciudadSeleccionada = 0;
-  final List<Ciudad> _ciudades = [];
-
-  Future<List<Pais>>? _paisesFuture;
-  Future<List<Estado>>? _estadosFuture;
-  Future<List<Ciudad>>? _ciudadesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _paisesFuture ??= _cargarPaises();
-    _paisesFuture?.then((_) {
-      _estadosFuture ??= _cargarEstados();
-      _estadosFuture?.then((_) {
-        _ciudadesFuture ??= _cargarCiudades();
-      });
-    });
-  }
-
-  Future<List<Pais>> _cargarPaises() async {
-    List<Pais> list = [];
-    const url = "https://etravel.somee.com/API/Pais/List";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      final List<dynamic> paisesJson = jsonDecode(respuesta.body);
-      list = paisesJson.map((json) => Pais.fromJson(json)).toList();
-      if (list.isNotEmpty) {
-        _paisSeleccionado = list.first.paisId;
-      } else {
-        print('Error al cargar los paises');
-      }
-      // setState(() {
-      // });
-    }
-    return list;
-  }
-
-  void _onPaisSelected(Pais selectedPais) {
-    setState(() {
-      _paisSeleccionado = selectedPais.paisId;
-      _estados.clear();
-    });
-    _estadosFuture = _cargarEstados();
-  }
-
-  Future<List<Estado>> _cargarEstados() async {
-    List<Estado> list = [];
-    String url = "https://etravel.somee.com/API/Estado/List/$_paisSeleccionado";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> estadosJson = jsonDecode(respuesta.body);
-        list = estadosJson.map((json) => Estado.fromJson(json)).toList();
-        if (list.isNotEmpty) {
-          _estadoSeleccionado = list.first.estaId;
-        } else {
-          print('Error al cargar los estados');
-        }
-      });
-    }
-    return list;
-  }
-
-  void _onEstadoSelected(Estado selectedEstado) {
-    setState(() {
-      _estadoSeleccionado = selectedEstado.estaId;
-      _ciudades.clear();
-    });
-    _ciudadesFuture = _cargarCiudades();
-  }
-
-  Future<List<Ciudad>> _cargarCiudades() async {
-    List<Ciudad> list = [];
-    String url =
-        "https://etravel.somee.com/API/Ciudad/List/$_estadoSeleccionado";
-    final respuesta = await http.get(Uri.parse(url));
-
-    if (respuesta.statusCode >= 200 && respuesta.statusCode < 300) {
-      setState(() {
-        final List<dynamic> estadosJson = jsonDecode(respuesta.body);
-        list = estadosJson.map((json) => Ciudad.fromJson(json)).toList();
-        if (list.isNotEmpty) {
-          _estadoSeleccionado = list.first.estaId;
-        } else {
-          print('Error al cargar las ciudades');
-        }
-      });
-    }
-    return list;
-  }
-
-  void _onCiudadSelected(Ciudad selectedCiudad) {
-    setState(() {
-      _ciudadSeleccionada = selectedCiudad.ciudId;
-    });
-  }
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<dynamic>(
-        future: _getListado(), 
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView(
-              children: [
-                ...listadoHotelesConCollapse(snapshot.data),
-              ],
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      appBar: AppBar(
+        title: Text('Filtrar'),
+        
+        backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Aquí puedes agregar alguna acción para filtrar
+              _filtrarHoteles();
+            },
+            icon: Icon(Icons.filter_alt),
+          ),
+        ],
+        iconTheme: IconThemeData(color: Colors.white),
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child:  Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  value: _paisSeleccionado,
+                  items: _paises
+                      .map(
+                        (pais) => DropdownMenuItem<int>(
+                          value: pais['pais_Id'],
+                          child: Text(pais['pais_Descripcion']),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _paisSeleccionado = value;
+                      _estadoSeleccionado = null;
+                      _ciudadSeleccionada = null;
+                      _cargarEstados(value!);
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'País',
+                    border: OutlineInputBorder(),
+                    
+                  ),
+                ),
+              ),
+              SizedBox(width: 10),
+               Expanded(
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 50), // Establecer un ancho máximo para el dropdown
+                  child: DropdownButtonFormField<int>(
+                    value: _estadoSeleccionado,
+                    items: _estados
+                        .map(
+                          (estado) => DropdownMenuItem<int>(
+                            value: estado['esta_Id'],
+                            child: Text(estado['esta_Descripcion']),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _estadoSeleccionado = value;
+                        _ciudadSeleccionada = null;
+                        _cargarCiudades(value!);
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Estado',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  value: _ciudadSeleccionada,
+                  items: _ciudades
+                      .map(
+                        (ciudad) => DropdownMenuItem<int>(
+                          value: ciudad['ciud_Id'],
+                          child: Text(ciudad['ciud_Descripcion']),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _ciudadSeleccionada = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Ciudad',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: FutureBuilder<dynamic>(
+              future: _getListado(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView(
+                    children: [
+                      ...listadoHotelesConCollapse(snapshot.data),
+                    ],
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+           SizedBox(width: 40),
+        ],
+        
+      ),
+      ),
+
+     
     );
   }
+  
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: FutureBuilder<dynamic>(
+  //       future: _getListado(), 
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasData) {
+  //           return ListView(
+  //             children: [
+  //               ...listadoHotelesConCollapse(snapshot.data),
+  //             ],
+  //           );
+  //         } else {
+  //           return const Center(child: CircularProgressIndicator());
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
 
   List<Widget> listadoHotelesConCollapse(
     List<dynamic>? info,
@@ -218,7 +317,9 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
   Widget build(BuildContext context) {
     final hotelData = widget.hotelData;
     return GestureDetector(
-      child: Card(
+      child: Padding(
+         padding: const EdgeInsets.all(10.0),
+        child:   Card(
         color: Colors.white10,
         clipBehavior: Clip.hardEdge,
         child: ExpansionTile(
@@ -424,6 +525,8 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
           ], //
         ),
       ),
+      ), 
+    
     );
   }
 }
