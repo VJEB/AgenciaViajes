@@ -24,7 +24,10 @@ namespace Practica.BussinesLogic.Servicios
 
 
         #region Usuario
-
+        public bool ValidarPin(string PIN)
+        {
+            return _usuarioRepositorio.ValidarPin(PIN);
+        }
         public ServiceResult ListUsua2(int Usua_Id)
         {
             var result = new ServiceResult();
@@ -39,6 +42,12 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
+
+        public tbUsuarios MostrarPorUsua_Usuario(string Usua_Usuario)
+        {
+            return _usuarioRepositorio.MostrarPorUsua_Usuario(Usua_Usuario);
+        }
+
         public ServiceResult ListUsua()
         {
             var result = new ServiceResult();
@@ -115,7 +124,7 @@ namespace Practica.BussinesLogic.Servicios
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult ActualizarCodigo(string Usua_Id, string codigo)
+        public ServiceResult ActualizarCodigo(int Usua_Id, string codigo)
         {
             var result = new ServiceResult();
             try
@@ -143,22 +152,21 @@ namespace Practica.BussinesLogic.Servicios
             var result = new ServiceResult();
             try
             {
-                var lost = _usuarioRepositorio.RestablecerContra(item);
-                if (lost.CodeStatus > 0)
+                var response = _usuarioRepositorio.RestablecerContra(item);
+                if (response.CodeStatus == 1)
                 {
-                    return result.Ok(lost);
+                    return result.Ok(response);
                 }
                 else
                 {
-                    lost.MessageStatus = (lost.CodeStatus == 0) ? "401 Error de Consulta" : lost.MessageStatus;
-                    return result.Error(lost);
+                    return result.Error("Error al reestablecer la contraseña");
                 }
 
             }
             catch (Exception ex)
             {
 
-                return result.Error(ex.Message);
+                return result.Error("Error al reestablecer la contraseña");
             }
         }
         public ServiceResult Eliminarusua(int id)

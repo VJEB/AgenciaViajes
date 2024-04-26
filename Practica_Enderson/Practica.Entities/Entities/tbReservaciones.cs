@@ -10,6 +10,7 @@ namespace Agencia.Entities.Entities
     public partial class tbReservaciones
     {
         public int Rese_Id { get; set; }
+        public decimal Rese_PrecioPorNoche { get; set; }
         public decimal Rese_Precio { get; set; }
         public int Rese_Cantidad { get; set; }
         public decimal Rese_PrecioTodoIncluido { get; set; }

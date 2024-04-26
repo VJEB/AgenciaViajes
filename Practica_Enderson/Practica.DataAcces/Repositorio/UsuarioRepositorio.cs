@@ -12,6 +12,43 @@ namespace Practica.DataAcces.Repositorio
 {
     public class UsuarioRepositorio : IRepository<tbUsuarios>
     {
+        public tbUsuarios MostrarPorUsua_Usuario(string Usua_Usuario)
+        {
+
+            tbUsuarios result = new tbUsuarios();
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { Usua_Usuario = Usua_Usuario };
+                List<tbUsuarios> response = db.Query<tbUsuarios>(ScriptBaseDatos.Usua_MostrarPorUsuario, parameters, commandType: CommandType.StoredProcedure).ToList();
+                if (response.Count > 0)
+                {
+                    return response[0];
+
+                }
+                else
+                {
+                    return result;
+                }
+            }
+        }
+
+        public bool ValidarPin(string PIN)
+        {
+
+            using (var db = new SqlConnection(AgenciaContext.ConnectionString))
+            {
+                var parameters = new { PIN = PIN };
+                var response = db.Query<int>(ScriptBaseDatos.Usua_ValidarPin, parameters, commandType: CommandType.StoredProcedure).ToList();
+                if (response.Count > 0)
+                {
+                    if (response[0] > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         public IEnumerable<tbUsuarios> List2(int Usua_Id)
         {
 
@@ -46,7 +83,7 @@ namespace Practica.DataAcces.Repositorio
             }
         }
 
-        public RequestStatus ActualizarCodigoVerificacion(string Usua_Id, string codigo)
+        public RequestStatus ActualizarCodigoVerificacion(int Usua_Id, string codigo)
         {
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
@@ -150,18 +187,17 @@ namespace Practica.DataAcces.Repositorio
             using (var db = new SqlConnection(AgenciaContext.ConnectionString))
             {
                 var parametro = new DynamicParameters();
-                parametro.Add("Usua_Id", item.Usua_Id);
+                parametro.Add("Usua_CodigoVerificacion", item.Usua_CodigoVerificacion);
                 parametro.Add("Usua_Contra", item.Usua_Contra);
                 parametro.Add("Usua_Usua_Modifica", 1);
                 parametro.Add("Usua_Fecha_Modifica", DateTime.Now);
 
-                var result = db.Execute(ScriptBaseDatos.Usua_Reestablecer,
+                var result = db.QueryFirst(ScriptBaseDatos.Usua_Reestablecer,
                     parametro,
                      commandType: CommandType.StoredProcedure
                     );
 
-                string mensaje = (result == 1) ? "Exito" : "Error";
-                return new RequestStatus { CodeStatus = result, MessageStatus = mensaje };
+                return new RequestStatus { CodeStatus = result.Resultado};
             }
         }
 

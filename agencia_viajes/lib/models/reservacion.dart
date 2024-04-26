@@ -16,6 +16,13 @@ class Reservacion {
   final String reseFechaCreacion;
   final int? reseUsuaModifica;
   final String? reseFechaModifica;
+  final String? haCaNombre;
+  final String? hoteNombre;
+  final String? ciudDescripcion;
+  final String? estaDescripcion;
+  final String? paisDescripcion;
+  final double? paisPorcentajeImpuesto;
+  final String? impuDescripcion;
 
   Reservacion({
     required this.reseId,
@@ -35,12 +42,19 @@ class Reservacion {
     required this.reseFechaCreacion,
     this.reseUsuaModifica,
     this.reseFechaModifica,
+    this.haCaNombre,
+    this.hoteNombre,
+    this.ciudDescripcion,
+    this.estaDescripcion,
+    this.paisDescripcion,
+    this.paisPorcentajeImpuesto,
+    this.impuDescripcion,
   });
 
   factory Reservacion.fromJson(Map<String, dynamic> json) {
     return Reservacion(
       reseId: json['rese_Id'],
-      resePrecio: json['rese_Precio'].toDouble(),
+      resePrecio: json['rese_PrecioPorNoche'].toDouble(),
       reseCantidad: json['rese_Cantidad'],
       resePrecioTodoIncluido: json['rese_PrecioTodoIncluido'].toDouble(),
       reseFechaEntrada: json['rese_FechaEntrada'],
@@ -56,13 +70,20 @@ class Reservacion {
       reseFechaCreacion: json['rese_Fecha_Creacion'],
       reseUsuaModifica: json['rese_Usua_Modifica'],
       reseFechaModifica: json['rese_Fecha_Modifica'],
+      haCaNombre: json['haCa_Nombre'],
+      hoteNombre: json['hote_Nombre'],
+      ciudDescripcion: json['ciud_Descripcion'],
+      estaDescripcion: json['esta_Descripcion'],
+      paisDescripcion: json['pais_Descripcion'],
+      paisPorcentajeImpuesto: json['pais_PorcentajeImpuesto']?.toDouble(),
+      impuDescripcion: json['impu_Descripcion'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'rese_Id': reseId,
-      'rese_Precio': resePrecio,
+      'rese_PrecioPorNoche': resePrecio,
       'rese_Cantidad': reseCantidad,
       'rese_PrecioTodoIncluido': resePrecioTodoIncluido,
       'rese_FechaEntrada': reseFechaEntrada,
@@ -78,6 +99,13 @@ class Reservacion {
       'rese_Fecha_Creacion': reseFechaCreacion,
       'rese_Usua_Modifica': reseUsuaModifica,
       'rese_Fecha_Modifica': reseFechaModifica,
+      'haCa_Nombre': haCaNombre,
+      'hote_Nombre': hoteNombre,
+      'ciud_Descripcion': ciudDescripcion,
+      'esta_Descripcion': estaDescripcion,
+      'pais_Descripcion': paisDescripcion,
+      'pais_PorcentajeImpuesto': paisPorcentajeImpuesto,
+      'impu_Descripcion': impuDescripcion,
     };
   }
 }

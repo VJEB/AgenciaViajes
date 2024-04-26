@@ -11,9 +11,11 @@ namespace Practica.DataAcces.Repositorio
         #region Usuarios
         public static string Usua_Mostrar = "Acce.SP_Usuarios_Mostrar";
         public static string Usua_Mostrar2 = "Acce.SP_Usuarios_Mostrar2";
+        public static string Usua_MostrarPorUsuario = "Acce.SP_Usuarios_MostrarPorUsuario";
         public static string Usua_Insertar = "Acce.SP_Usuarios_Insertar";
         public static string Usua_Actualizar = "Acce.SP_Usuarios_Actualizar";
         public static string Usua_Codigo = "[Acce].[SP_Usuarios_ActualizarCodigoVerificacion]";
+        public static string Usua_ValidarPin = "[Acce].[SP_Usuarios_ValidarPin]";
         public static string Usua_Eliminar = "Acce.SP_Usuarios_Eliminar";
         public static string Usua_Detalles = "Acce.SP_Usuarios_Llenar";
         public static string Usua_Reestablecer = "[Acce].[SP_Usuarios_Reestablecer]";
@@ -101,7 +103,6 @@ namespace Practica.DataAcces.Repositorio
         public static string Fact_Actualizar = "Vent.SP_Facturas_Actualizar";
         #endregion
         public static string Meto_Mostrar = "[Gral].[SP_MetodosPagos_Mostrar]";
-        public static string Fact_InsertarDetalle = "[Vent].[SP_FacturasDetalle_Insertar]";
     }
 
 }

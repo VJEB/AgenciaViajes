@@ -1,61 +1,35 @@
-import 'dart:convert';
-import 'package:agencia_viajes/screen/enviar_pin_screen.dart';
+import 'package:agencia_viajes/screen/validar_pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:agencia_viajes/screen/layout.dart';
-import 'package:agencia_viajes/screen/persona_registro_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agencia_viajes/models/usuario.dart';
 
-class InicioSesion extends StatefulWidget {
-  /// Callback for when this form is submitted successfully. Parameters are (email, password)
-  final Function(String? email, String? password)? onSubmitted;
-
-  const InicioSesion({this.onSubmitted, Key? key}) : super(key: key);
+class EnviarPin extends StatefulWidget {
+  const EnviarPin({super.key});
   @override
-  State<InicioSesion> createState() => _InicioSesionState();
+  State<EnviarPin> createState() => _EnviarPinState();
 }
 
-class _InicioSesionState extends State<InicioSesion> {
-  late String email, password;
-  UsuarioModel? usuario;
-  String? emailError, passwordError;
-  Function(String? email, String? password)? get onSubmitted =>
-      widget.onSubmitted;
+class _EnviarPinState extends State<EnviarPin> {
+  String usuario = '';
+  String? usuarioError;
 
   @override
   void initState() {
     super.initState();
-    email = '';
-    password = '';
-    emailError = null;
-    passwordError = null;
   }
 
   void resetErrorText() {
     setState(() {
-      emailError = null;
-      passwordError = null;
+      usuarioError = null;
     });
   }
 
   bool validate() {
     resetErrorText();
-
-    RegExp emailExp = RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-
     bool isValid = true;
-    if (email.isEmpty || !emailExp.hasMatch(email)) {
-      setState(() {
-        emailError = 'El correo es inválido';
-      });
-      isValid = false;
-    }
 
-    if (password.isEmpty) {
+    if (usuario.isEmpty) {
       setState(() {
-        passwordError = 'Por favor ingrese su contraseña';
+        usuarioError = 'Por favor ingrese su usuario';
       });
       isValid = false;
     }
@@ -65,42 +39,28 @@ class _InicioSesionState extends State<InicioSesion> {
 
   Future<void> submit() async {
     // Check if fields are empty before making the request
-    if (email.isEmpty || password.isEmpty) {
+    if (usuario.isEmpty) {
       setState(() {
-        emailError =
-            email.isEmpty ? 'Por favor ingrese su correo electrónico' : null;
-        passwordError =
-            password.isEmpty ? 'Por favor ingrese su contraseña' : null;
+        usuarioError = usuario.isEmpty ? 'Por favor ingrese su usuario' : null;
       });
       return;
     } else {
       String url =
-          'https://etravel.somee.com/API/Usuario/Login/$email/$password';
+          'https://localhost:44372/API/Usuario/EnviarCodigo?Usuario=${usuario}';
 
       try {
         // Make the HTTP request
-        final response = await http.get(Uri.parse(url));
+        final response = await http.post(Uri.parse(url));
 
         if (response.statusCode == 200) {
-          final responseData = jsonDecode(response.body);
-
-          final usuario = UsuarioModel.fromJson(responseData['data'][0]);
-
-          // Almacena los datos del usuario en SharedPreferences
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setInt('usua_Id', usuario.usuaId ?? 0);
-          prefs.setString('usua_Usuario', usuario.usuaUsuario ?? '');
-          prefs.setString('usua_Contra', usuario.usuaContra ?? '');
-
-          // Navigate to another page if login is successful
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const Layout()),
+            MaterialPageRoute(builder: (_) => const ValidarPin()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Usuario o contraseña incorrectos'),
+            const SnackBar(
+              content: Text("No existe ese usuaio"),
               backgroundColor: Colors.red,
             ),
           );
@@ -146,7 +106,7 @@ class _InicioSesionState extends State<InicioSesion> {
               ),
               SizedBox(height: screenHeight * .01),
               const Text(
-                'Inicia sesión para continuar!',
+                'Por favor bríndanos tu usuario para continuar',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -157,79 +117,23 @@ class _InicioSesionState extends State<InicioSesion> {
               TextInput(
                 onChanged: (value) {
                   setState(() {
-                    email = value;
+                    usuario = value;
                   });
                 },
                 labelText: 'Usuario',
-                errorText: emailError,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
+                errorText: usuarioError,
+                // textInputAction: TextInputAction.next,
                 autoFocus: true,
               ),
               SizedBox(height: screenHeight * .025),
-              TextInput(
-                onChanged: (value) {
-                  setState(() {
-                    password = value;
-                  });
-                },
-                onSubmitted: (val) => submit(),
-                labelText: 'Contraseña',
-                errorText: passwordError,
-                obscureText: true,
-                textInputAction: TextInputAction.next,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EnviarPin(),
-                    ),
-                  ),
-                  child: const Text(
-                    'Olvidé mi contraseña',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * .03,
-              ),
               FormButton(
-                text: 'Iniciar Sesión',
+                text: 'Enviar código de verificación',
                 onPressed: submit,
-                iconData: Icons.login,
+                iconData: Icons.mail,
               ),
               SizedBox(
                 height: screenHeight * .075,
               ),
-              TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const RegistroPersona(),
-                  ),
-                ),
-                child: RichText(
-                  text: const TextSpan(
-                    text: "Soy un usuario nuevo, ",
-                    style: TextStyle(color: Colors.white),
-                    children: [
-                      TextSpan(
-                        text: 'Registrarse',
-                        style: TextStyle(
-                          color: Color(0xFFFFBD59),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
             ],
           ),
         ),
@@ -242,8 +146,7 @@ class FormButton extends StatelessWidget {
   final String text;
   final IconData? iconData; // Icon data for the button icon
   final Function? onPressed;
-  const FormButton({this.text = '', this.iconData, this.onPressed, Key? key})
-      : super(key: key);
+  const FormButton({this.text = '', this.iconData, this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {

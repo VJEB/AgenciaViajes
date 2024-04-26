@@ -1,6 +1,7 @@
 import 'package:agencia_viajes/screen/componentes/menu_lateral.dart';
 import 'package:agencia_viajes/screen/dashboard_screen.dart';
 import 'package:agencia_viajes/screen/hoteles_screen.dart';
+import 'package:agencia_viajes/screen/iniciosesion_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:agencia_viajes/screen/usuarios_screen1.dart';
 import 'package:agencia_viajes/screen/perfil_screen.dart';
@@ -42,7 +43,17 @@ class _LayoutState extends State<Layout> {
           _appBarTitles[_selectedIndex],
           style: TextStyle(color: Color(0xFFFFBD59)),
         ),
-        actions: <Widget>[],
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.login),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const InicioSesion()),
+              );
+            },
+          ),
+        ],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       drawer: MenuLateral(
