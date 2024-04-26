@@ -26,7 +26,7 @@ namespace Agencia.API.Controllers
         public IActionResult List(int Pers_Id)
         {
             var result = _ventaServicio.ListFact(Pers_Id);
-            return Ok(result);
+            return Ok(result.Data);
         }
 
 

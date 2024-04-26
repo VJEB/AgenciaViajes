@@ -232,7 +232,8 @@ class _RegistroPersonaState extends State<RegistroPersona> {
   }
 
   Future<int> reqPersona() async {
-    String url = '"https://etravel.somee.com/API/Persona/"${persona == null ? "Create" : "Edit/${persona!.persId}"}';
+     String url =
+        'https://etravel.somee.com/API/Persona/${persona == null ? 'Create' : 'Edit/${persona!.persId}'}';
     Persona pers = Persona(
         cargId: persona == null ? 1 : persona!.cargId,
         persId: persona == null ? 0 : persona!.persId,

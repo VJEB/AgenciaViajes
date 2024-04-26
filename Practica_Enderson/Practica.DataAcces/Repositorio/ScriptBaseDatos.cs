@@ -99,7 +99,13 @@ namespace Practica.DataAcces.Repositorio
         public static string Fact_Actualizar = "Vent.SP_Facturas_Actualizar";
         #endregion
         public static string Meto_Mostrar = "[Gral].[SP_MetodosPagos_Mostrar]";
-        public static string Fact_InsertarDetalle = "[Vent].[SP_FacturasDetalle_Insertar]";
+
+        #region Dashboards
+        public static string Dash_CiudDestino = "[Agen].[SP_EstadosCivilesQueMasViajan_Dashboard]";
+        public static string Dash_CiudHospedaje = "[Agen].[SP_CiudadesHospedaje_Dashboard]";
+        public static string Dash_TipoTransporte = "[Agen].[SP_TiposTransporte_Dashboard]";
+        public static string Dash_HotelesReservados = "[Agen].[SP_HotelesMasReservados_Dashboard]";
+        #endregion
     }
 
 }

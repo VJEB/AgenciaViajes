@@ -62,6 +62,42 @@ class _CarritoState extends State<Carrito> {
     _guardarCarrito();
   }
 
+  void _verificarCarritoVacio() {
+    if (carrito.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Carrito vacío!", style: TextStyle(color: Color(0xFFFFBD59), fontWeight: FontWeight.bold),),
+            content: Text("¿Desea agregar un paquete al carrito?", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => Paquetes()),
+                  );
+                },
+                child: Text("Sí", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("No", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConfirmarPago()),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     _cargarCarrito(); // Cargar el carrito cada vez que se construye la pantalla
@@ -92,12 +128,7 @@ class _CarritoState extends State<Carrito> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: ElevatedButton.icon(
-                onPressed: () {
-                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ConfirmarPago()), // Reemplaza NuevaPantalla con el nombre de la pantalla de destino
-                );
-                },
+                onPressed: _verificarCarritoVacio,
                 icon: Icon(Icons.payment),
                 label: Text(
                   'Proceder con mi pago',

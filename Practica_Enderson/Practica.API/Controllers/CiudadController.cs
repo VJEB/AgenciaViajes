@@ -19,5 +19,7 @@ namespace Practica.API.Controllers
             var result = _generalServicio.ListCiud(Esta_Id);
             return Ok(result.Data);
         }
+
+       
     }
 }

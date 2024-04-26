@@ -88,6 +88,7 @@ class _InicioSesionState extends State<InicioSesion> {
         // Almacena los datos del usuario en SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         prefs.setInt('usua_Id', usuario.usuaId ?? 0);
+        prefs.setInt('pers_Id', usuario.persId ?? 0);
         prefs.setString('usua_Usuario', usuario.usuaUsuario ?? '');
         prefs.setString('usua_Contra', usuario.usuaContra ?? '');
         

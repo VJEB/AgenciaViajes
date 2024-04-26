@@ -87,12 +87,12 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
   Future<void> postUsuario() async {
     const String url = "https://etravel.somee.com/API/Usuario/Create";
-    Usuario usua = Usuario(
-        emplId: persId,
+    UsuarioModel usua = UsuarioModel(
+        persId: persId,
         usuaUsuario: usuario,
-        usuaContrasena: password,
+        usuaContra: password,
         persEmail: persEmail,
-        usuaCreacion: 1,
+        usuaUsuaCreacion: 1,
         usuaFechaCreacion: DateTime.now().toUtc().toIso8601String());
 
     var resultado = await http.post(
