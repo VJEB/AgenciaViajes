@@ -63,19 +63,18 @@ class _LayoutState extends State<Layout> {
 
 @override
 Widget build(BuildContext context) {
-  // Verificar si el usuario está autenticado solo para la pantalla de perfil
   if (_selectedIndex == 2 && (_usuario.usuaId == null || _usuario.usuaId == -1)) {
-    // Si el usua_Id es nulo o -1 y se está en la pantalla de perfil, redirigir a la pantalla de inicio de sesión
+
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const InicioSesion()),
       );
     });
-    // Retornar un contenedor vacío mientras se redirige
+  
     return Container();
   } else {
-    // Si el usuario está autenticado o no se está en la pantalla de perfil, mostrar el layout normalmente
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -87,7 +86,7 @@ Widget build(BuildContext context) {
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       drawer: MenuLateral(
-        context: context,
+        // context: context,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(

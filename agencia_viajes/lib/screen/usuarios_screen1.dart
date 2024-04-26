@@ -70,7 +70,7 @@ class _UsuariosState extends State<Usuarios> {
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       drawer: MenuLateral(
-        context: context,
+        // context: context,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

@@ -100,7 +100,7 @@ class _InicioSesionState extends State<InicioSesion> {
        prefs.setString('pers_DNI', usuario.persDNI ?? '');
         prefs.setInt('pers_Telefono', usuario.persTelefono ?? 0);
         prefs.setString('pers_Email', usuario.persEmail ?? '');
-        
+        prefs.setString('usua_Admin', usuario.usuaAdmin.toString());
           // Navigate to another page if login is successful
           Navigator.push(
             context,
