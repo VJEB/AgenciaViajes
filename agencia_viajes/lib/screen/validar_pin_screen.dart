@@ -85,6 +85,17 @@ class _ValidarPinState extends State<ValidarPin> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFBD59)),
+          onPressed: () {
+            Navigator.of(context).pop();
+            
+          },
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
+      ),
       body: Container(
         color: Colors.black,
         child: Padding(

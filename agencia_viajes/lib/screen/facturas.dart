@@ -45,7 +45,7 @@ String url = "";
           usuaContra: usuaContra,
          
         );
-          url = "https://localhost:44372/API/Factura/List/${_usuario.persId}";
+          url = "https://etravel.somee.com/API/Factura/List/${_usuario.persId}";
       });
         _getListado();
     } else {

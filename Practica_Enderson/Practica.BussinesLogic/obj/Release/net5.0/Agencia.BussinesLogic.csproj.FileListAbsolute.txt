@@ -17,3 +17,22 @@ C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practi
 C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.dll
 C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\ref\Agencia.BussinesLogic.dll
 C:\Users\HP GAMING JAFET\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.BussinesLogic.deps.json
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.BussinesLogic.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\ref\Agencia.BussinesLogic.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.BussinesLogic.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.Common.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.DataAcces.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.Entities.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.Common.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.DataAcces.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\bin\Release\net5.0\Agencia.Entities.pdb
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.csproj.AssemblyReference.cache
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.AssemblyInfoInputs.cache
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.AssemblyInfo.cs
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.csproj.CoreCompileInputs.cache
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.csproj.CopyComplete
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\ref\Agencia.BussinesLogic.dll
+C:\Users\LAB1\Documents\GitHub\AgenciaViajes\Practica_Enderson\Practica.BussinesLogic\obj\Release\net5.0\Agencia.BussinesLogic.pdb

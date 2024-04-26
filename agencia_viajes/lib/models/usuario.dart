@@ -17,6 +17,8 @@ class UsuarioModel {
   String? usuaUrlImagen;
   String? persDNI;
   String? persSexo;
+    String? persNombre;
+      String? persApellido;
   int? persTelefono;
   String? persPasaporte;
   int? ciudId;
@@ -46,6 +48,8 @@ class UsuarioModel {
       this.usuaFechaModifica,
       this.persona,
       this.usuaUrlImagen,
+      this.persNombre,
+    this.persApellido,
       this.persDNI,
       this.persSexo,
       this.persTelefono,
@@ -74,6 +78,8 @@ class UsuarioModel {
       rolDescripcion: json['rol_Descripcion'],
       usuaUsuaCreacion: json['usua_Usua_Creacion'],
       persona: json['persona'],
+      persNombre: json['pers_Nombre'],
+      persApellido: json['pers_Apellido'],
       usuaUrlImagen: json['usua_UrlImagen'],
       persDNI: json['pers_DNI'],
       persSexo: json['pers_Sexo'],
@@ -101,13 +107,15 @@ class UsuarioModel {
       'rol_Id': rolId,
       'pers_Id': persId,
       'pers_Email': persEmail,
+      // 'pers_Nombre': persNombre,
+      // 'pers_Apellido': persApellido,
       // 'rol_Descripcion': rolId,
       'usua_Usua_Creacion': usuaUsuaCreacion,
       'usua_Fecha_Creacion': usuaFechaCreacion,
       'usua_Usua_Modifica': usuaUsuaModifica,
       'usua_Fecha_Modifica': usuaFechaModifica,
+      'usua_UrlImagen': usuaUrlImagen,
       // 'persona': persona,
-      // 'usua_UrlImagen': usuaUrlImagen,
       // 'pers_DNI': persDNI,
       // 'pers_Sexo': persSexo,
       // 'pers_Telefono': persTelefono,

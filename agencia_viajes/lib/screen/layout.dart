@@ -82,7 +82,9 @@ Widget build(BuildContext context) {
           _appBarTitles[_selectedIndex],
           style: TextStyle(color: Color(0xFFFFBD59)),
         ),
-        actions: <Widget>[],
+        actions: <Widget>[
+          
+        ],
         iconTheme: const IconThemeData(color: Color(0xFFFFBD59)),
       ),
       drawer: MenuLateral(
