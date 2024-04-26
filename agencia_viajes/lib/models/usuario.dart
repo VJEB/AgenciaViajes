@@ -14,6 +14,8 @@ class UsuarioModel {
   int? usuaUsuaModifica;
   final String? usuaFechaModifica;
   String? persona;
+  String? persNombre;
+  String? persApellido;
   String? usuaUrlImagen;
   String? persDNI;
   String? persSexo;
@@ -44,6 +46,8 @@ class UsuarioModel {
     this.usuaUsuaModifica,
     this.usuaFechaModifica,
     this.persona,
+    this.persNombre,
+    this.persApellido,
     this.usuaUrlImagen,
     this.persDNI,
     this.persSexo,
@@ -73,6 +77,8 @@ class UsuarioModel {
       rolDescripcion: json['rol_Descripcion'],
       usuaUsuaCreacion: json['usua_Usua_Creacion'],
       persona: json['persona'],
+      persNombre: json['pers_Nombre'],
+      persApellido: json['pers_Apellido'],
       usuaUrlImagen: json['usua_UrlImagen'],
       persDNI: json['pers_DNI'],
       persSexo: json['pers_Sexo'],
@@ -103,6 +109,8 @@ class UsuarioModel {
       'rol_Descripcion': rolId,
       'usua_Usua_Creacion': usuaUsuaCreacion,
       'persona': persona,
+      'pers_Nombre': persNombre,
+      'pers_Apellido': persApellido,
       'usua_UrlImagen': usuaUrlImagen,
       'pers_DNI': persDNI,
       'pers_Sexo': persSexo,

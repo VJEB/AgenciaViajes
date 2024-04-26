@@ -80,6 +80,10 @@ namespace Agencia.Entities.Entities
         [NotMapped]
         public string Pers_Sexo { get; set; }
         [NotMapped]
+        public string Pers_Nombre { get; set; }
+        [NotMapped]
+        public string Pers_Apellido { get; set; }
+        [NotMapped]
         public int Pers_Telefono { get; set; }
         [NotMapped]
         public string Pers_Pasaporte { get; set; }

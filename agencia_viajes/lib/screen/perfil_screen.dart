@@ -21,6 +21,8 @@ class _ProfileScreenState extends State {
       cargId: -1,
       esCiId: -1,
       persona: 'Cargando',
+      persNombre: 'Cargando',
+      persApellido: 'Cargando',
       persPasaporte: 'Cargando.. ',
       persSexo: 'Cargando..',
       persTelefono: -1,
@@ -44,6 +46,8 @@ class _ProfileScreenState extends State {
     final int? cargId = prefs.getInt('carg_Id');
     final int? esCiId = prefs.getInt('esCi_Id');
     final String? persona = prefs.getString('persona');
+    final String? persNombre = prefs.getString('pers_Nombre');
+    final String? persApellido = prefs.getString('pers_Apellido');
     final String? persPasaporte = prefs.getString('pers_Pasaporte');
     final String? persSexo = prefs.getString('pers_Sexo');
     final int? pers_Telefono = prefs.getInt('pers_Telefono');
@@ -65,6 +69,8 @@ class _ProfileScreenState extends State {
             cargId: cargId,
             esCiId: esCiId,
             persona: persona,
+            persNombre: persNombre,
+            persApellido: persApellido,
             persPasaporte: persPasaporte,
             persSexo: persSexo,
             persTelefono: pers_Telefono,
@@ -133,13 +139,13 @@ class _ProfileScreenState extends State {
                           persona: Persona(
                               cargId: _usuario.cargId,
                               esCiId: _usuario.esCiId ?? 0,
-                              persApellido: "Espinoza",
+                              persApellido: _usuario.persNombre ?? '',
                               ciudId: _usuario.ciudId ?? 0,
                               persDNI: _usuario.persDNI ?? '',
                               persFechaCreacion: "",
                               persUsuaCreacion: 1,
                               persHabilitado: true,
-                              persNombre: "Victor",
+                              persNombre: _usuario.persApellido ?? '',
                               persPasaporte: _usuario.persPasaporte ?? '',
                               persSexo: _usuario.persSexo ?? '',
                               persTelefono: _usuario.persTelefono ?? 0,
@@ -154,11 +160,7 @@ class _ProfileScreenState extends State {
                           persId: 1,
                         ),
                       ),
-                      const ProfileListTile(
-                        label: 'Mis Tarjetas',
-                        iconData: Icons.card_giftcard_outlined,
-                        pantalla: RegistroUsuario(persId: 1),
-                      ),
+                     
                     ],
                   ),
                 ),
