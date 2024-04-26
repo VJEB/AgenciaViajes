@@ -4,6 +4,7 @@ import 'package:agencia_viajes/models/habitaciones_categorias.dart';
 import 'package:agencia_viajes/models/hotel.dart';
 import 'package:agencia_viajes/models/place.dart';
 import 'package:agencia_viajes/models/profile.dart';
+import 'package:agencia_viajes/screen/airbnb_screen.dart';
 import 'package:agencia_viajes/screen/hotel_screen.dart';
 import 'package:agencia_viajes/screen/layout.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -276,7 +277,8 @@ class _HotelExpansionTileState extends State<HotelExpansionTile> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => HotelScreen(
+                        builder: (_) => AirBnbScreen(
+                        // builder: (_) => HotelScreen(
                           habitacionCategoria: HabitacionCategoria(
                             haCaId: habitacionesData['haCa_Id'],
                             hoCaNombre: habitacionesData['haCa_Nombre'],
